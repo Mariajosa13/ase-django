@@ -1,0 +1,142 @@
+.light {
+    --BackgroundColor-body: #ffffff;
+    --BackgroundColor-container: #dbc7f1;
+    --HoverA: #9446ae;
+    --BackgroundColor-btn: #441151;
+    --Hover-btn: #733982;
+    --Background-header: #fbfefb;
+    --Border-searchContainer: #ccc;
+    --Ingreso: #ff958c;
+  }
+  
+  @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+  
+  /*Estilos header*/
+  
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fbfefb;
+    padding: 5px 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    height: 60px;
+  }
+  
+  nav .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  nav ul.nav-links {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 15px; 
+  }
+  
+  nav ul li a {
+    padding: 5px 10px;
+    font-size: 14px; 
+  }
+  
+  .logo img {
+    max-width: 60px;
+  }
+  
+  
+  .search-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    margin-left: 35em;
+  }
+  
+  .search-container input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+  
+  .search-container input:focus {
+    border-color: #A3C4F3;
+    box-shadow: 0 0 5px rgba(163, 196, 243, 0.5);
+    outline: none;
+  }
+  
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  nav ul.nav-links {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+  
+  nav ul li {
+    position: relative;
+  }
+  
+  .fa-solid:hover{
+    color: #ff958c;
+  }
+  
+  nav ul li a{
+    margin: 0 10px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+  
+  /* .ubicacion{
+    color: #441151;
+  }
+  
+  .ubicacion:hover{
+    text-decoration: underline;
+    color: #441151;
+  }
+  
+  .ingreso{
+    color: #757474;
+  }
+  
+  .ingreso:hover{
+    color: #ff958c;
+  }
+  
+  nav ul li a i {
+    margin-right: 8px;
+  }
+  
+  .menu-icon {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  
+  .menu-icon i {
+    font-size: 24px;
+    color: #333;
+  } */
+  
+  @media screen and (max-height: 400px) {
+    header {flex-direction: column;}
+    .search-container input{margin-left: 4px; flex-wrap: nowrap;}
+  
+  }

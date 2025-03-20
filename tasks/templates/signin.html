@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+ <!--Empieza formulario de ingreso-->
+ <main class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4 mt-5">
+            <form action="/signin/" method="POST" class="card card-body">
+                {{error}}
+                {% csrf_token %}
+                
+                      <h1 class="text-center">Ingresa</h1>
+                      <div class="social-icons">
+                        <a href="#" class="icon"><i class="fa-brands fa-google"></i></a>
+                        <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                      </div>
+                      <span>o ingresa con tu usuario</span>
+                        <div class="mb-3">
+                            <label for="usuario">Usuario:</label>
+                            <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Cual es tu usuario">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password1">Contraseña:</label>
+                            <input type="password" id="password1" name="password1" class="form-control" placeholder="Escribe tu contraseña">
+                        </div>
+                        
+                        <a href="#">¿Olvidaste tu contraseña?</a>
+                        <button class="btn btn-primary" type="submit">Registrarse</button>
+            </form>           
+        </div>
+    </div>
+</main>
+
+ <!--Termina el formulario de ingreso-->
+
+{% endblock %}
+
+

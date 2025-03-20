@@ -1,0 +1,222 @@
+/*Paleta de colores*/
+
+/*Paleta de colores*/
+
+.light {
+    --BackgroundColor-body: #ffffff;
+    --BackgroundColor-container: #dbc7f1;
+    --HoverA: #9446ae;
+    --BackgroundColor-btn: #441151;
+    --Hover-btn: #733982;
+    --Background-header: #fbfefb;
+    --Border-searchContainer: #ccc;
+    --Ingreso: #ff958c;
+  }
+  
+  @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+  
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 5px;
+    margin: 0 auto;
+  }
+  
+  /*Estilos bienvenida*/
+  
+  .person{
+    max-width: 800px;
+    margin-right: .4rem;
+    margin-top: -0.3rem;
+  }
+  
+  .showcase-area{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 6em;
+    border-radius: 10px;
+    padding-left: 20px;
+    background-color: #dbc7f1;
+  }
+  
+  .big-title{
+    font-size: 3em;
+    color: rgb(19, 18, 18);
+    line-height: 1.4;
+  }
+  
+  .text{
+    color: rgb(54, 53, 53);
+    font-size: 1.1rem;
+    margin: 1.9rem 0 2.5rem;
+    max-width: 600px;
+    line-height: 2.3;
+  }
+  
+  .showcase-area .btn{
+    display: inline-block;
+    padding: 15px 20px;
+    color: #fff;
+    background-color: #441151;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 0 40px 2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .showcase-area .btn:hover{
+    background-color: #733982;
+    color: #fbfefb;
+  }
+  
+  @media screen and (max-width: 800px) {
+    .showcase-area {flex-direction: column;}
+    .showcase-area {margin-top: 12em;}
+    .person {max-width: 500px;}
+  }
+  
+  /*Columnas servicios y productos*/
+  
+  .row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap; 
+    max-width: 1200px;  
+    margin: 0 auto;
+    padding: 20px; 
+    box-sizing: border-box;
+}
+
+.row .card {
+    display: flex;
+    border-radius: 20px;
+    margin: 10px; 
+    max-width: 100%; 
+    flex: 1 1 300px; 
+    min-width: 280px; 
+}
+  .row .card .card-img{
+    width: 100%;
+    height: auto; 
+    object-fit: cover;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+  
+  .row .card .card-body a{
+    color: #000;
+    text-decoration: none;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+    font-size: 12px;
+  }
+  
+  .row .card .card-body a:hover{
+    color: #79617f;
+  }
+  
+  @media screen and (max-width: 800px) {
+    .row {flex-direction: column;}
+    .row {justify-content: center;}
+  }
+
+  /*Slider*/
+  .card-list .card-item{
+    color: #ff958c;
+    width: 400px;
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    backdrop-filter: blur(30px);
+    background: rgba(255, 149, 140, 0.2);
+    border: 1px solid rgba(255, 149, 140, 0.5);
+  }
+  .card-list .card-item .store-image{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 40px;
+    border: 3px solid #fff;
+    padding: 4px;
+  }
+
+  .card-list .card-item .visit-button{
+    font-size: 1.25rem;
+    padding: 10px 35px;
+    color: #441151;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #dbc7f1;
+    border: 1px solid transparent;
+    transition: 0.2s ease;
+  }
+
+  .card-list .card-item .visit-button:hover{
+    background: rgba(68, 17, 81, 0.1);
+    border: 1px solid #ffff;
+    color: #fff;
+  }
+
+  /*Slider termina*/
+  
+  /*Card registrate como*/
+
+  .h1{
+    text-align: center;
+    font-size: 80px;
+  }
+
+  .registro{
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 3px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  .btn-registros{
+    background-color: #441151 !important;
+    color: #fbfefb !important;
+    border-radius: 10px !important;
+    border: none !important;
+    display: flex !important;
+    padding: 8px 16px !important;
+    font-size: 0.9rem !important;
+  }
+
+  .card-body .btn-registros:hover{
+    background-color: #733982;
+    color: #fff;
+  }
+
+  @media screen and (max-width: 800px) {
+    .registro {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 10px;
+  }
+
+  .tiendas img {
+    width: 60px;
+    height: 60px;
+  }
+  .tiendas a{
+    width: 100%; /* Asegurar que ocupa todo el ancho disponible */
+    padding: 10px 20px; /* Ajustar el espacio interno */
+
+  }
+
+  }

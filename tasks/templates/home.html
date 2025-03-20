@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"> <!--Link swiper CSS JS-->
+  <link rel="stylesheet" href="{% static 'css/home.css' %}">
+  <title>Document</title>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="showcase-area mb-3"> <!--bienvenida -->
+        <div class="left">
+          <div class="big-title">
+            <p>Todo</p>
+            <b><p>para tu mascota</p></b>
+          </div>
+          <p class="text">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut perspiciatis autem, obcaecati et aperiam quo. Culpa aut soluta natus?
+          </p>
+          {% if user.is_authenticated %}
+          <div class="cta">
+            <h1 class="btn">Bienvenido {{user.username}}</h1>
+          </div>
+          {% else %}
+          <div class="cta">
+            <a href="/signin/" class="btn">Empezar ahora</a>
+          </div>
+          {% endif  %}
+        </div>
+        <div class="right">
+          <img src="{% static 'img/secondImage.png' %}" alt="" class="person">
+        </div>
+      </div> <!--Finaliza bienvenida-->
+    
+    <div class="container swiper"><!--Inicia slider-->
+        <h2 class="fw-bold">Nuestras tiendas más buscadas</h2> 
+        <div class="slider-wrapper">
+          <div class="card-list swiper-wrapper">
+            <div class="card-item swiper-slide">
+              <img src="{% static 'img/kanu.png' %}" alt="" class="store-image">
+              <h2 class="store-name">Kanu</h2>
+              <button class="visit-button">Ver tienda</button>
+            </div>
+            <div class="card-item swiper-slide">
+              <img src="{% static 'img/laikaLogo.jpeg' %}" alt="" class="store-image">
+              <h2 class="store-name">Laika</h2>
+              <button class="visit-button">Ver tienda</button>
+            </div>
+            <div class="card-item swiper-slide">
+              <img src="{% static 'img/movet.webp' %}" alt="" class="store-image">
+              <h2 class="store-name">Movet</h2>
+              <button class="visit-button">Ver tienda</button>
+            </div>
+            <div class="card-item swiper-slide">
+              <img src="{% static 'img/pamascotas.webp' %}" alt="" class="store-image">
+              <h2 class="store-name">Pa'mascotas</h2>
+              <button class="visit-button">Ver tienda</button>
+            </div>
+            <div class="card-item swiper-slide">
+              <img src="{% static 'img/puntovet.jpeg' %}" alt="" class="store-image">
+              <h2 class="store-name">Punto Vet</h2>
+              <button class="visit-button">Ver tienda</button>
+            </div>
+            <div class="card-item swiper-slide">
+              <img src="{% static 'img/puppis.png' %}" alt="" class="store-image">
+              <h2 class="store-name">Puppis</h2>
+              <button class="visit-button">Ver tienda</button>
+            </div>
+          </div>
+
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
+    </div>
+        <!--Finaliza slider-->
+      <div class="row mb-3"> <!--columnas no sabes como registrate-->
+        <h1>Forma parte del equipo <b><font color="#ff958c">ASE</font></b></h1>
+        {% if user.is_authenticated %}
+        <div class="col-6 registro">
+            <h4>Regístrate como domiciliario</h4>
+            <button class="btn-registros">Domi</button>
+        </div>
+        <div class="col-6 registro">
+            <h4>Regístrate como tienda</h4>
+            <button class="btn-registros">Tienda</button>
+        </div>
+        {% else %}
+        <div class="col-6 registro">
+            <h4>Regístrate como domiciliario</h4>
+            <button class="btn-registros">Domi</button>
+        </div>
+        <div class="col-6 registro">
+            <h4>Regístrate como tienda</h4>
+            <button class="btn-registros">Tienda</button>
+        </div>
+        <div class="col-6 registro">
+            <h4>Regístrate como cliente</h4>
+            <button class="btn-registros">Cliente</button>
+        </div>
+        {% endif %}
+        
+      </div> <!--Finaliza no sabes como registrarte-->
+    </div> <!--finaliza global container-fluid-->
+    {% endblock %}
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> <!--Link swiper JS Script-->
+    <script src="{% static 'js/script.js' %}"></script> <!--link java script personalizado-->
+</body>
+</html>
