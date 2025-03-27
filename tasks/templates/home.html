@@ -8,9 +8,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"> <!--Link swiper CSS JS-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"> <!--font awesome-->
   <link rel="stylesheet" href="{% static 'css/home.css' %}">
-  <title>Document</title>
+  <script src="{% static 'js/scriptJs.js' %}"></script> <!--link java script personalizado-->
+  <title>Home</title>
 </head>
 <body>
   <div class="container-fluid">
@@ -38,47 +39,56 @@
         </div>
       </div> <!--Finaliza bienvenida-->
     
-    <div class="container swiper"><!--Inicia slider-->
-        <h2 class="fw-bold">Nuestras tiendas más buscadas</h2> 
-        <div class="slider-wrapper">
-          <div class="card-list swiper-wrapper">
-            <div class="card-item swiper-slide">
-              <img src="{% static 'img/kanu.png' %}" alt="" class="store-image">
-              <h2 class="store-name">Kanu</h2>
-              <button class="visit-button">Ver tienda</button>
-            </div>
-            <div class="card-item swiper-slide">
-              <img src="{% static 'img/laikaLogo.jpeg' %}" alt="" class="store-image">
-              <h2 class="store-name">Laika</h2>
-              <button class="visit-button">Ver tienda</button>
-            </div>
-            <div class="card-item swiper-slide">
-              <img src="{% static 'img/movet.webp' %}" alt="" class="store-image">
-              <h2 class="store-name">Movet</h2>
-              <button class="visit-button">Ver tienda</button>
-            </div>
-            <div class="card-item swiper-slide">
-              <img src="{% static 'img/pamascotas.webp' %}" alt="" class="store-image">
-              <h2 class="store-name">Pa'mascotas</h2>
-              <button class="visit-button">Ver tienda</button>
-            </div>
-            <div class="card-item swiper-slide">
-              <img src="{% static 'img/puntovet.jpeg' %}" alt="" class="store-image">
-              <h2 class="store-name">Punto Vet</h2>
-              <button class="visit-button">Ver tienda</button>
-            </div>
-            <div class="card-item swiper-slide">
-              <img src="{% static 'img/puppis.png' %}" alt="" class="store-image">
-              <h2 class="store-name">Puppis</h2>
-              <button class="visit-button">Ver tienda</button>
-            </div>
-          </div>
-
-          <div class="swiper-pagination"></div>
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
+        <!--Inicia slider-->
+        <div class="wrapper">
+          <h2>Nuestras tiendas más buscadas</h2>
+          <i class="fa-solid fa-left-long" style="color: #ffffff;"></i>
+          <ul class="carousel">
+            <li class="card">
+              <div class="img">
+                <img src="{% static 'img/kanu.png' %}" alt=""  draggable="false">
+              </div>
+                <h2>Kanu</h2>
+                <button class="visit-button">Ver tienda</button>
+            </li>
+            <li class="card">
+              <div class="img">
+                <img src="{% static 'img/laikaLogo.jpeg' %}" alt="" draggable="false">
+              </div>
+                <h2>Laika</h2>
+                <button class="visit-button">Ver tienda</button>
+            </li>
+            <li class="card">
+              <div class="img">
+                <img src="{% static 'img/movet.webp' %}" alt="" draggable="false">
+              </div>
+                <h2>Movet</h2>
+                <button class="visit-button">Ver tienda</button>
+            </li>
+            <li class="card">
+              <div class="img">
+                <img src="{% static 'img/pamascotas.webp' %}" alt="" draggable="false">
+              </div>
+                <h2>Pa'mascotas</h2>
+                <button class="visit-button">Ver tienda</button>
+            </li>
+            <li class="card">
+              <div class="img">
+                <img src="{% static 'img/puntovet.jpeg' %}" alt="" draggable="false">
+              </div>
+                <h2>Punto Vet</h2>
+                <button class="visit-button">Ver tienda</button>
+            </li>
+            <li class="card">
+              <div class="img">
+                <img src="{% static 'img/puppis.png' %}" alt="" draggable="false">
+              </div>
+                <h2>Puppis</h2>
+                <button class="visit-button">Ver tienda</button>
+            </li>
+          </ul>
+          <i class="fa-solid fa-right-long" style="color: #ffffff;"></i>
         </div>
-    </div>
         <!--Finaliza slider-->
       <div class="row mb-3"> <!--columnas no sabes como registrate-->
         <h1>Forma parte del equipo <b><font color="#ff958c">ASE</font></b></h1>
@@ -111,7 +121,7 @@
     {% endblock %}
 
     
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> <!--Link swiper JS Script-->
-    <script src="{% static 'js/script.js' %}"></script> <!--link java script personalizado-->
+    
 </body>
 </html>
+
