@@ -9,8 +9,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"> <!--font awesome-->
-  <link rel="stylesheet" href="{% static 'css/home.css' %}">
-  <script src="{% static 'js/scriptJs.js' %}"></script> <!--link java script personalizado-->
+  <link rel="stylesheet" href="{% static 'css/homes.css' %}">
+  <script src="{% static 'js/scriptJ.js' %}"></script> <!--link java script personalizado-->
   <title>Home</title>
 </head>
 <body>
@@ -42,7 +42,7 @@
         <!--Inicia slider-->
         <div class="wrapper">
           <h2>Nuestras tiendas más buscadas</h2>
-          <i class="fa-solid fa-left-long" style="color: #ffffff;"></i>
+          <i id="left" class="fa-solid fa-left-long" style="color: #ffffff;"></i>          
           <ul class="carousel">
             <li class="card">
               <div class="img">
@@ -87,7 +87,7 @@
                 <button class="visit-button">Ver tienda</button>
             </li>
           </ul>
-          <i class="fa-solid fa-right-long" style="color: #ffffff;"></i>
+          <i id="right" class="fa-solid fa-right-long" style="color: #ffffff;"></i>
         </div>
         <!--Finaliza slider-->
       <div class="row mb-3"> <!--columnas no sabes como registrate-->
