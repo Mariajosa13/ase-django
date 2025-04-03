@@ -10,4 +10,4 @@ class ProductoForm(ModelForm):
 class SignupForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ['nombre', 'apellido', 'fechaNacimiento']
+        fields = ['nombre', 'apellido', 'correo']

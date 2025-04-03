@@ -1,6 +1,135 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"> <!--font awesome-->
+    <link rel="stylesheet" href="{% static 'css/Signin.css' %}">
+    <script src="{% static 'js/form.js' %}"></script> <!--link java script personalizado-->
+    <title>Registro - Ingreso</title>
+</head>
+<body>
+    <style type="text/css">
+        .error{
+            color: red;
+        }
+    </style>
+        <div class="container" id="container"> <!--Container global-->
+            <div class="form-container sign-up"> <!--Comienza el formulario de registro-->
+              <form id="formulario" class="formulario">
+                <h1>Crea tu cuenta</h1>
+                <div class="social-icons">
+                  <a href="#" class="icon"><i class="fa-brands fa-google"></i></a>
+                  <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+                <!--Campos del formulario-->
+                <div class="formulario__grupo">
+                <!--grupo nombre-->
+                <div id="grupo__usuario">
+                    <div class="formulario__grupo-input">
+                      <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Cual es tu usuario">
+                      <i class="formulario__validacion-estado fas fa-times-circle"></i> 
+                      <p class="formulario__input-error">El usuario</p>
+                    </div>
+                  </div>
+
+                <!--grupo nombre-->
+                <div id="grupo__nombre">
+                  <div class="formulario__grupo-input">
+                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Escribe tu nombre">
+                    <i class="formulario__validacion-estado fas fa-times-circle"></i> 
+                    <p class="formulario__input-error">El nombre debe tener más de un digito y solo puede contener letras</p>
+                  </div>
+                </div>
+    
+                <!--Grupo apellido-->
+                <div id="grupo__apellido">
+                  <div class="formulario__grupo-input">
+                    <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Escribe tu apellido">
+                    <i class="formulario__validacion-estado fas fa-times-circle"></i> 
+                    <p class="formulario__input-error">El apellido debe tener más de un digito y solo puede contener letras</p>
+                  </div>
+                </div>
+    
+                <!--Grupo email-->
+                <div id="grupo__correo">
+                  <div class="formulario__grupo-input">
+                    <input type="email" id="correo" name="correo" class="form-control" placeholder="Escribe tu correo electrónico">
+                    <i class="formulario__validacion-estado fas fa-times-circle"></i> 
+                    <p class="formulario__input-error">El correo debe</p>
+                  </div>
+                </div>
+    
+    
+                <!--Grupo contraseña-->
+                <div id="grupo__password1">
+                  <div class="formulario__grupo-input">
+                    <input type="password" id="password1" name="password1" class="form-control" placeholder="Escribe tu contraseña">
+                    <i class="formulario__validacion-estado fas fa-times-circle"></i>
+                    <p class="formulario__input-error">La contraseña debe</p>  
+                  </div>
+                </div>
+    
+                <div id="grupo__password2">
+                    <div class="formulario__grupo-input">
+                      <input type="password" id="password2" name="password2" class="form-control" placeholder="Confirma tu contraseña">
+                      <i class="formulario__validacion-estado fas fa-times-circle"></i>
+                      <p class="formulario__input-error">La contraseña debe</p>  
+                    </div>
+                </div>
+    
+            </div>
+    
+                <p class="formulario__mensaje">Por favor ingrese los campos correctamente</p>
+                <button onclick="validarCampos()">Registrarse</button>
+              </form>
+            </div> <!--Finaliza el formulario de registro-->
+    
+            <div class="form-container sign-in"> <!--Empieza formulario de ingreso-->
+              <form>
+                <h1>Ingresa</h1>
+                <div class="social-icons">
+                  <a href="#" class="icon"><i class="fa-brands fa-google"></i></a>
+                  <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+                <span>o ingresa con tu nombre de usuario</span>
+                <type="text" id="usuario" name="usuario" class="form-control" placeholder="Cual es tu usuario">
+                <input type="password" id="password1" name="password1" class="form-control" placeholder="Escribe tu contraseña">
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                <button class="btn btn-primary" type="submit">Registrarse</button>
+              </form>
+            </div> <!--Termina el formulario de ingreso-->
+    
+            <div class="toggle-container"> <!--saludos-->
+              <div class="toggle">
+                <div class="toggle-panel toggle-left"> <!--Saludo registro-->
+                  <h1>¡Bienvenido a ASE!</h1>
+                  <p>Registra tu información personal para tener acceso a todo nuestro sitio web</p>
+                  <button class="hidden" id="login">Ingresar</button>
+                </div> <!--finaliza saludo ingreso-->
+    
+                <div class="toggle-panel toggle-right"> <!--Saludo ingreso-->
+                  <h1>¡Bienvenido de nuevo a ASE!</h1>
+                  <p>Ingresa tu información personal para tener acceso a todo nuestro sitio web</p>
+                  <button class="hidden" id="register">Registrarse</button>
+                </div> <!--finaliza saludo registro-->
+    
+              </div>
+            </div> <!--finalizan saludos-->
+        </div><!--Finaliza container global-->
+        <script src="js/val.js"></script>
+        <script src="js/form.js"></script>
+
+    {% endblock %}
+
+</body>
+</html>
+<!-- 
 
 <main class="container">
     <div class="row">
@@ -23,8 +152,8 @@
                     <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Escribe tu apellido">
                 </div>
                 <div class="mb-3">
-                    <label for="fechaNacimiento">Fecha de nacimiento:</label>
-                    <input type="date" id="fechaNacimiento" name="fechaNacimiento" class="form-control">
+                    <label for="correo">Correo Electrónico</label>
+                    <input type="email" id="correo" name="correo" class="form-control" placeholder="Escribe tu correo electrónico">
                 </div>
                 <div class="mb-3">
                     <label for="password1">Contraseña:</label>
@@ -43,4 +172,4 @@
     <p style="color: red;">{{ error }}</p>
 {% endif %}
 
-{% endblock %}
+ -->
