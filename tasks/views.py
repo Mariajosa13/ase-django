@@ -22,23 +22,27 @@ def signup(request):
                 user = User.objects.create_user(username=request.POST['usuario'], password=request.POST['password1'])
                 user.save()
 
-                profile = Profile(user=user) 
-                profile_form = SignupForm(request.POST, instance=profile)
-
-                if profile_form.is_valid():
-                    profile_form.save()
+                # Crear perfil con los campos adicionales
+                profile = Profile(
+                    user=user,
+                    nombre=request.POST['nombre'],
+                    apellido=request.POST['apellido'],
+                    correo=request.POST['correo']
+                )
+                profile.save()
 
                 login(request, user)
                 return redirect('productos')
             except IntegrityError:
                 return render(request, 'signup.html', {
                     'form': SignupForm(),
-                    "error": 'Username already exists'
+                    "error": '⚠️ El nombre de usuario ya existe.'
                 })
         return render(request, 'signup.html', {
             'form': SignupForm(),
-            "error": 'Passwords do not match'
+            "error": '❌ Las contraseñas no coinciden.'
         })
+
     
 @login_required
 def productos(request):

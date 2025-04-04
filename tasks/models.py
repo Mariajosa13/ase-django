@@ -21,6 +21,6 @@ class Profile(models.Model):
     apellido = models.CharField(max_length=200)
     correo = models.EmailField(null=True, blank=True)
 
-    def __str__(self):
-        return self.nombre + '- by ' + self.user.username
+    def _str_(self):
+        return f"{self.nombre} - by {self.user.username}"
 
