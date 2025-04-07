@@ -3,7 +3,6 @@
     --HoverA: #733982;
     --BackgroundColor-btn: #441151;
     --Hover-btn: #733982;
-    --Background-header: #fbfefb;
     --Border-searchContainer: #ccc;
     --Ingreso: #ff958c;
     --MoradoClaro: #dbc7f1;
@@ -11,56 +10,54 @@
   
   @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
   
-  *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  .center-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 60px); /* considera el padding-top por navbar fijo */
+    padding-bottom: 10px;
   }
   
-  body{
-    background-color: #dbc7f1;
-    background: linear-gradient(to right, #efe8f7,
-    #dbc7f1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    height: 100vh;
+  html, body {
+    background: linear-gradient(to right, #efe8f7, #dbc7f1);
+    height: 100%;
+    margin: 0;
+    padding-top: 30px;
   }
+  
    /*container y form*/
     
-  .container{
+  .container-global{
     background-color: #fff;
     border-radius: 30px;
     box-shadow: 0 5px 150x rgba(0, 0, 0, 0.35);
     position: relative;
     overflow: hidden;
     width: 768px;
-    max-width: 100%px;
+    max-width: 100%;
     min-height: 480px;
     padding: 20px;
   }
   
-  .container p{
+  .container-global p{
     font-size: 14px;
     line-height: 20px;
     letter-spacing: 0.3px;
     margin: 20px 0;
   }
   
-  .container span{
+  .container-global span{
     font-size: 12px;
   }
   
-  .container a{
+  .container-global a{
     color: #ccc;
     font-size: 13px;
     text-decoration: none;
     margin: 15px 0 10px;
   }
   
-  .container button{
+  .container-global button{
     background-color: #441151;
     color: #fff;
     font-size: 12px;
@@ -73,13 +70,19 @@
     margin-top: 10px;
     cursor: pointer;
   }
+
+  .container-global button:hover{
+    background-color: #dbc7f1;
+    border-color: #dbc7f1;
+    color: #441151;
+  }
   
-  .container button.hidden{
+  .container-global button.hidden{
     background-color: transparent;
     border-color: #fff;
   }
   
-  .container form{
+  .container-global form{
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -89,7 +92,7 @@
     height: 100%;
   }
   
-  .container input{
+  .container-global input{
     background-color: #eee;
     border: none;
     margin: 8px 0;
@@ -118,7 +121,7 @@
     z-index: 2;
   }
   
-  .container.active .sign-in{
+  .container-global.active .sign-in{
     transform: translateX(100%);
   }
   
@@ -136,7 +139,7 @@
     }
   
   
-  .container.active .sign-up{
+  .container-global.active .sign-up{
     transform: translateX(100%);
     opacity: 1;
     z-index: 5;
@@ -263,7 +266,7 @@
     z-index: 1000;
   }
   
-  .container.active .toggle-container{
+  .container-global.active .toggle-container{
     transform: translateX(-100%);
     border-radius: 0 150px 100px 0;
   }
@@ -281,7 +284,7 @@
     transition: all 0.6s ease-in-out;
   }
   
-  .container.active .toggle{
+  .container-global.active .toggle{
     transform: translateX(50%);
   }
   
@@ -304,7 +307,7 @@
     transform: translateX(-200%);
   }
   
-  .container.active .toggle-left{
+  .container-global.active .toggle-left{
     transform: translateX(0);
   }
   
@@ -313,7 +316,7 @@
     transform: translateX(0);
   }
   
-  .container.active .toggle-right{
+  .container-global.active .toggle-right{
     transform: translateX(200%);
   }
   

@@ -14,7 +14,8 @@
     <title>Registro - Ingreso</title>
 </head>
 <body>
-        <div class="container" id="container"> <!--Container global-->
+  <div class="center-wrapper">
+        <div class="container-global" id="container"> <!--Container global-->
             <div class="form-container sign-up"> <!--Comienza el formulario de registro-->
               <form method="POST" class="card card-body">
                 <h1 class="text-center">Registrarse</h1>
@@ -109,6 +110,7 @@
               </div>
             </div> <!--finalizan saludos-->
         </div><!--Finaliza container global-->
+      </div>
         <script src="{% static 'js/form.js' %}"></script> <!--link java script personalizado-->
         
         {% if error %}
