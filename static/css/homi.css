@@ -131,17 +131,20 @@
 
   /*Slider*/
 
-  .wrapper{
+  .wrapper {
     max-width: 1100px;
     width: 100%;
     position: relative;
+    margin: 40px auto;
+    padding: 0 20px;
     overflow: visible;
   }
-
-  .wrapper i{
+  
+  .wrapper i {
     height: 50px;
     width: 50px;
-    background: #ff958c;
+    background: #441151;
+    color: white;
     text-align: center;
     line-height: 50px;
     border-radius: 50%;
@@ -151,167 +154,358 @@
     z-index: 20;
     font-size: 1.25rem;
     transform: translateY(-50%);
-    box-shadow: 0 3px 6px rgba(0,0,0,0.23);
+    box-shadow: 0 5px 15px rgba(163, 104, 217, 0.4);
+    transition: all 0.3s ease;
   }
-
-  .wrapper i:first-child{
-    left: 22px;
+  
+  .wrapper i:hover {
+    transform: translateY(-50%) scale(1.08);
+    box-shadow: 0 8px 20px rgba(163, 104, 217, 0.5);
   }
-
-  .wrapper i:last-child{
-    right: -22px;
+  
+  .wrapper i:first-child {
+    left: -10px;
   }
-
-  .wrapper .carousel{
+  
+  .wrapper i:last-child {
+    right: -10px;
+  }
+  
+  .wrapper .carousel {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: calc((100% / 3) - 12px);
-    gap: 16px;
+    grid-auto-columns: calc((100% / 3) - 20px);
+    gap: 30px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     scrollbar-width: 0;
+    padding: 20px 10px;
   }
-
-  .carousel::-webkit-scrollbar{
+  
+  .carousel::-webkit-scrollbar {
     display: none;
   }
-
-  .carousel :where(.card, .img){
+  
+  .carousel :where(.card, .img) {
     display: flex;
     align-items: center;
     justify-content: center;
   }
-
+  
   .carousel.dragging {
     scroll-snap-type: none;
     scroll-behavior: auto;
   }
-
-  .carousel.dragging .card{
+  
+  .carousel.dragging .card {
     cursor: grab;
     user-select: none;
   }
   
-  .carousel .card{
+  .carousel .card {
     scroll-snap-align: start;
-    height: 342px;
+    height: 360px;
     list-style: none;
-    background: rgba(255, 149, 140, 0.23);
-    border-radius: 8px;
+    background: white;
+    border-radius: 16px;
     display: flex;
     cursor: pointer;
-    padding-bottom: 15px;
+    padding: 30px 20px;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    box-shadow: 0 10px 25px rgba(163, 104, 217, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
   }
-
-  .card .img{
-    background:#441151;
-    width: 140px;
-    height: 140px;
+  
+  .carousel .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: #dbc7f1;
+  }
+  
+  .carousel .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(163, 104, 217, 0.25);
+  }
+  
+  .card .img {
+    background: #dbc7f1;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
+    margin-bottom: 15px;
+    position: relative;
+    z-index: 1;
   }
-
-  .card .img img{
+  
+  .card .img::after {
+    content: '';
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    background: transparent;
+    border: 3px dashed rgba(163, 104, 217, 0.3);
+    border-radius: 50%;
+    animation: rotate 15s linear infinite;
+  }
+  
+  @keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .card .img img {
     width: 140px;
     height: 140px;
     object-fit: cover;
     border-radius: 50%;
-    border: 4px solid #fff;
+    border: 4px solid white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
-
-  .card h2{
-    font-weight: 500;
-    font-size: 1.56rem;
-    margin: 30px 0 5px;
-  }
-
-  .visit-button{
-    font-size: 1.25rem;
-    padding: 10px 35px;
+  
+  .card h2 {
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin: 15px 0 25px;
     color: #441151;
-    border-radius: 6px;
+    position: relative;
+  }
+  
+  .card h2::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 3px;
+    background: #ff958c;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 10px;
+  }
+  
+  .visit-button {
+    font-size: 1.1rem;
+    padding: 12px 30px;
+    color: #441151;
+    border-radius: 30px;
     font-weight: 500;
     cursor: pointer;
     background: #dbc7f1;
-    border: 1px solid transparent;
-    transition: 0.2s ease;
+    border: none;
+    transition: 0.3s ease;
+    box-shadow: 0 5px 15px rgba(163, 104, 217, 0.3);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
   }
-
-  .visit-button:hover{
-    background: rgba(68, 17, 81, 0.1);
-    border: 1px solid #ffff;
-    color: #733982;
+  
+  .visit-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: #ff958c;
+    transition: 0.5s ease;
+    z-index: -1;
   }
-
-  @media screen and (max-width: 900px){
-    .wrapper .carousel{
-        grid-auto-columns: calc((100% / 2) -9px);
+  
+  .visit-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(163, 104, 217, 0.4);
+    color: #ffffff;
+  }
+  
+  .visit-button:hover::before {
+    width: 100%;
+  }
+  
+  @media screen and (max-width: 900px) {
+    .wrapper .carousel {
+      grid-auto-columns: calc((100% / 2) - 15px);
     }
   }
-
-  @media screen and (max-width: 900px){
-    .wrapper .carousel{
-        grid-auto-columns: 100%;
+  
+  @media screen and (max-width: 600px) {
+    .wrapper .carousel {
+      grid-auto-columns: 100%;
+    }
+    
+    .wrapper i {
+      height: 40px;
+      width: 40px;
+      line-height: 40px;
     }
   }
-
 
   /*Slider termina*/
   
   /*Card registrate como*/
 
-  .h1{
-    text-align: center;
-    font-size: 80px;
-  }
+  /* Título principal */
+.h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: #333;
+  position: relative;
+}
 
-  .registro{
-    background-color: #ffffff;
-    width: 100%;
-    max-width: 1200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.h1 .ASE {
+  color: #ff7bac;
+  font-weight: 700;
+  position: relative;
+}
+
+.h1 .ASE::after {
+  content: '🐾';
+  font-size: 1.8rem;
+  position: absolute;
+  top: 0;
+  margin-left: 5px;
+}
+
+/* Contenedor de opciones de registro */
+.registro-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Tarjetas de registro */
+.registro {
+  background-color: #ffffff;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 40px;
+  border-radius: 15px;
+  margin-bottom: 3px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-left: 5px solid #733982;
+  position: relative;
+  overflow: hidden;
+}
+
+.registro::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 5px;
+  background: #733982;
+  transition: width 0.3s ease;
+  z-index: 1;
+}
+
+.registro:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.registro:hover::before {
+  width: 10px;
+}
+
+/* Textos de registro */
+.registro-text {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.registro-text::before {
+  margin-right: 15px;
+  font-size: 1.5rem;
+}
+
+.domiciliario .registro-text::before {
+  content: '🚚';
+}
+
+.tienda .registro-text::before {
+  content: '🏪';
+}
+
+.cliente .registro-text::before {
+  content: '👤';
+}
+
+/* Botones de registro */
+.btn-registros {
+  background: #733982 !important;
+  color: #ffffff !important;
+  border-radius: 30px !important;
+  border: none !important;
+  padding: 10px 22px !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3) !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-registros::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: #925aa0;
+  transition: 0.5s ease;
+  z-index: -1;
+}
+
+.btn-registros:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 20px rgba(156, 39, 176, 0.4) !important;
+}
+
+.btn-registros:hover::before {
+  width: 100%;
+}
+
+/* Responsive */
+@media screen and (max-width: 800px) {
+  .h1 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+  }
+  
+  .registro {
     padding: 20px;
-    border-radius: 20px;
-    margin-bottom: 3px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
   }
   
+  .registro-text {
+    font-size: 1.1rem;
+    justify-content: center;
+  }
   
-  .btn-registros{
-    background-color: #441151 !important;
-    color: #fbfefb !important;
-    border-radius: 10px !important;
-    border: none !important;
+  .btn-registros {
+    width: 100%;
     display: flex !important;
-    padding: 8px 16px !important;
-    font-size: 0.9rem !important;
+    justify-content: center;
   }
-
-  .card-body .btn-registros:hover{
-    background-color: #733982;
-    color: #fff;
-  }
-
-  @media screen and (max-width: 800px) {
-    .registro {
-      width: 100%;
-      padding: 15px;
-      margin-bottom: 10px;
-  }
-
-  .tiendas img {
-    width: 60px;
-    height: 60px;
-  }
-  .tiendas a{
-    width: 100%; /* Asegurar que ocupa todo el ancho disponible */
-    padding: 10px 20px; /* Ajustar el espacio interno */
-
-  }
-
-  }
+}
