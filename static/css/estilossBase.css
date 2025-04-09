@@ -1,0 +1,170 @@
+/* Estilos para el navbar */
+.navbar {
+  background-color: var(--Background-header);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  padding: 10px 20px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* Logo */
+.navbar .logo img {
+  max-height: 45px;
+  transition: transform 0.3s;
+}
+
+.navbar .logo img:hover {
+  transform: scale(1.05);
+}
+
+/* Contenedor */
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Enlaces de navegación */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  color: #333;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+.nav-link:hover {
+  color: var(--HoverA);
+  background-color: rgba(148, 70, 174, 0.05);
+}
+
+/* Botón de registro e ingreso especiales */
+.nav-link.register {
+  background-color: var(--BackgroundColor-btn);
+  color: white;
+}
+
+.nav-link.register:hover {
+  background-color: var(--Hover-btn);
+  color: white;
+}
+
+.nav-link.login {
+  color: var(--Ingreso);
+}
+
+.nav-link.login:hover {
+  color: var(--Hover-btn);
+}
+
+/* Botón toggle para móvil */
+.navbar-toggler {
+  border: none;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  transition: all 0.3s;
+  background-color: transparent;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.navbar-toggler-icon {
+  background-image: none;
+  position: relative;
+  height: 2px;
+  width: 24px;
+  background-color: #441151;
+  display: inline-block;
+  transition: all 0.3s;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  height: 2px;
+  width: 24px;
+  background-color: #441151;
+  transition: all 0.3s;
+}
+
+.navbar-toggler-icon::before {
+  top: -8px;
+}
+
+.navbar-toggler-icon::after {
+  top: 8px;
+}
+
+/* Animación del botón toggle cuando está activo */
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+  background-color: transparent;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before {
+  transform: rotate(45deg);
+  top: 0;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after {
+  transform: rotate(-45deg);
+  top: 0;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 992px) {
+  .navbar-collapse {
+    background-color: var(--Background-header);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 15px;
+  }
+  
+  .navbar-nav {
+    gap: 8px;
+  }
+  
+  .nav-link {
+    padding: 10px 15px;
+    display: block;
+    text-align: center;
+  }
+  
+  .nav-link.register,
+  .nav-link.login {
+    margin-top: 5px;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar {
+    padding: 8px 12px;
+  }
+  
+  .navbar .logo img {
+    max-height: 38px;
+  }
+}
