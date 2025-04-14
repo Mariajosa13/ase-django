@@ -1,28 +1,162 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+</head>
+<body>
+<div class="container py-5">
+    <h1 class="mb-4">Productos para Mascotas</h1>
 
-<main class="container">
     <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <h1 class="text-center display-3 py-5">Productos</h1>
-            <ul class="list-group">
-                {% for Producto in productos %}
-                <a class="list-group-item" href="{% url 'producto_detail' Producto.id %}">
-                    <header class="d-flex justify-content-between">
-                    <h3 class="fw-bold">{{ Producto.nombre }}</h3>
-                    <p>{{ Producto.user.username }}</p>
+        <div class="col-md-3">
+            <!-- Sidebar de filtros -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Filtrar Productos</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" action="{% url 'producto_list' %}">
+                        <div class="mb-3">
+                            {{ form.busqueda }}
+                        </div>
 
-                </header>
+                        <div class="mb-3">
+                            <label class="form-label">Categoría</label>
+                            {{ form.categoria }}
+                        </div>
 
-                    <p>{{ Producto.description }}</p>
-                    <p>{{ Producto.precio }}</p>
-                </a>
-                {% endfor %}   
-            </ul>
-            
+                        <div class="mb-3">
+                            <label class="form-label">Tipo de Mascota</label>
+                            {{ form.tipo_mascota }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Rango de Precio</label>
+                            <div class="d-flex">
+                                <div class="flex-grow-1 me-2">
+                                    {{ form.precio_min }}
+                                </div>
+                                <div class="flex-grow-1">
+                                    {{ form.precio_max }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ordenar por</label>
+                            {{ form.orden }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Aplicar Filtros</button>
+                        <a href="{% url 'producto_list' %}" class="btn btn-outline-secondary w-100 mt-2">Limpiar Filtros</a>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Categorías -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Categorías</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% for categoria in categorias %}
+                        <li class="list-group-item">
+                            <a href="{% url 'categoria_productos' categoria.slug %}" class="text-decoration-none">
+                                {{ categoria.nombre }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h5>{{ productos.count }} productos encontrados</h5>
+                </div>
+            </div>
+
+            <!-- Productos -->
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for producto in productos %}
+                <div class="col">
+                    <div class="card h-100 producto-card">
+                        {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                        {% else %}
+                        <img src="{% static 'img/producto-default.jpg' %}" class="card-img-top" alt="{{ producto.nombre }}">
+                        {% endif %}
+
+                        <div class="card-body">
+                            <h5 class="card-title">{{ producto.nombre }}</h5>
+                            <p class="card-text text-muted">{{ producto.get_tipo_mascota_display }}</p>
+                            <p class="card-text fw-bold text-primary">${{ producto.precio }}</p>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    {% if producto.stock > 0 %}
+                                    <span class="badge bg-success">En stock</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">Agotado</span>
+                                    {% endif %}
+                                </div>
+
+                                <a href="{{ producto.get_absolute_url }}" class="btn btn-sm btn-outline-primary">Ver detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        No se encontraron productos que coincidan con los filtros seleccionados.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paginación -->
+            {% if is_paginated %}
+            <nav aria-label="Paginación de productos" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo; Primera</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Anterior</a>
+                    </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <span class="page-link">
+                            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Siguiente</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Última &raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
         </div>
     </div>
-</main>
-
+</div>
+</body>
+</html>
 {% endblock %}
