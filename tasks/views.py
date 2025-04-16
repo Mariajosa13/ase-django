@@ -48,10 +48,10 @@ def signup(request):
         })
 
 def productos(request):
-    productos = Productos.objects.filter(user=request.user)
+    productos = Productos.objects.all()
     return render(request, 'productos.html', {'productos': productos})
 
-def lista_productos_mascotas(request):
+def producto_list(request):
     form = FiltroProductoMascotaForm(request.GET)
     productos = Productos.objects.all()
 
@@ -97,7 +97,7 @@ def lista_productos_mascotas(request):
             'productos': page_obj,
             'categorias': categorias,
 }
-    return render(request, 'productos/lista_productos_mascotas.html', context)
+    return render(request, 'productos/producto_list.html', context)
 
 @login_required
 def agregar_resena(request, slug):
@@ -110,7 +110,7 @@ def agregar_resena(request, slug):
             reseña.producto = producto
             reseña.usuario = request.user
             reseña.save()
-            return redirect('producto_mascota_detalle', slug=producto.slug)
+            return redirect('producto_detail', slug=producto.slug)
     else:
         form = ResenaProductoMascotaForm()
 
@@ -173,7 +173,7 @@ def producto_detail(request, producto_id=None, slug=None):
     }
     
     # Determinar qué plantilla usar
-    template = 'productos/detalle_producto_mascota.html' if slug else 'producto_detail.html'
+    template = 'producto_detail.html'
     
     return render(request, template, context)
 

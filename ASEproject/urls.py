@@ -17,18 +17,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from tasks import views
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('signup/', views.signup, name='signup'),
-    path('productos', views.productos, name='productos'),
-    path('mascotas/producto_list', views.lista_productos_mascotas, name='lista_productos_mascotas'),
+    path('productos/', views.productos, name='productos'),
+    path('mascotas/producto_list', views.producto_list, name='producto_list'),
     path('mascotas/producto/<slug:slug>/resena/', views.agregar_resena, name='agregar_resena'),
-    path('mascotas/categoria/<slug:slug>/', views.productos_por_categoria, name='productos_por_categoria'),
+    path('productos/categoriaMascota/<slug:slug>/', views.productos_por_categoria, name='productos_por_categoria'),
     path('productos/<int:producto_id>/', views.producto_detail, name='producto_detail'),
     path('productos/<slug:slug>/', views.producto_detail, name='detalle_producto_mascota'),
     path('productos/<int:producto_id>/delete', views.delete_producto, name='delete_producto'),
     path('logout/', views.signout, name='logout'),
     path('signin/', views.signin, name='signin')
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

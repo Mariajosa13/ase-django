@@ -23,12 +23,13 @@ class CategoriaMascota(models.Model):
    slug = models.SlugField(unique=True, blank=True)
    imagen = models.ImageField(upload_to='categorias_mascotas/', blank=True, null=True)
    
+   
    def save(self, *args, **kwargs):
-      if not self.slug:
-         self.slug = slugify(self.nombre)
-         super().save(*args, **kwargs)
+        if not self.slug:
+            self.slug = slugify(self.nombre)
+        super().save(*args, **kwargs)
          
-         def __str__(self):
+        def __str__(self):
             return self.nombre
 
 class Meta:
@@ -65,7 +66,7 @@ class Productos(models.Model):
         return f"{self.nombre} - {self.get_tipo_mascota_display()} - by {self.user.username}"
 
     def get_absolute_url(self):
-        return reverse('producto_mascota_detalle', kwargs={'slug': self.slug})
+        return reverse('producto_detail', args=[str(self.id)])
 
 class Meta:
     verbose_name = "Producto para Mascota"

@@ -8,14 +8,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"> <!--font awesome-->
+    <link rel="stylesheet" href="{% static 'css/detalle.css' %}">
+    
+    <title>Detalle Productos</title>
 </head>
 <body>
     <div class="container py-5">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'productos' %}">Productos</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'categoria_productos' producto.categoria.slug %}">{{ producto.categoria.nombre }}</a></li>
+                <li class="breadcrumb-item">
+                    {% if producto.categoria %}
+                        <a href="{% url 'productos_por_categoria' slug=producto.categoria.slug %}">{{ producto.categoria.nombre }}</a>
+                    {% else %}
+                        Sin categoría
+                    {% endif %}
+                </li>
                 <li class="breadcrumb-item active" aria-current="page">{{ producto.nombre }}</li>
             </ol>
         </nav>
@@ -53,9 +62,12 @@
                 </div>
     
                 <p class="text-muted mb-3">
-                    Categoría: <a href="{% url 'categoria_productos' producto.categoria.slug %}">{{ producto.categoria.nombre }}</a> |
-                    Para: {{ producto.get_tipo_mascota_display }}
-                </p>
+                    {% if producto.categoria %}
+                        <a href="{% url 'productos_por_categoria' slug=producto.categoria.slug %}">{{ producto.categoria.nombre }}</a>
+                    {% else %}
+                        Sin categoría
+                    {% endif %}
+                </p>    
     
                 <h3 class="text-primary mb-4">${{ producto.precio }}</h3>
     
@@ -73,7 +85,7 @@
                 </div>
     
                 {% if producto.stock > 0 %}
-                <form method="post" action="{% url 'agregar_carrito' %}" class="d-flex align-items-end">
+                <form method="post" class="d-flex align-items-end">
                     {% csrf_token %}
                     <input type="hidden" name="producto_id" value="{{ producto.id }}">
     
