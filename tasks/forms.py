@@ -1,5 +1,7 @@
 from django import forms
+from django.contrib.auth.models import User
 from .models import Productos, Profile, ResenaProductoMascota, CategoriaMascota
+from datetime import date
 
 
 class ProductoForm(forms.ModelForm):
@@ -57,6 +59,34 @@ class FiltroProductoMascotaForm(forms.ModelForm):
 )
 
 class SignupForm(forms.ModelForm):
+    usuario = forms.CharField(max_length=150)
+    password1 = forms.CharField(widget=forms.PasswordInput)
+    password2 = forms.CharField(widget=forms.PasswordInput)
+    
     class Meta:
         model = Profile
         fields = ['nombre', 'apellido', 'correo']
+
+class ProfileUpdateForm(forms.ModelForm):
+    """Formulario para completar y actualizar datos opcionales del perfil."""
+    segundo_apellido = forms.CharField(max_length=200, required=False)
+    fecha_nacimiento = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        help_text='Debes ser mayor de edad.'
+    )
+    celular = forms.CharField(max_length=15, required=False)
+    genero = forms.ChoiceField(choices=Profile.GENERO_OPCIONES, required=False)
+    
+    class Meta:
+        model = Profile
+        fields = ['segundo_apellido', 'fecha_nacimiento', 'celular', 'genero']
+        
+    def clean_fecha_nacimiento(self):
+        fecha_nacimiento = self.cleaned_data.get('fecha_nacimiento')
+        if fecha_nacimiento:
+            hoy = date.today()
+            edad = hoy.year - fecha_nacimiento.year - ((hoy.month, hoy.day) < (fecha_nacimiento.month, fecha_nacimiento.day))
+            if edad < 18:
+                raise forms.ValidationError('Debes ser mayor de edad para registrarte.')
+        return fecha_nacimiento

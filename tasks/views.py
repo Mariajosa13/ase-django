@@ -8,7 +8,8 @@ from django.core.paginator import Paginator
 from .models import Productos, Profile, CategoriaMascota, ResenaProductoMascota
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Avg
-from .forms import ResenaProductoMascotaForm, FiltroProductoMascotaForm, ProductoForm, SignupForm
+from django.contrib import messages
+from .forms import ResenaProductoMascotaForm, FiltroProductoMascotaForm, ProductoForm, SignupForm, ProfileUpdateForm
 
 
 # Create your views here.
@@ -46,6 +47,71 @@ def signup(request):
             'form': SignupForm(),
             "error": '❌ Las contraseñas no coinciden.'
         })
+    
+@login_required
+def signout(request):
+    logout(request)
+    return redirect('home')
+
+def signin(request):
+    if request.method == 'GET':
+        return render(request, 'signin.html', {
+        'form': AuthenticationForm
+    })
+    else:
+        user = authenticate(request, username=request.POST['usuario'], password=request.POST['password1'])
+        
+        if user is None:
+            return render(request, 'signin.html', {
+                'form': AuthenticationForm,
+                'error': 'username or password is incorrect'
+                })
+        else:
+            login(request, user)
+            return redirect('productos')
+
+
+@login_required
+def perfil_detalle(request):
+    """Vista para ver el perfil del usuario."""
+    profile = get_object_or_404(Profile, user=request.user)
+    return render(request, 'perfil_detalle.html', {'profile': profile})
+
+@login_required
+def perfil_editar(request):
+    """Vista para editar los campos opcionales del perfil."""
+    profile = get_object_or_404(Profile, user=request.user)
+    
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Tu perfil ha sido actualizado correctamente.')
+            return redirect('perfil_detalle')
+    else:
+        form = ProfileUpdateForm(instance=profile)
+    
+    return render(request, 'perfil_editar.html', {'form': form})
+
+@login_required
+def eliminar_campo(request, campo):
+    """Vista para eliminar valores de campos opcionales específicos."""
+    campos_permitidos = ['segundo_apellido', 'celular', 'genero']
+    
+    if campo not in campos_permitidos:
+        messages.error(request, 'No se puede eliminar este campo.')
+        return redirect('perfil_editar')
+    
+    profile = get_object_or_404(Profile, user=request.user)
+    
+    if hasattr(profile, campo):
+        setattr(profile, campo, None)
+        profile.save()
+        messages.success(request, f'El campo {campo} ha sido eliminado.')
+    else:
+        messages.error(request, 'Campo no encontrado.')
+        
+    return redirect('perfil_detalle')
 
 def productos(request):
     productos = Productos.objects.all()
@@ -234,25 +300,4 @@ def delete_producto(request, producto_id):
         producto.delete()
         return redirect('productos')
 
-@login_required
-def signout(request):
-    logout(request)
-    return redirect('home')
-
-def signin(request):
-    if request.method == 'GET':
-        return render(request, 'signin.html', {
-        'form': AuthenticationForm
-    })
-    else:
-        user = authenticate(request, username=request.POST['usuario'], password=request.POST['password1'])
-        
-        if user is None:
-            return render(request, 'signin.html', {
-                'form': AuthenticationForm,
-                'error': 'username or password is incorrect'
-                })
-        else:
-            login(request, user)
-            return redirect('productos')
         

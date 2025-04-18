@@ -2,21 +2,78 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.text import slugify
-
+from django.core.exceptions import ValidationError
+from datetime import date
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
+
+def validar_mayor_edad(fecha_nacimiento):
+    """Valida que el usuario sea mayor de edad (18 años o más)."""
+    hoy = date.today()
+    edad = hoy.year - fecha_nacimiento.year - ((hoy.month, hoy.day) < (fecha_nacimiento.month, fecha_nacimiento.day))
+    if edad < 18:
+        raise ValidationError('Debes ser mayor de edad para registrarte.')
+
 class Profile(models.Model):
+    GENERO_OPCIONES = [
+        ('M', 'Masculino'),
+        ('F', 'Femenino'),
+        ('O', 'Otro'),
+        ('N', 'Prefiero no decirlo'),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=200)
     apellido = models.CharField(max_length=200)
     correo = models.EmailField(null=True, blank=True)
 
-    def _str_(self):
+    # campos opcionales que el usuario podrá editar
+
+    segundo_apellido = models.CharField(max_length=200, blank=True, null=True)
+    fecha_nacimiento = models.DateField(validators=[validar_mayor_edad], blank=True, null=True)
+    celular = models.CharField(max_length=15, blank=True, null=True)
+    genero = models.CharField(max_length=1, choices=GENERO_OPCIONES, blank=True, null=True)
+
+    def __str__(self):
         return f"{self.nombre} - by {self.user.username}"
     
- 
- # Productos Claude
-    
+    def save(self, *args, **kwargs):
+        # Si es una instancia existente, verificamos que no se cambien los campos restringidos
+        if self.pk:
+            old_instance = Profile.objects.get(pk=self.pk)
+            if old_instance.nombre != self.nombre:
+                raise ValidationError("No se puede modificar el nombre.")
+            if old_instance.apellido != self.apellido:
+                raise ValidationError("No se puede modificar el primer apellido.")
+            if old_instance.fecha_nacimiento and old_instance.fecha_nacimiento != self.fecha_nacimiento:
+                raise ValidationError("No se puede modificar la fecha de nacimiento una vez establecida.")
+                
+        super(Profile, self).save(*args, **kwargs)
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """Crea un perfil cuando se crea un usuario nuevo."""
+    if created:
+        Profile.objects.create(
+            user=instance,
+            nombre="Usuario",  # Valores predeterminados
+            apellido="Nuevo",
+            correo=instance.email if instance.email else ""
+        )
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    """Guarda el perfil cuando se guarda el usuario."""
+    if not hasattr(instance, 'profile'):
+        Profile.objects.create(
+            user=instance,
+            nombre="Usuario",
+            apellido="Nuevo",
+            correo=instance.email if instance.email else ""
+        )
+    instance.profile.save()
 
 class CategoriaMascota(models.Model):
    nombre = models.CharField(max_length=100)
