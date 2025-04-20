@@ -4,12 +4,13 @@ from .models import Productos, Profile, ResenaProductoMascota, CategoriaMascota
 from datetime import date
 
 
-class ProductoForm(forms.ModelForm):
+# formulario para crear o editar un producto
+class ProductoForm(forms.ModelForm): #el modelForm esta directamente conectado a la base de datos django
     class Meta:
         model = Productos
         fields = ['nombre', 'description', 'precio', 'stock', 'imagen', 'categoria', 'tipo_mascota', 'destacado']
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}), #para que se vea mas bonito
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'precio': forms.NumberInput(attrs={'class': 'form-control'}),
             'stock': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -22,18 +23,27 @@ class ProductoForm(forms.ModelForm):
     tipo_mascota = forms.ChoiceField(
         choices=Productos.TIPO_MASCOTA_CHOICES,
         required=False,
-        widget=forms.Select(attrs={'class': 'form-select'})
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+            })
     )
 
+#para dejar reseña 
 class ResenaProductoMascotaForm(forms.ModelForm):
    class Meta:
       model = ResenaProductoMascota
       fields = ['calificacion', 'comentario']
       widgets = {
-         'calificacion': forms.Select(attrs={'class': 'form-select'}),
-         'comentario': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+         'calificacion': forms.Select(attrs={
+             'class': 'form-select'
+             }),
+         'comentario': forms.Textarea(attrs={
+             'class': 'form-control',
+               'rows': 4
+               }),
  }
 
+#Este formulario se usa para filtrar los productos en las vistas como: productos por categoría, todos los productos
 class FiltroProductoMascotaForm(forms.ModelForm):
    ORDEN_CHOICES = [
       ('', 'Ordenar por'),
@@ -47,28 +57,97 @@ class FiltroProductoMascotaForm(forms.ModelForm):
       'class': 'form-control',
       'placeholder': 'Buscar productos...'
  }))
-   categoria = forms.ModelChoiceField(queryset=CategoriaMascota.objects.all(), required=False, empty_label="Todas las categorías", widget=forms.Select(attrs={'class': 'form-select'})
+   categoria = forms.ModelChoiceField(
+       queryset=CategoriaMascota.objects.all(), 
+       required=False, 
+       empty_label="Todas las categorías", 
+       widget=forms.Select(attrs={
+           'class': 'form-select'
+           })
 )
-   tipo_mascota = forms.ChoiceField(choices=[('', 'Todas las mascotas')] + Productos.TIPO_MASCOTA_CHOICES, required=False, widget=forms.Select(attrs={'class': 'form-select'})
+   tipo_mascota = forms.ChoiceField(
+       choices=[('', 'Todas las mascotas')] + Productos.TIPO_MASCOTA_CHOICES,
+       required=False, 
+       widget=forms.Select(attrs={
+           'class': 'form-select'
+           })
 )
-   precio_min = forms.IntegerField(required=False, min_value=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio mínimo'})
+   precio_min = forms.IntegerField(
+       required=False, 
+       min_value=0, 
+       widget=forms.NumberInput(attrs={
+           'class': 'form-control', 
+           'placeholder': 'Precio mínimo'
+           })
 )
-   precio_max = forms.IntegerField(required=False, min_value=0, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Precio máximo'})
+   precio_max = forms.IntegerField(
+       required=False, 
+       min_value=0, 
+       widget=forms.NumberInput(attrs={
+           'class': 'form-control',
+           'placeholder': 'Precio máximo'
+           })
 )
-   orden = forms.ChoiceField(choices=ORDEN_CHOICES, required=False, widget=forms.Select(attrs={'class': 'form-select'})
+   orden = forms.ChoiceField(choices=ORDEN_CHOICES, 
+        required=False, 
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+            })
 )
 
+# cuando el usuario se registra por primera vez
 class SignupForm(forms.ModelForm):
-    usuario = forms.CharField(max_length=150)
-    password1 = forms.CharField(widget=forms.PasswordInput)
-    password2 = forms.CharField(widget=forms.PasswordInput)
+    usuario = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Cual es tu usuario'
+        })
+    )
+    nombre = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Escribe tu nombre'
+        })
+    )
+    apellido = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Escribe tu apellido'
+        })
+    )
+    correo = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Escribe tu correo electrónico'
+        })
+    )
+    password1 = forms.CharField(
+        label='Contraseña',
+        strip=False, #si el usuario ingresa un espacio se guarda como si hiciera parte de la contraseña
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Escribe tu contraseña'
+        })
+    )
+    password2 = forms.CharField(
+        label='Confirmar contraseña',
+        strip=False,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Confirma tu contraseña'
+        })
+    )
     
     class Meta:
         model = Profile
         fields = ['nombre', 'apellido', 'correo']
 
+
+#el usuario podrá completar su información personal en el profile
 class ProfileUpdateForm(forms.ModelForm):
-    """Formulario para completar y actualizar datos opcionales del perfil."""
     segundo_apellido = forms.CharField(max_length=200, required=False)
     fecha_nacimiento = forms.DateField(
         required=False,

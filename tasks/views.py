@@ -16,18 +16,22 @@ from .forms import ResenaProductoMascotaForm, FiltroProductoMascotaForm, Product
 def home(request):
     return render(request, 'home.html')
 
+# Vista para registrar un nuevo usuario
 def signup(request):
+    # Muestra el formulario con GET
     if request.method == 'GET':
         return render(request, 'signup.html', {
             'form': SignupForm()
         })
     else:
+        # Se envia la información y valida que las contraseñas coincidan
         if request.POST['password1'] == request.POST['password2']:
             try:
+
+                # Crea un usuario y un perfil y se guarda
                 user = User.objects.create_user(username=request.POST['usuario'], password=request.POST['password1'])
                 user.save()
 
-                # Crear perfil con los campos adicionales
                 profile = Profile(
                     user=user,
                     nombre=request.POST['nombre'],
@@ -36,52 +40,62 @@ def signup(request):
                 )
                 profile.save()
 
+                # Inicia sesión y  lo redirige a los productos
                 login(request, user)
                 return redirect('productos')
+            
+            # Si trata de registrarse con un usuario existente IntegrityError no lo permite
             except IntegrityError:
                 return render(request, 'signup.html', {
                     'form': SignupForm(),
                     "error": '⚠️ El nombre de usuario ya existe.'
                 })
+            
+        # Se recibe información desde el html y si el usuario ingresa contraseñas diferentes manda el error
         return render(request, 'signup.html', {
             'form': SignupForm(),
             "error": '❌ Las contraseñas no coinciden.'
         })
-    
+
+#para cerrar sesión
 @login_required
 def signout(request):
     logout(request)
     return redirect('home')
 
 def signin(request):
+    # Muestra el formulario con GET
     if request.method == 'GET':
         return render(request, 'signin.html', {
         'form': AuthenticationForm
     })
     else:
+        #Si es POST verifica si el usuario existe con ese usuario y contraseña
         user = authenticate(request, username=request.POST['usuario'], password=request.POST['password1'])
         
+        # Si el usuario no existe manda error
         if user is None:
             return render(request, 'signin.html', {
                 'form': AuthenticationForm,
-                'error': 'username or password is incorrect'
+                'error': 'Usuario o contraseña son incorrectos'
                 })
         else:
+            #Si el usuario existe lo redirige a la página de productos
             login(request, user)
             return redirect('productos')
 
 
 @login_required
 def perfil_detalle(request):
-    """Vista para ver el perfil del usuario."""
+    #Muestra la información del perfil del usuario que se creo al registrarse
     profile = get_object_or_404(Profile, user=request.user)
     return render(request, 'perfil_detalle.html', {'profile': profile})
 
 @login_required
 def perfil_editar(request):
-    """Vista para editar los campos opcionales del perfil."""
     profile = get_object_or_404(Profile, user=request.user)
     
+    # Se toma el formulario de actualización de perfil y se actualiza información como se define en este
     if request.method == 'POST':
         form = ProfileUpdateForm(request.POST, instance=profile)
         if form.is_valid():
@@ -95,16 +109,19 @@ def perfil_editar(request):
 
 @login_required
 def eliminar_campo(request, campo):
-    """Vista para eliminar valores de campos opcionales específicos."""
+    # Se eliminan campos permitidos
     campos_permitidos = ['segundo_apellido', 'celular', 'genero']
     
     if campo not in campos_permitidos:
         messages.error(request, 'No se puede eliminar este campo.')
         return redirect('perfil_editar')
     
+    #Busca el perfil del ususario
     profile = get_object_or_404(Profile, user=request.user)
     
+    # hasattr verifica si en el perfil si existe el campo que se va a eliminar
     if hasattr(profile, campo):
+    # Si existe lo pone en none (campo vacío)
         setattr(profile, campo, None)
         profile.save()
         messages.success(request, f'El campo {campo} ha sido eliminado.')
@@ -114,31 +131,32 @@ def eliminar_campo(request, campo):
     return redirect('perfil_detalle')
 
 def productos(request):
+    #Muestra todos los productos
     productos = Productos.objects.all()
     return render(request, 'productos.html', {'productos': productos})
 
 def producto_list(request):
+    #Toma el formulario de Filtros de productos
     form = FiltroProductoMascotaForm(request.GET)
     productos = Productos.objects.all()
 
- # Aplicar filtros si el formulario es válido
     if form.is_valid():
- # Filtrar por categoría
+ # Lo filtra por categoría
         if form.cleaned_data.get('categoria'):
             productos = productos.filter(categoria=form.cleaned_data['categoria'])
 
- # Filtrar por tipo de mascota
+ # Lo filtra por tipo de mascota
         if form.cleaned_data.get('tipo_mascota'):
             productos = productos.filter(tipo_mascota=form.cleaned_data['tipo_mascota'])
 
- # Filtrar por rango de precio
+ # Lo filtra por rango de precio max o min
         if form.cleaned_data.get('precio_min'):
             productos = productos.filter(precio__gte=form.cleaned_data['precio_min'])
 
         if form.cleaned_data.get('precio_max'):
             productos = productos.filter(precio__lte=form.cleaned_data['precio_max'])
 
- # Buscar por texto
+ # Lo busca por texto
         if form.cleaned_data.get('busqueda'):
             busqueda = form.cleaned_data['busqueda']
             productos = productos.filter(
@@ -146,12 +164,12 @@ def producto_list(request):
                 Q(description__icontains=busqueda)
  )
 
- # Ordenar resultados
+ # Ordena todos los resultados
         if form.cleaned_data.get('orden'):
             productos = productos.order_by(form.cleaned_data['orden'])
 
- # Paginación
-        paginator = Paginator(productos, 12) # 12 productos por página
+ # Permite 12 productos por página con el Paginator de django
+        paginator = Paginator(productos, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
@@ -166,28 +184,8 @@ def producto_list(request):
     return render(request, 'productos/producto_list.html', context)
 
 @login_required
-def agregar_resena(request, slug):
-    producto = get_object_or_404(Productos, slug=slug)
-
-    if request.method == 'POST':
-        form = ResenaProductoMascotaForm(request.POST)
-        if form.is_valid():
-            reseña = form.save(commit=False)
-            reseña.producto = producto
-            reseña.usuario = request.user
-            reseña.save()
-            return redirect('producto_detail', slug=producto.slug)
-    else:
-        form = ResenaProductoMascotaForm()
-
-    return render(request, 'agregar_resena.html', {
-        'form': form,
-        'producto': producto
-    })
-
-@login_required
 def producto_detail(request, producto_id=None, slug=None):
-    # Determina qué identificador se está utilizando
+    # Determina qué identificador se está utilizando si id o slug (versión simplificada de un texto sin espacios y usualmente en URLS)
     if producto_id:
         producto = get_object_or_404(Productos, pk=producto_id, user=request.user)
     elif slug:
@@ -195,7 +193,7 @@ def producto_detail(request, producto_id=None, slug=None):
     else:
         return HttpResponseBadRequest("No se proporcionó un identificador de producto")
     
-    # Obtener reseñas, calificaciones y productos relacionados
+    # Se obtienen reseñas, calificaciones y productos relacionados
     resenas = producto.resenas.all().order_by('-fecha_creacion') if hasattr(producto, 'resenas') else None
     promedio_calificacion = producto.resenas.aggregate(Avg('calificacion'))['calificacion__avg'] if hasattr(producto, 'resenas') else None
     
@@ -238,11 +236,9 @@ def producto_detail(request, producto_id=None, slug=None):
         'form_resena': form_resena,
     }
     
-    # Determinar qué plantilla usar
     template = 'producto_detail.html'
     
     return render(request, template, context)
-
 
 # Vista para listar productos por categoría
 def productos_por_categoria(request, slug):
@@ -276,7 +272,7 @@ def productos_por_categoria(request, slug):
             productos = productos.order_by(form.cleaned_data['orden'])
 
  # Paginación
-        paginator = Paginator(productos, 12) # 12 productos por página
+        paginator = Paginator(productos, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
@@ -294,10 +290,34 @@ def productos_por_categoria(request, slug):
 
         
 @login_required
+#Debe editarse y que sea para administradores
 def delete_producto(request, producto_id):
     producto = get_object_or_404(Productos, pk=producto_id, user=request.user)
     if request.method == 'POST':
         producto.delete()
         return redirect('productos')
+
+@login_required
+#se debe editar
+def agregar_resena(request, slug):
+    producto = get_object_or_404(Productos, slug=slug)
+
+    #guarda reseña asociada al usuario y el producto
+    if request.method == 'POST':
+        form = ResenaProductoMascotaForm(request.POST)
+        if form.is_valid():
+            reseña = form.save(commit=False)
+            reseña.producto = producto
+            reseña.usuario = request.user
+            reseña.save()
+            return redirect('producto_detail', slug=producto.slug)
+    else:
+        form = ResenaProductoMascotaForm()
+
+    return render(request, 'agregar_resena.html', {
+        'form': form,
+        'producto': producto
+    })
+
 
         

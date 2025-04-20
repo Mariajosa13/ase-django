@@ -10,7 +10,7 @@ from django.dispatch import receiver
 # Create your models here.
 
 def validar_mayor_edad(fecha_nacimiento):
-    """Valida que el usuario sea mayor de edad (18 años o más)."""
+    #validacion mayor de edad
     hoy = date.today()
     edad = hoy.year - fecha_nacimiento.year - ((hoy.month, hoy.day) < (fecha_nacimiento.month, fecha_nacimiento.day))
     if edad < 18:
@@ -54,7 +54,7 @@ class Profile(models.Model):
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    """Crea un perfil cuando se crea un usuario nuevo."""
+    # se crear perfil de usuario
     if created:
         Profile.objects.create(
             user=instance,
