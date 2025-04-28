@@ -185,60 +185,37 @@ def producto_list(request):
 
 @login_required
 def producto_detail(request, producto_id=None, slug=None):
-    # Determina qué identificador se está utilizando si id o slug (versión simplificada de un texto sin espacios y usualmente en URLS)
+    # Esta vista muestra el detalle de un producto específico.
+    # El producto se puede buscar usando su 'producto_id' o su 'slug' (texto mas bonito en URLs).
+
+    # se obtiene el producto usando el 'producto_id' si está disponible
     if producto_id:
-        producto = get_object_or_404(Productos, pk=producto_id, user=request.user)
+        producto = get_object_or_404(Productos, pk=producto_id)
+    # Si no hay 'producto_id', se busca usando el 'slug'
     elif slug:
         producto = get_object_or_404(Productos, slug=slug)
+    # Si no se proporcionó ni 'producto_id' ni 'slug', devolvemos un error 400 (Bad Request)
     else:
         return HttpResponseBadRequest("No se proporcionó un identificador de producto")
     
-    # Se obtienen reseñas, calificaciones y productos relacionados
+    # se obtienen todas las reseñas asociadas al producto (si existen) desde la más reciente a la más antigua.
     resenas = producto.resenas.all().order_by('-fecha_creacion') if hasattr(producto, 'resenas') else None
     promedio_calificacion = producto.resenas.aggregate(Avg('calificacion'))['calificacion__avg'] if hasattr(producto, 'resenas') else None
-    
-    # Productos relacionados (misma categoría)
-    if hasattr(producto, 'categoria'):
+    productos_relacionados = None
+
+    # Si el producto tiene una categoría asignada (y no está vacía) se buscan productos relacionaos,
+    if hasattr(producto, 'categoria') and producto.categoria:
         productos_relacionados = Productos.objects.filter(
             categoria=producto.categoria
         ).exclude(id=producto.id)[:4]
-    else:
-        productos_relacionados = None
-    
-    # Manejo de formularios
-    if request.method == 'GET':
-        form = ProductoForm(instance=producto)
-        form_resena = ResenaProductoMascotaForm() if hasattr(producto, 'resenas') else None
-    else:  # POST
-        try:
-            form = ProductoForm(request.POST, instance=producto)
-            form.save()
-            return redirect('productos')
-        except ValueError:
-            form_resena = ResenaProductoMascotaForm() if hasattr(producto, 'resenas') else None
-            return render(request, 'producto_detail.html', {
-                'producto': producto, 
-                'form': form,
-                'resenas': resenas,
-                'promedio_calificacion': promedio_calificacion,
-                'productos_relacionados': productos_relacionados,
-                'form_resena': form_resena,
-                'error': "Error al actualizar el producto"
-            })
-    
-    # Contexto común para GET y POST fallido
-    context = {
+
+    return render(request, 'producto_detail.html', {
         'producto': producto,
-        'form': form,
         'resenas': resenas,
         'promedio_calificacion': promedio_calificacion,
         'productos_relacionados': productos_relacionados,
-        'form_resena': form_resena,
-    }
-    
-    template = 'producto_detail.html'
-    
-    return render(request, template, context)
+    })
+
 
 # Vista para listar productos por categoría
 def productos_por_categoria(request, slug):
