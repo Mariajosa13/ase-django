@@ -1,3 +1,19 @@
+/* Color variables */
+:root {
+  --primary: #441151;
+  --primary-hover: #733982;
+  --secondary: #dbc7f1;
+  --background: #efe8f7;
+  --error: #ff958c;
+  --success: #4caf50;
+  --white: #fff;
+  --light-gray: #eee;
+  --border-color: #ccc;
+  --text-gray: #666;
+  --placeholder-gray: #888;
+}
+
+
 /* Estilos para el navbar */
 .navbar {
   background-color: var(--Background-header);
@@ -7,6 +23,8 @@
   width: 100%;
   top: 0;
   left: 0;
+  right: 0;
+  height: 60px;
   z-index: 10000;
   transition: all 0.3s ease;
 }
@@ -56,13 +74,13 @@
 
 /* Botón de registro e ingreso especiales */
 .nav-link.register {
-  background-color: var(--BackgroundColor-btn);
-  color: white;
+  background-color: var(--secondary);
+  color: var(--primary);
 }
 
 .nav-link.register:hover {
-  background-color: var(--Hover-btn);
-  color: white;
+  background-color: var(--error);
+  color: var(--background);
 }
 
 .nav-link.login {
