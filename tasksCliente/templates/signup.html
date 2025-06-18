@@ -1,0 +1,297 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"> <!--font awesome-->
+    <link rel="stylesheet" href="{% static 'css/formularios.css' %}">
+    
+    <title>Registro - Ingreso</title>
+</head>
+<body>
+<div class="center-wrapper">
+    <div class="container-global" id="container">
+
+        <!-- Formulario de Registro (sign-up) -->
+        <div class="form-container sign-up">
+            <form action="/signup/" method="POST" class="card card-body">
+                {% csrf_token %}
+                <h1 class="text-center">Registrarse</h1>
+
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-google"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+                <span>o regístrate con tu nombre de usuario</span>
+
+                {# Grupo de campos principales en dos columnas #}
+                <div class="formulario__grupo">
+                    <div class="formulario__grupo-input">
+                        {{ signup_form.username.label_tag }}
+                        {{ signup_form.username|add_class:"form-control" }}
+                        {% if signup_form.username.errors %}<ul class="errorlist">{% for error in signup_form.username.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                    </div>
+                    <div class="formulario__grupo-input">
+                        {{ signup_form.nombre.label_tag }}
+                        {{ signup_form.nombre|add_class:"form-control" }}
+                        {% if signup_form.nombre.errors %}<ul class="errorlist">{% for error in signup_form.nombre.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                    </div>
+                </div>
+
+                <div class="formulario__grupo">
+                    <div class="formulario__grupo-input">
+                        {{ signup_form.apellido.label_tag }}
+                        {{ signup_form.apellido|add_class:"form-control" }}
+                        {% if signup_form.apellido.errors %}<ul class="errorlist">{% for error in signup_form.apellido.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                    </div>
+                    <div class="formulario__grupo-input">
+                        {{ signup_form.correo.label_tag }}
+                        {{ signup_form.correo|add_class:"form-control" }}
+                        {% if signup_form.correo.errors %}<ul class="errorlist">{% for error in signup_form.correo.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                    </div>
+                </div>
+
+                <div class="formulario__grupo-input full-width"> {# Este campo ocupa todo el ancho #}
+                    {{ signup_form.tipo_usuario.label_tag }}
+                    {{ signup_form.tipo_usuario|add_class:"form-control"|attr:"onchange:mostrarCamposEspecificos()" }}
+                    {% if signup_form.tipo_usuario.errors %}<ul class="errorlist">{% for error in signup_form.tipo_usuario.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                </div>
+
+                <div class="formulario__grupo">
+                    <div class="formulario__grupo-input">
+                        {{ signup_form.password.label_tag }}
+                        {{ signup_form.password|add_class:"form-control" }}
+                        {% if signup_form.password.errors %}<ul class="errorlist">{% for error in signup_form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                    </div>
+                    <div class="formulario__grupo-input">
+                        {{ signup_form.password2.label_tag }}
+                        {{ signup_form.password2|add_class:"form-control" }}
+                        {% if signup_form.password2.errors %}<ul class="errorlist">{% for error in signup_form.password2.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                    </div>
+                </div>
+
+                <!-- {# Campos específicos de Cliente #}
+                <div id="campos_cliente" style="display: none;" class="formulario__grupo-dinamico">
+                    <div class="formulario__grupo"> {# Agrupando campos de cliente de a dos #}
+                        <div class="formulario__grupo-input">
+                            {{ signup_form.segundo_apellido.label_tag }}
+                            {{ signup_form.segundo_apellido|add_class:"form-control" }}
+                            {% if signup_form.segundo_apellido.errors %}<ul class="errorlist">{% for error in signup_form.segundo_apellido.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                        </div>
+                        <div class="formulario__grupo-input">
+                            {{ signup_form.celular.label_tag }}
+                            {{ signup_form.celular|add_class:"form-control" }}
+                            {% if signup_form.celular.errors %}<ul class="errorlist">{% for error in signup_form.celular.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                        </div>
+                    </div>
+                    <div class="formulario__grupo"> {# Siguiente grupo de campos de cliente #}
+                        <div class="formulario__grupo-input">
+                            {{ signup_form.genero.label_tag }}
+                            {{ signup_form.genero|add_class:"form-control" }}
+                            {% if signup_form.genero.errors %}<ul class="errorlist">{% for error in signup_form.genero.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                        </div>
+                        <div class="formulario__grupo-input">
+                            {{ signup_form.fecha_nacimiento.label_tag }}
+                            {{ signup_form.fecha_nacimiento|add_class:"form-control" }}
+                            {% if signup_form.fecha_nacimiento.errors %}<ul class="errorlist">{% for error in signup_form.fecha_nacimiento.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {# Campos específicos de Domiciliario #}
+                <div id="campos_domiciliario" style="display: none;" class="formulario__grupo-dinamico">
+                    <div class="formulario__grupo"> {# Agrupando campos de domiciliario de a dos #}
+                        <div class="formulario__grupo-input">
+                            {{ signup_form.vehiculo.label_tag }}
+                            {{ signup_form.vehiculo|add_class:"form-control" }}
+                            {% if signup_form.vehiculo.errors %}<ul class="errorlist">{% for error in signup_form.vehiculo.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                        </div>
+                        <div class="formulario__grupo-input">
+                            {{ signup_form.segundo_apellido.label_tag }}
+                            {{ signup_form.segundo_apellido|add_class:"form-control" }}
+                            {% if signup_form.segundo_apellido.errors %}<ul class="errorlist">{% for error in signup_form.segundo_apellido.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                        </div>
+                    </div>
+                    <div class="formulario__grupo"> {# Siguiente grupo de campos de domiciliario #}
+                        <div class="formulario__grupo-input">
+                            {{ signup_form.celular.label_tag }}
+                            {{ signup_form.celular|add_class:"form-control" }}
+                            {% if signup_form.celular.errors %}<ul class="errorlist">{% for error in signup_form.celular.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                        </div>
+                        <div class="formulario__grupo-input">
+                            {{ signup_form.genero.label_tag }}
+                            {{ signup_form.genero|add_class:"form-control" }}
+                            {% if signup_form.genero.errors %}<ul class="errorlist">{% for error in signup_form.genero.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                        </div>
+                    </div>
+                    <div class="formulario__grupo"> {# Último campo de domiciliario si no hay otro par #}
+                        <div class="formulario__grupo-input">
+                            {{ signup_form.fecha_nacimiento.label_tag }}
+                            {{ signup_form.fecha_nacimiento|add_class:"form-control" }}
+                            {% if signup_form.fecha_nacimiento.errors %}<ul class="errorlist">{% for error in signup_form.fecha_nacimiento.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {# Campos específicos de Tienda #}
+                <div id="campos_tienda" style="display: none;" class="formulario__grupo-dinamico">
+                    <div class="formulario__grupo"> {# Agrupando campos de tienda de a dos #}
+                        <div class="formulario__grupo-input">
+                            {{ signup_form.nombre_tienda.label_tag }}
+                            {{ signup_form.nombre_tienda|add_class:"form-control" }}
+                            {% if signup_form.nombre_tienda.errors %}<ul class="errorlist">{% for error in signup_form.nombre_tienda.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                        </div>
+                        <div class="formulario__grupo-input">
+                            {{ signup_form.nit.label_tag }}
+                            {{ signup_form.nit|add_class:"form-control" }}
+                            {% if signup_form.nit.errors %}<ul class="errorlist">{% for error in signup_form.nit.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                        </div>
+                    </div>
+                </div> -->
+                
+                {# Mostrar errores no asociados a un campo específico #}
+                {% if signup_form.non_field_errors %}
+                    <ul class="errorlist">{% for error in signup_form.non_field_errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
+                {# Mostrar el error general si lo hay (desde la vista) #}
+                {% if error %}
+                    <p style="color: red;">{{ error }}</p>
+                {% endif %}
+                {# Mostrar mensajes flash de Django #}
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+
+                <button class="btn btn-primary" type="submit" name="register_submit">Registrarse</button>
+            </form>
+        </div> <!-- Finaliza el formulario de registro -->
+
+        <!-- Formulario de Inicio de Sesión (sign-in) -->
+        <div class="form-container sign-in">
+            <form action="/signin/" method="POST" class="card card-body"> {# O action="/signup/" si toda la lógica POST va a 'signup' #}
+                {% csrf_token %}
+                <h1>Ingresa</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-google"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+                <span>o ingresa con tu nombre de usuario</span>
+
+                {# Renderizar campos del AuthenticationForm #}
+                <div class="formulario__grupo"> {# Agrupando campos de login de a dos #}
+                    <div class="formulario__grupo-input">
+                        {{ signin_form.username.label_tag }}
+                        {{ signin_form.username|add_class:"form-control" }}
+                        {% if signin_form.username.errors %}<ul class="errorlist">{% for error in signin_form.username.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                    </div>
+                    <div class="formulario__grupo-input">
+                        {{ signin_form.password.label_tag }}
+                        {{ signin_form.password|add_class:"form-control" }}
+                        {% if signin_form.password.errors %}<ul class="errorlist">{% for error in signin_form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                    </div>
+                </div>
+
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                
+                {# Mostrar errores no asociados a un campo específico #}
+                {% if signin_form.non_field_errors %}
+                    <ul class="errorlist">{% for error in signin_form.non_field_errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
+                {# Mostrar el error general si lo hay (desde la vista) #}
+                {% if error %}
+                    <p style="color: red;">{{ error }}</p>
+                {% endif %}
+                {# Mostrar mensajes flash de Django #}
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                <button class="btn btn-primary" type="submit" name="login_submit">Ingresar</button>
+            </form>
+        </div> <!-- Termina el formulario de ingreso -->
+
+        <!-- Toggle Container (No cambios mayores aquí, solo su ubicación) -->
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>¡Bienvenido de nuevo!</h1>
+                    <p>Ingresa tus datos personales para utilizar todas las funciones del sitio</p>
+                    <button class="hidden" id="login">Ingresar</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>¡Hola!</h1>
+                    <p>Regístrate con tus datos personales para utilizar todas las funciones del sitio</p>
+                    <button class="hidden" id="register">Registrarse</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    const container = document.getElementById('container');
+    const registerBtn = document.getElementById('register');
+    const loginBtn = document.getElementById('login');
+
+    registerBtn.addEventListener('click', () => {
+        container.classList.add("active");
+    });
+
+    loginBtn.addEventListener('click', () => {
+        container.classList.remove("active");
+    });
+
+    function mostrarCamposEspecificos() {
+        // El ID será generado por Django con el prefijo: id_signup-tipo_usuario
+        const tipoUsuarioSelect = document.getElementById('id_signup-tipo_usuario'); 
+        
+        const camposCliente = document.getElementById('campos_cliente');
+        const camposDomiciliario = document.getElementById('campos_domiciliario');
+        const camposTienda = document.getElementById('campos_tienda');
+
+        // Ocultar todos los campos primero
+        if (camposCliente) camposCliente.style.display = 'none';
+        if (camposDomiciliario) camposDomiciliario.style.display = 'none';
+        if (camposTienda) camposTienda.style.display = 'none';
+
+        // Mostrar los campos según el tipo de usuario seleccionado
+        const selectedValue = tipoUsuarioSelect.value;
+        if (selectedValue === 'cliente') {
+            if (camposCliente) camposCliente.style.display = 'block';
+        } else if (selectedValue === 'domiciliario') {
+            if (camposDomiciliario) camposDomiciliario.style.display = 'block';
+        } else if (selectedValue === 'tienda') {
+            if (camposTienda) camposTienda.style.display = 'block';
+        }
+    }
+
+    // Llama a la función al cargar la página para establecer el estado inicial
+    // y al cambiar el valor del select de tipo de usuario
+    document.addEventListener('DOMContentLoaded', () => {
+        mostrarCamposEspecificos(); // Llama al cargar la página
+        const tipoUsuarioSelect = document.getElementById('id_signup-tipo_usuario');
+        if (tipoUsuarioSelect) {
+            tipoUsuarioSelect.addEventListener('change', mostrarCamposEspecificos); // Llama al cambiar la selección
+        }
+    });
+</script>
+
+</body>
+</html>
+
+{% endblock content %}

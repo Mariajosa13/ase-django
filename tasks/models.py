@@ -1,3 +1,4 @@
+from urllib import request
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -7,7 +8,8 @@ from datetime import date
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# Create your models here.
+# SECCIÓN USUARIOS
+
 
 def validar_mayor_edad(fecha_nacimiento):
     #validacion mayor de edad
@@ -24,56 +26,86 @@ class Profile(models.Model):
         ('N', 'Prefiero no decirlo'),
     ]
 
+    TIPO_USUARIO_CHOICES = [ # Cambiado a TIPO_USUARIO_CHOICES para evitar conflicto de nombre con la tupla global
+        ('cliente', 'Cliente'),
+        ('domiciliario', 'Domiciliario'),
+        ('tienda', 'Tienda'),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=200)
-    apellido = models.CharField(max_length=200)
+    tipo_usuario = models.CharField(max_length=20, choices=TIPO_USUARIO_CHOICES, default='cliente') # Establece un valor predeterminado
+    nombre = models.CharField(max_length=200, blank=True, null=True) # Permitir null y blank para creación inicial
+    apellido = models.CharField(max_length=200, blank=True, null=True) # Permitir null y blank para creación inicial
     correo = models.EmailField(null=True, blank=True)
-
-    # campos opcionales que el usuario podrá editar
-
-    segundo_apellido = models.CharField(max_length=200, blank=True, null=True)
     fecha_nacimiento = models.DateField(validators=[validar_mayor_edad], blank=True, null=True)
-    celular = models.CharField(max_length=15, blank=True, null=True)
-    genero = models.CharField(max_length=1, choices=GENERO_OPCIONES, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.nombre} - by {self.user.username}"
+        return f"{self.nombre} - by {self.user.username}" # Usar user.username para mejor descripción
     
     def save(self, *args, **kwargs):
         # Si es una instancia existente, verificamos que no se cambien los campos restringidos
+        # Solo se restringe cambiar nombre y apellido una vez establecidos, no fecha_nacimiento
+        # ya que el ProfileUpdateForm lo maneja.
         if self.pk:
             old_instance = Profile.objects.get(pk=self.pk)
-            if old_instance.nombre != self.nombre:
+            if old_instance.nombre and old_instance.nombre != self.nombre:
                 raise ValidationError("No se puede modificar el nombre.")
-            if old_instance.apellido != self.apellido:
+            if old_instance.apellido and old_instance.apellido != self.apellido:
                 raise ValidationError("No se puede modificar el primer apellido.")
-            if old_instance.fecha_nacimiento and old_instance.fecha_nacimiento != self.fecha_nacimiento:
-                raise ValidationError("No se puede modificar la fecha de nacimiento una vez establecida.")
-                
+            # Eliminada la validación para fecha_nacimiento para permitir actualización desde ProfileUpdateForm
         super(Profile, self).save(*args, **kwargs)
 
+# Señal para crear un perfil cuando se crea un usuario.
+# Ahora crea un perfil con campos vacíos que serán llenados por la vista.
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    # se crear perfil de usuario
     if created:
-        Profile.objects.create(
-            user=instance,
-            nombre="Usuario",  # Valores predeterminados
-            apellido="Nuevo",
-            correo=instance.email if instance.email else ""
-        )
+        Profile.objects.create(user=instance) # Crea un perfil vacío, la vista lo llenará
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    """Guarda el perfil cuando se guarda el usuario."""
-    if not hasattr(instance, 'profile'):
-        Profile.objects.create(
-            user=instance,
-            nombre="Usuario",
-            apellido="Nuevo",
-            correo=instance.email if instance.email else ""
-        )
-    instance.profile.save()
+# Removida la señal save_user_profile ya que era redundante y causaba conflictos.
+
+class Cliente(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+
+    # info que podrá agregar el cliente
+    segundo_apellido = models.CharField(max_length=200, blank=True, null=True)
+    celular = models.CharField(max_length=15, blank=True, null=True)
+    genero = models.CharField(max_length=1, choices=Profile.GENERO_OPCIONES, default='N')
+    
+    def __str__(self):
+        return f"Cliente: {self.profile.user.username}"
+ 
+class Domiciliario(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    vehiculo = models.CharField(max_length=50, blank=True, null=True)
+    segundo_apellido = models.CharField(max_length=200, blank=True, null=True)
+    celular = models.CharField(max_length=15, blank=True, null=True)
+    genero = models.CharField(max_length=1, choices=Profile.GENERO_OPCIONES, default='N')
+
+    def __str__(self):
+        return f"Domiciliario: {self.profile.user.username}"
+
+
+class Tienda(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    nombre_tienda = models.CharField(max_length=200, blank=True, null=True) # Agregué estos campos
+    nit = models.CharField(max_length=50, blank=True, null=True) # Agregué estos campos
+
+    def __str__(self):
+        return f"Tienda: {self.profile.user.username} ({self.nombre_tienda})"
+
+@receiver(post_save, sender=Profile)
+def crear_subtipo_usuario(sender, instance, created, **kwargs):
+    if created and instance.tipo_usuario:
+        if instance.tipo_usuario == 'cliente':
+            Cliente.objects.create(profile=instance)
+        elif instance.tipo_usuario == 'domiciliario':
+            Domiciliario.objects.create(profile=instance)
+        elif instance.tipo_usuario == 'tienda':
+            Tienda.objects.create(profile=instance)
+
+
+# SECCIÓN MASCOTAS
 
 class CategoriaMascota(models.Model):
    nombre = models.CharField(max_length=100)
