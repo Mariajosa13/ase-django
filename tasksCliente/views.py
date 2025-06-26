@@ -12,7 +12,6 @@ from django.contrib import messages
 from tasksCliente.forms import SignupForm, ProfileUpdateForm
 
 
-
 # Create your views here.
 def home(request):
     return render(request, 'home.html')
@@ -64,7 +63,7 @@ def signup(request):
                         if fecha_nacimiento_str:
                             try:
                                 cliente.fecha_nacimiento = fecha_nacimiento_str 
-                            except ValueError: # Este catch es menos probable ahora si el form ya validó la fecha
+                            except ValueError: # Este es menos probable ahora si el form ya validó la fecha
                                 print("Formato de fecha de nacimiento incorrecto para cliente.")
                                 pass
                         else:
@@ -182,7 +181,6 @@ def signup(request):
                     'error': 'Usuario o contraseña son incorrectos.'
                 })
         else:
-            # Si se envía un POST sin un botón de submit reconocido
             signup_form = SignupForm(prefix='signup')
             signin_form = AuthenticationForm(prefix='signin')
             messages.error(request, 'Solicitud desconocida.')
@@ -200,10 +198,6 @@ def signout(request):
     return redirect('home')
 
 def signin(request):
-    # La lógica de inicio de sesión ya está integrada en la vista `signup`
-    # Es recomendable consolidar toda la lógica de POST en una sola vista (signup).
-    # Sin embargo, si deseas mantener esta vista separada para GET de login,
-    # debes asegurarte de que devuelva los formularios de la misma manera que signup.
     if request.method == 'GET':
         signup_form = SignupForm(prefix='signup')
         signin_form = AuthenticationForm(prefix='signin')
@@ -212,12 +206,7 @@ def signin(request):
             'signin_form': signin_form,
         })
     else:
-        # Si es POST, la lógica de login debería ser manejada en la vista `signup`
-        # si tu <form action="/signup/" ...> apunta allí.
-        # Si esta vista de `signin` recibe POST, entonces su lógica es redundante
-        # con la de 'login_submit' en 'signup'.
-        # Para que funcione si el HTML form action es /signin/ y POST llega aquí:
-        form = AuthenticationForm(data=request.POST, prefix='signin') # Añadir prefix aquí
+        form = AuthenticationForm(data=request.POST, prefix='signin')
         if form.is_valid():
             user = form.get_user()
             login(request, user)
@@ -292,14 +281,6 @@ def perfil_editar(request):
         form = ProfileUpdateForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
-            
-            # Lógica para guardar campos de Cliente/Domiciliario/Tienda si existen en el form
-            # Esto requeriría adaptar ProfileUpdateForm para incluir esos campos,
-            # o crear formularios separados para cada tipo de usuario.
-            
-            # Por ahora, asumo que ProfileUpdateForm solo edita campos de Profile.
-            # Si quieres editar los campos adicionales (segundo_apellido, celular, etc.),
-            # necesitarías pasar más forms o combinar la lógica aquí.
 
             messages.success(request, 'Tu perfil ha sido actualizado correctamente.')
             return redirect('perfil_detalle')
@@ -312,11 +293,9 @@ def perfil_editar(request):
 def eliminar_campo(request, campo):
     # Se eliminan campos permitidos
     # Estos campos son parte de Cliente/Domiciliario, no directamente de Profile.
-    # Necesitas obtener el objeto Cliente/Domiciliario asociado.
     
-    campos_permitidos_cliente = ['segundo_apellido', 'celular', 'genero', 'fecha_nacimiento'] # Añadido fecha_nacimiento
+    campos_permitidos_cliente = ['segundo_apellido', 'celular', 'genero', 'fecha_nacimiento']
     campos_permitidos_domiciliario = ['segundo_apellido', 'celular', 'genero', 'fecha_nacimiento', 'vehiculo']
-    # Campos de Tienda no son eliminables de esta forma.
 
     profile = get_object_or_404(Profile, user=request.user)
     
@@ -480,3 +459,10 @@ def productos_por_categoria(request, slug):
 }
 
     return render(request, 'productos/productos_por_categoria.html', context)
+
+
+
+# Vista domi al iniciar sesión
+
+def dashboard_domiciliario(request):
+    return render(request, 'dashboard_domiciliario.html')
