@@ -1,8 +1,24 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from tasksCliente import views
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+)
+#importacion vistas API
+from tasks.views_api import (
+    SignupAPIView, ProfileDetailAPIView, ProfileUpdateAPIView,
+    DeleteProfileFieldAPIView, ProductosViewSet, CategoriaMascotaViewSet,
+    ResenaProductoMascotaViewSet, MyTokenObtainPairAPIView
+)
+
+# Crea un router para ViewSets
+router = DefaultRouter()
+router.register(r'productos', ProductosViewSet)
+router.register(r'categorias', CategoriaMascotaViewSet)
+router.register(r'resenas', ResenaProductoMascotaViewSet)
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -25,8 +41,25 @@ urlpatterns = [
     path('productos/<slug:slug>/', views.producto_detail, name='detalle_producto_mascota'),
 
     # Vista domi después de ingreso
-    path('domi/', views.dashboard_domiciliario, name='dashboard_domiciliario')
+    path('domi/', views.dashboard_domiciliario, name='dashboard_domiciliario'),
 
+    # URLs de la API 
+    path('api/', include(router.urls)),
+
+    # URLs de autenticación JWT
+    path('api/token/', MyTokenObtainPairAPIView.as_view(), name='api_token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='api_token_refresh'),
+
+    # URLs específicas de gestión de usuarios/perfiles API
+    path('api/register/', SignupAPIView.as_view(), name='api_register'),
+    path('api/profile/', ProfileDetailAPIView.as_view(), name='api_profile_detail'),
+    path('api/profile/update/', ProfileUpdateAPIView.as_view(), name='api_profile_update'),
+    path('api/profile/delete-field/<str:campo>/', DeleteProfileFieldAPIView.as_view(), name='api_delete_profile_field'),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+    
+    

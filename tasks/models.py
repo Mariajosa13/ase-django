@@ -162,7 +162,7 @@ class Meta:
     verbose_name_plural = "Productos para Mascotas"
    
 class ResenaProductoMascota(models.Model):
-    producto = models.ForeignKey(Productos, on_delete=models.CASCADE, related_name='resenas')
+    producto = models.ForeignKey(Productos, on_delete=models.CASCADE, related_name='resenas_producto_mascota')
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     calificacion = models.PositiveSmallIntegerField(choices=[(i, i) for i in range(1, 6)])
     comentario = models.TextField()
