@@ -1,3 +1,4 @@
+from datetime import date
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.db.models import Avg, Q
@@ -52,15 +53,13 @@ class SignupAPISerializer(serializers.Serializer):
     correo = serializers.EmailField()
     tipo_usuario = serializers.ChoiceField(choices=Profile.TIPO_USUARIO_CHOICES)
 
-    # Campos opcionales que pueden venir en la solicitud, mapeados a los subtipos
-    # Estos campos se usarán para cualquier tipo de usuario que los necesite
-    segundo_apellido = serializers.CharField(max_length=200, required=False, allow_blank=True)
-    celular = serializers.CharField(max_length=20, required=False, allow_blank=True)
-    genero = serializers.CharField(max_length=1, required=False, allow_blank=True)
+    segundo_apellido = serializers.CharField(max_length=200, required=False, allow_blank=True, default='') 
+    celular = serializers.CharField(max_length=20, required=False, allow_blank=True, default='') 
+    genero = serializers.CharField(max_length=1, required=False, allow_blank=True, default='N')
     fecha_nacimiento = serializers.DateField(required=False, allow_null=True)
-    vehiculo = serializers.CharField(max_length=100, required=False, allow_blank=True)
-    nombre_tienda = serializers.CharField(max_length=200, required=False, allow_blank=True)
-    nit = serializers.CharField(max_length=50, required=False, allow_blank=True)
+    vehiculo = serializers.CharField(max_length=100, required=False, allow_blank=True, default='') 
+    nombre_tienda = serializers.CharField(max_length=200, required=False, allow_blank=True, default='') 
+    nit = serializers.CharField(max_length=50, required=False, allow_blank=True, default='') 
 
     def validate(self, data):
         if data['password'] != data['password2']:
@@ -69,27 +68,28 @@ class SignupAPISerializer(serializers.Serializer):
             raise serializers.ValidationError({"username": "Este nombre de usuario ya está en uso."})
         if Profile.objects.filter(correo=data['correo']).exists():
             raise serializers.ValidationError({"correo": "Este correo electrónico ya está registrado."})
-            
-        # Validación de mayor debe estar accesible
+        
+        # Validación de mayor de edad
         fecha_nacimiento = data.get('fecha_nacimiento')
         if fecha_nacimiento:
-            from datetime import date
             hoy = date.today()
+            # Calcula la edad para verificar si es mayor de edad
             edad = hoy.year - fecha_nacimiento.year - ((hoy.month, hoy.day) < (fecha_nacimiento.month, fecha_nacimiento.day))
             if edad < 18:
                 raise serializers.ValidationError({"fecha_nacimiento": "Debes ser mayor de edad para registrarte."})
                 
         return data
 
-def create(self, validated_data):
+    def create(self, validated_data):
         try:
-            # Crear el usuario base de Django
+            # Encriptar la contraseña antes de crear el usuario
             user = User.objects.create_user(
                 username=validated_data['username'],
-                password=validated_data['password']
+                password=validated_data['password'],
+                email=validated_data['correo']
             )
 
-            # Crear el perfil general (los campos que aplican a todos)
+            # 2. Crear el perfil general (los campos que aplican a todos)
             profile = Profile.objects.create(
                 user=user,
                 nombre=validated_data['nombre'],
@@ -99,8 +99,10 @@ def create(self, validated_data):
                 fecha_nacimiento=validated_data.get('fecha_nacimiento')
             )
 
-            # Crear la instancia del tipo de usuario específico
+            # 3. Crear la instancia del tipo de usuario específico
             tipo_usuario = validated_data['tipo_usuario']
+            
+            # Utiliza .get() con un valor por defecto para campos opcionales,
             if tipo_usuario == 'cliente':
                 Cliente.objects.create(
                     profile=profile,
@@ -122,11 +124,13 @@ def create(self, validated_data):
                     nombre_tienda=validated_data.get('nombre_tienda', ''),
                     nit=validated_data.get('nit', '')
                 )
-            return user
+            
+            return user # Retornamos el objeto User creado
         except IntegrityError:
+            # Esto captura errores (username o correo ya existen)
             raise serializers.ValidationError({"detail": "Error de base de datos: el nombre de usuario o correo ya existen."})
         except Exception as e:
-            # Esto atrapará errores inesperados durante la creación de los subtipos
+            # Captura cualquier otro error durante la creación
             raise serializers.ValidationError({"detail": f"Ocurrió un error inesperado durante el registro: {e}"})
 
 # Jason Web token serializer para obtener el token JWT con datos del usuario, valida que las credenciales sean correctas y si son correctas, devuelve un token JWT con datos del usuario, se hace personalizado para incluir datos del perfil del usuario y el user_type para que el frontend pueda identificar el tipo de usuario y mostrar la información correspondiente.

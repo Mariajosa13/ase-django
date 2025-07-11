@@ -47,14 +47,14 @@ urlpatterns = [
     path('api/', include(router.urls)),
 
     # URLs de autenticación JWT
-    path('api/token/', MyTokenObtainPairAPIView.as_view(), name='api_token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='api_token_refresh'),
+    path('api/token/', MyTokenObtainPairAPIView.as_view(), name='api_token_obtain_pair'), #signin
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='api_token_refresh'), 
 
     # URLs específicas de gestión de usuarios/perfiles API
-    path('api/register/', SignupAPIView.as_view(), name='api_register'),
-    path('api/profile/', ProfileDetailAPIView.as_view(), name='api_profile_detail'),
-    path('api/profile/update/', ProfileUpdateAPIView.as_view(), name='api_profile_update'),
-    path('api/profile/delete-field/<str:campo>/', DeleteProfileFieldAPIView.as_view(), name='api_delete_profile_field'),
+    path('api/register/', SignupAPIView.as_view(), name='api_register'), #signup
+    path('api/profile/', ProfileDetailAPIView.as_view(), name='api_profile_detail'), #profile
+    path('api/profile/update/', ProfileUpdateAPIView.as_view(), name='api_profile_update'), #profile_update
+    path('api/profile/delete-field/<str:campo>/', DeleteProfileFieldAPIView.as_view(), name='api_delete_profile_field'), #profile_delete_field
 ]
 
 if settings.DEBUG:

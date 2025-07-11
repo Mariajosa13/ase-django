@@ -32,11 +32,11 @@ class Profile(models.Model):
         ('tienda', 'Tienda'),
     ]
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
     tipo_usuario = models.CharField(max_length=20, choices=TIPO_USUARIO_CHOICES, default='cliente') # Establece un valor predeterminado
     nombre = models.CharField(max_length=200, blank=True, null=True) # Permitir null y blank para creación inicial
     apellido = models.CharField(max_length=200, blank=True, null=True) # Permitir null y blank para creación inicial
-    correo = models.EmailField(null=True, blank=True)
+    correo = models.EmailField(null=True, blank=True, unique=True)
     fecha_nacimiento = models.DateField(validators=[validar_mayor_edad], blank=True, null=True)
 
     def __str__(self):
