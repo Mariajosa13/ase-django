@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Proceder al Pago</h1>
+
+    {% if cart_items %}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Resumen de tu Pedido</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for item in cart_items %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">{{ item.producto.nombre }}</h6>
+                                        <small class="text-muted">{{ item.quantity }} x ${{ item.producto.precio|floatformat:2 }}</small>
+                                    </div>
+                                    <span class="fw-bold">${{ item.get_total_price|floatformat:2 }}</span>
+                                </li>
+                            {% endfor %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center bg-light fw-bold">
+                                <span>Total del Carrito:</span>
+                                <span>${{ total_cart_price|floatformat:2 }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                {% comment %} 
+                Aquí puedes agregar más secciones como:
+                - Formulario para dirección de envío
+                - Selección de método de envío
+                - Formulario de pago (tarjeta de crédito, etc.)
+                {% endcomment %}
+
+                <h4>Información de Contacto</h4>
+                {% if user.is_authenticated and user_profile %}
+                    <p><strong>Nombre:</strong> {{ user_profile.nombre|default:"N/A" }} {{ user_profile.apellido|default:"N/A" }}</p>
+                    <p><strong>Correo:</strong> {{ user_profile.correo|default:user.email }}</p>
+                    {% if cliente_info %}
+                        <p><strong>Celular:</strong> {{ cliente_info.celular|default:"N/A" }}</p>
+                        <p><strong>Género:</strong> {{ cliente_info.get_genero_display }}</p>
+                        {# Podrías añadir un enlace para editar esta información si no está completa #}
+                        <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-secondary">Editar Perfil</a> {# Asume que tienes esta URL #}
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-info">
+                        Por favor <a href="{% url 'signup' %}?next={{ request.path }}">inicia sesión</a> para agilizar tu compra, o continúa como invitado.
+                        {# Aquí podrías añadir un formulario para que los invitados ingresen su información #}
+                    </div>
+                {% endif %}
+
+                <h4 class="mt-4">Método de Pago</h4>
+                <div class="alert alert-warning">
+                    La integración de pasarelas de pago se realizaría en este paso. Por ahora, es un resumen.
+                    {# Formulario para Stripe, PayPal, etc. #}
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title">Resumen del Pedido</h5>
+                        <ul class="list-group list-group-flush mb-3">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Subtotal:</span>
+                                <span>${{ total_cart_price|floatformat:2 }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Envío:</span>
+                                <span>$0.00</span> {# Placeholder #}
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between fw-bold">
+                                <span>Total a Pagar:</span>
+                                <span>${{ total_cart_price|floatformat:2 }}</span>
+                            </li>
+                        </ul>
+                        <button type="submit" class="btn btn-primary btn-lg w-100">Confirmar Compra</button>
+                        <a href="{% url 'view_cart' %}" class="btn btn-outline-secondary w-100 mt-2">Volver al Carrito</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center">
+            Tu carrito está vacío. ¡No hay productos para proceder al pago!
+            <br>
+            <a href="{% url 'productos' %}" class="btn btn-primary mt-3">Ver Productos</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
 from django.core.paginator import Paginator
 from django.db import IntegrityError
-from tasks.models import Cliente, Domiciliario, Productos, Profile, CategoriaMascota, Tienda
+from tasks.models import Cart, CartItem, Cliente, Domiciliario, Productos, Profile, CategoriaMascota, Tienda
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Avg
 from django.contrib import messages
@@ -325,6 +325,8 @@ def eliminar_campo(request, campo):
         
     return redirect('perfil_detalle')
 
+# Productos views
+
 def productos(request):
     #Muestra todos los productos
     productos = Productos.objects.all()
@@ -378,7 +380,6 @@ def producto_list(request):
 }
     return render(request, 'productos/producto_list.html', context)
 
-@login_required
 def producto_detail(request, producto_id=None, slug=None):
     # Esta vista muestra el detalle de un producto específico.
     # El producto se puede buscar usando su 'producto_id' o su 'slug' (texto mas bonito en URLs).
@@ -460,6 +461,132 @@ def productos_por_categoria(request, slug):
 
     return render(request, 'productos/productos_por_categoria.html', context)
 
+#CARRITO DE COMPRAS
+
+def _get_or_create_cart(request):
+    # función para obtener o crear un carrito de compras estando el usuario autenticado o sin autenticar, trabaja internamente para las demás funciones del carrito
+    if request.user.is_authenticated:
+        cart, created = Cart.objects.get_or_create(user=request.user)
+    else:
+        # Usar la clave de sesión para usuarios no autenticados
+        session_key = request.session.session_key
+        if not session_key:
+            request.session.save()
+            session_key = request.session.session_key
+        cart, created = Cart.objects.get_or_create(session_key=session_key)
+    return cart
+
+def add_to_cart(request, producto_id):
+    producto = get_object_or_404(Productos, id=producto_id)
+    cart = _get_or_create_cart(request)
+
+    quantity_to_add = 1
+    if request.method == 'POST' and 'quantity' in request.POST:
+        try:
+            quantity_to_add = int(request.POST['quantity'])
+            if quantity_to_add <= 0:
+                quantity_to_add = 1 # Asegura que la cantidad sea al menos 1
+        except ValueError:
+            quantity_to_add = 1 # Si hay un error, usa la cantidad por defecto
+
+    cart_item = CartItem.objects.filter(cart=cart, producto=producto).first()
+
+    if cart_item:
+        # Si el item ya existe, incrementa la cantidad
+        cart_item.quantity += quantity_to_add
+        cart_item.save()
+    else:
+        # Si no existe, crea un nuevo item en el carrito
+        CartItem.objects.create(cart=cart, producto=producto, quantity=quantity_to_add)
+
+    return redirect('view_cart') # Redirige a la vista del carrito
+
+def remove_from_cart(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id)
+    cart = _get_or_create_cart(request)
+
+    # se asegura de que el item pertenece al carrito del usuario actual o de la sesión
+    if cart_item.cart != cart:
+        return HttpResponseBadRequest("Este item no pertenece a tu carrito.")
+
+    cart_item.delete()
+    return redirect('view_cart')
+
+def update_cart_item_quantity(request, item_id):
+    if request.method == 'POST':
+        cart_item = get_object_or_404(CartItem, id=item_id)
+        cart = _get_or_create_cart(request)
+
+        if cart_item.cart != cart:
+            return HttpResponseBadRequest("Este item no pertenece a tu carrito.")
+        
+        try:
+            quantity = int(request.POST.get('quantity'))
+            if quantity <= 0:
+                cart_item.delete()
+            else:
+                cart_item.quantity = quantity
+                cart_item.save()
+        except ValueError:
+            return HttpResponseBadRequest("Cantidad inválida.")
+    
+    return redirect('view_cart')
+
+def view_cart(request):
+    cart = _get_or_create_cart(request)
+    cart_items = cart.items.all() # Obtiene todos los ítems del carrito
+    
+    context = {
+        'cart': cart,
+        'cart_items': cart_items,
+        'cart_total_price': cart.get_total_price(),
+    }
+    return render(request, 'cart.html', context)
+
+# @login_required # Descomenta si solo quieres que usuarios autenticados procedan al pago
+def checkout(request):
+    cart = _get_or_create_cart(request)
+    
+    cart_items = cart.items.all().select_related('producto') # Obtener todos los ítems del carrito
+    
+    total_cart_price = cart.get_total_price()
+
+    # - Calcular costos de envío (basado en la dirección del usuario, peso total, etc.)
+    # - Aplicar descuentos/cupones
+    # - Recopilar información de envío/facturación si el usuario no la tiene
+    # - Procesar pago (normalmente esto iría en una vista separada o en un paso posterior)
+
+    context = {
+        'cart': cart,
+        'cart_items': cart_items,
+        'total_cart_price': total_cart_price,
+        'user_profile': None, # por si no hay usuario o perfil
+    }
+
+    # Si el usuario está autenticado, podemos cargar su información de perfil/cliente
+    if request.user.is_authenticated:
+        try:
+            # obtener el Profile asociado al usuario
+            user_profile = Profile.objects.get(user=request.user)
+            context['perfil_detalle'] = user_profile
+
+            #si es cliente
+            if user_profile.tipo_usuario == 'cliente':
+                try:
+                    cliente_info = Cliente.objects.get(profile=user_profile)
+                    context['perfil_detalle'] = cliente_info
+                except Cliente.DoesNotExist:
+                    pass 
+            
+            # elif user_profile.tipo_usuario == 'domiciliario':
+            #     context['domiciliario_info'] = Domiciliario.objects.get(profile=user_profile)
+            # elif user_profile.tipo_usuario == 'tienda':
+            #     context['tienda_info'] = Tienda.objects.get(profile=user_profile)
+
+        except Profile.DoesNotExist:
+            pass
+    
+    return render(request, 'checkout.html', context)
 
 
 # Vista domi al iniciar sesión

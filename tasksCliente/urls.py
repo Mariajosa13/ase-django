@@ -40,6 +40,13 @@ urlpatterns = [
     path('productos/<int:producto_id>/', views.producto_detail, name='producto_detail'),
     path('productos/<slug:slug>/', views.producto_detail, name='detalle_producto_mascota'),
 
+     # Cart
+    path('cart/', views.view_cart, name='view_cart'),
+    path('cart/add/<int:producto_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('cart/update/<int:item_id>/', views.update_cart_item_quantity, name='update_cart_item_quantity'),
+    path('checkout/', views.checkout, name='checkout'),
+
     # Vista domi después de ingreso
     path('domi/', views.dashboard_domiciliario, name='dashboard_domiciliario'),
 

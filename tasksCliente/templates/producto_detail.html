@@ -54,7 +54,7 @@
                             <i class="fa{% if i|add:"0"|add:"-48" <= promedio_calificacion %}s{% elif i|add:"0"|add:"-48"|add:"-0.5" <= promedio_calificacion %}s-half-alt{% else %}r{% endif %} fa-star text-warning"></i>
                             {% endfor %}
                         </div>
-                        <span class="ms-2">{{ promedio_calificacion|floatformat:1 }} ({{ reseñas.count }} reseñas)</span>
+                        <span class="ms-2">{{ promedio_calificacion|floatformat:1 }} ({{ resenas.count }} resenas)</span>
                     </div>
                     {% else %}
                     <span class="text-muted">Sin reseñas aún</span>
@@ -73,7 +73,7 @@
     
                 <div class="mb-4">
                     <h5>Descripción:</h5>
-                    <p>{{ producto.descripcion|linebreaks }}</p>
+                    <p>{{ producto.description|linebreaks }}</p>
                 </div>
     
                 <div class="d-flex align-items-center mb-4">
@@ -85,13 +85,12 @@
                 </div>
     
                 {% if producto.stock > 0 %}
-                <form method="post" class="d-flex align-items-end">
+                <form method="post" action="{% url 'add_to_cart' producto.id %}" class="d-flex align-items-end">
                     {% csrf_token %}
-                    <input type="hidden" name="producto_id" value="{{ producto.id }}">
     
                     <div class="me-3" style="width: 100px;">
-                        <label for="cantidad" class="form-label">Cantidad</label>
-                        <input type="number" id="cantidad" name="cantidad" class="form-control" value="1" min="1" max="{{ producto.stock }}">
+                        <label for="quantity" class="form-label">Cantidad</label>
+                        <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="{{ producto.stock }}">
                     </div>
     
                     <button type="submit" class="btn btn-primary">
@@ -101,96 +100,6 @@
                 {% endif %}
             </div>
         </div>
-    
-        <!-- Reseñas -->
-        <div class="row mt-5">
-            <div class="col-12">
-                <h3 class="mb-4">Reseñas de Clientes</h3>
-    
-                <!-- Formulario para agregar reseña -->
-                {% if user.is_authenticated %}
-                <div class="card mb-4">
-                    <div class="card-header bg-light">
-                        <h5 class="mb-0">Dejar una Reseña</h5>
-                    </div>
-                    <div class="card-body">
-                        <form method="post" action="{% url 'agregar_resena' producto.slug %}">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label for="{{ form_reseña.calificacion.id_for_label }}" class="form-label">Calificación:</label>
-                                {{ form_reseña.calificacion }}
-                            </div>
-                            <div class="mb-3">
-                                <label for="{{ form_reseña.comentario.id_for_label }}" class="form-label">Comentario:</label>
-                                {{ form_reseña.comentario }}
-                            </div>
-                            <button type="submit" class="btn btn-primary">Enviar Reseña</button>
-                        </form>
-                    </div>
-                </div>
-                {% else %}
-                <div class="alert alert-info mb-4">
-                    <a href="{% url 'login' %}?next={{ request.path }}">Inicia sesión</a> para dejar una reseña.
-                </div>
-                {% endif %}
-    
-                <!-- Lista de reseñas -->
-                <div class="reseñas">
-                    {% for reseña in reseñas %}
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <div>
-                                    <h5 class="card-title mb-0">{{ reseña.usuario.get_full_name|default:reseña.usuario.username }}</h5>
-                                    <small class="text-muted">{{ reseña.fecha_creacion|date:"d/m/Y" }}</small>
-                                </div>
-                                <div class="rating">
-                                    {% for i in "12345" %}
-                                    <i class="fa{% if i|add:"0"|add:"-48" <= reseña.calificacion %}s{% else %}r{% endif %} fa-star text-warning"></i>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            <p class="card-text">{{ reseña.comentario|linebreaks }}</p>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="alert alert-light">
-                        No hay reseñas aún para este producto. ¡Sé el primero en dejar tu opinión!
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    
-        <!-- Productos relacionados -->
-        {% if productos_relacionados %}
-        <div class="row mt-5">
-            <div class="col-12">
-                <h3 class="mb-4">Productos Relacionados</h3>
-    
-                <div class="row row-cols-1 row-cols-md-4 g-4">
-                    {% for p in productos_relacionados %}
-                    <div class="col">
-                        <div class="card h-100">
-                            {% if p.imagen %}
-                            <img src="{{ p.imagen.url }}" class="card-img-top" alt="{{ p.nombre }}">
-                            {% else %}
-                            <img src="{% static 'img/producto-default.jpg' %}" class="card-img-top" alt="{{ p.nombre }}">
-                            {% endif %}
-    
-                            <div class="card-body">
-                                <h5 class="card-title">{{ p.nombre }}</h5>
-                                <p class="card-text fw-bold text-primary">${{ p.precio }}</p>
-                                <a href="{{ p.get_absolute_url }}" class="btn btn-sm btn-outline-primary">Ver detalles</a>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        {% endif %}
-    </div>
 </body>
 </html>
 {% endblock %}

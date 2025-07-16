@@ -31,6 +31,14 @@
                     <li class="nav-item">
                         <a href="/productos" class="nav-link">Productos</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_cart' %}">
+                            <i class="fas fa-shopping-cart"></i> Carrito
+                            {% if cart_item_count %}
+                            <span class="badge bg-danger rounded-pill">{{ cart_item_count }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a href="/logout" class="nav-link">Salir</a>

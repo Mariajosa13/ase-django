@@ -175,3 +175,29 @@ class ResenaProductoMascota(models.Model):
     
     def __str__(self):
         return f'Reseña de {self.usuario.username} para {self.producto.nombre}'
+
+class Cart(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    session_key = models.CharField(max_length=40, null=True, blank=True, unique=True) # permite que los productos queden en el carrito aunque el usuario no esté logueado
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        if self.user:
+            return f"Carrito de {self.user.username}"
+        return f"Carrito (Sesión: {self.session_key[:10]}...)"
+
+    def get_total_price(self):
+        return sum(item.get_total_price() for item in self.items.all())
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    producto = models.ForeignKey(Productos, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.producto.nombre} en Carrito de {self.cart}"
+
+    def get_total_price(self):
+        return self.quantity * self.producto.precio
