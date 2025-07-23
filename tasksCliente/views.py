@@ -138,58 +138,6 @@ def signup(request):
                     "error": form.errors.as_text() # Muestra los errores del formulario
                 })
 
-        # Manejar el inicio de sesión (si el formulario de login fue enviado a esta vista)
-        elif 'login_submit' in request.POST:
-            form = AuthenticationForm(request.POST, prefix='signin')
-            if form.is_valid():
-                user = form.get_user()
-                login(request, user)
-
-                try:
-                    profile = Profile.objects.get(user=user)
-                    tipo_usuario = profile.tipo_usuario.strip().lower()
-
-                    print("Tipo de usuario (Signin):", tipo_usuario)
-
-                    if tipo_usuario == 'cliente':
-                        return redirect('productos')
-                    elif tipo_usuario == 'domiciliario':
-                        return redirect('dashboard_domiciliario')
-                    elif tipo_usuario == 'tienda':
-                        return redirect('dashboard_tienda')
-                    else:
-                        return redirect('home')
-
-                except Profile.DoesNotExist:
-                    # Si el usuario existe pero no tiene un perfil (poco probable con las señales)
-                    signup_form = SignupForm(prefix='signup')
-                    signin_form = form
-                    messages.error(request, 'Este usuario no tiene perfil asignado.')
-                    return render(request, 'signup.html', {
-                        'signup_form': signup_form,
-                        'signin_form': signin_form,
-                        'error': 'Este usuario no tiene perfil asignado'
-                    })
-            else:
-                # El formulario de inicio de sesión no es válido
-                signup_form = SignupForm(prefix='signup')
-                signin_form = form
-                messages.error(request, 'Usuario o contraseña son incorrectos.')
-                return render(request, 'signup.html', {
-                    'signup_form': signup_form,
-                    'signin_form': signin_form,
-                    'error': 'Usuario o contraseña son incorrectos.'
-                })
-        else:
-            signup_form = SignupForm(prefix='signup')
-            signin_form = AuthenticationForm(prefix='signin')
-            messages.error(request, 'Solicitud desconocida.')
-            return render(request, 'signup.html', {
-                'signup_form': signup_form,
-                'signin_form': signin_form,
-                'error': 'Solicitud desconocida.'
-            })
-
 # para cerrar sesión
 @login_required
 def signout(request):
@@ -201,7 +149,7 @@ def signin(request):
     if request.method == 'GET':
         signup_form = SignupForm(prefix='signup')
         signin_form = AuthenticationForm(prefix='signin')
-        return render(request, 'signup.html', {
+        return render(request, 'signin.html', {
             'signup_form': signup_form,
             'signin_form': signin_form,
         })
@@ -239,7 +187,7 @@ def signin(request):
             signup_form = SignupForm(prefix='signup')
             signin_form = form
             messages.error(request, 'Usuario o contraseña son incorrectos.')
-            return render(request, 'signup.html', {
+            return render(request, 'signin.html', {
                 'signup_form': signup_form,
                 'signin_form': signin_form,
                 'error': 'Usuario o contraseña son incorrectos'

@@ -1,0 +1,318 @@
+/* Variables de colores - paleta profesional */
+:root {
+    --morado-oscuro: #441151;
+    --rosado-principal: #ff958c;
+    --morado-principal: #8e24aa;
+    --morado-claro: #dbc7f1;
+    --rosado-claro: #d81b60;
+    --gris-oscuro: #424242;
+    --gris-medio: #757575;
+    --gris-claro: #eeeeee;
+    --blanco: #ffffff;
+    --sombra-suave: rgba(0, 0, 0, 0.08);
+    --sombra-media: rgba(0, 0, 0, 0.12);
+  }
+  
+  /* Reset y estilos base */
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    color: var(--gris-oscuro);
+    background-color: #f9f9f9;
+    line-height: 1.6;
+  }
+  
+  .container {
+    background-color: var(--blanco);
+    border-radius: 4px;
+    box-shadow: 0 2px 6px var(--sombra-suave);
+  }
+  
+  /* Tipografía */
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--gris-oscuro);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+  }
+  
+  .text-muted {
+    color: var(--gris-medio) !important;
+  }
+  
+  /* Breadcrumb */
+  .breadcrumb {
+    background-color: transparent;
+    padding: 0.5rem 0;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .breadcrumb-item a {
+    color: var(--rosado-principal);
+    text-decoration: none;
+  }
+  
+  .breadcrumb-item a:hover {
+    color: var(--morado-principal);
+    text-decoration: underline;
+  }
+  
+  .breadcrumb-item.active {
+    color: var(--gris-medio);
+  }
+  
+  /* Cards */
+  .card {
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px var(--sombra-suave);
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 4px 10px var(--sombra-media);
+  }
+  
+  .card-header {
+    background-color: var(--morado-principal);
+    color: var(--blanco);
+    padding: 0.85rem 1.25rem;
+    border-bottom: none;
+  }
+  
+  .card-header h5 {
+    margin: 0;
+    color: var(--blanco);
+    font-weight: 500;
+  }
+  
+  /* Imágenes */
+  .img-fluid {
+    border-radius: 4px;
+  }
+  
+  .card-img-top {
+    height: 180px;
+    object-fit: cover;
+  }
+  
+  /* Calificaciones */
+  .rating {
+    display: flex;
+    align-items: center;
+  }
+  
+  .rating .fa-star, 
+  .rating .fa-star-half-alt {
+    color: var(--morado-principal) !important;
+    font-size: 0.9rem;
+  }
+  
+  /* Precio */
+  .text-primary {
+    color: var(--morado-oscuro) !important;
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+  
+  /* Badges */
+  .badge {
+    font-weight: 500;
+    padding: 0.5em 0.85em;
+    border-radius: 4px;
+  }
+  
+  .badge.bg-success {
+    background-color: var(--rosado-principal) !important;
+  }
+  
+  .badge.bg-danger {
+    background-color: var(--morado-principal) !important;
+  }
+  
+  /* Botones */
+  .btn {
+    border-radius: 4px;
+    font-weight: 500;
+    padding: 0.5rem 1.2rem;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-primary {
+    background-color: var(--morado-principal);
+    border-color: var(--morado-principal);
+  }
+  
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background-color: var(--morado-oscuro);
+    border-color: var(--morado-oscuro);
+    box-shadow: 0 0 0 0.2rem rgba(106, 27, 154, 0.25);
+  }
+  
+  .btn-outline-primary {
+    color: var(--rosado-principal);
+    border-color: var(--rosado-principal);
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: var(--rosado-principal);
+    border-color: var(--rosado-principal);
+    color: var(--blanco);
+  }
+  
+  .btn-sm {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.75rem;
+  }
+  
+  /* Formularios */
+  .form-control {
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+  }
+  
+  .form-control:focus {
+    border-color: var(--morado-principal);
+    box-shadow: 0 0 0 0.2rem rgba(142, 36, 170, 0.15);
+  }
+  
+  .form-label {
+    color: var(--gris-oscuro);
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Estilos para formulario de reseñas */
+  #id_calificacion {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  #id_calificacion li {
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  #id_calificacion input {
+    margin-right: 0.35rem;
+  }
+  
+  #id_comentario {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    min-height: 100px;
+  }
+  
+  /* Alertas */
+  .alert {
+    border-radius: 4px;
+    padding: 1rem;
+  }
+  
+  .alert-info {
+    background-color: #e8eaf6;
+    border-color: #c5cae9;
+    color: var(--rosado-principal);
+  }
+  
+  .alert-light {
+    background-color: var(--gris-claro);
+    border-color: #e0e0e0;
+  }
+  
+  /* Sección de descripción */
+  .mb-4 h5 {
+    color: var(--morado-oscuro);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Secciones */
+  .row.mt-5 {
+    padding-top: 2rem;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 2.5rem !important;
+  }
+  
+  /* Productos relacionados */
+  .row-cols-md-4 .card-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    height: 2.8rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  
+  /* Reseñas */
+  .reseñas .card {
+    margin-bottom: 1rem;
+  }
+  
+  .reseñas .card-title {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  .reseñas small.text-muted {
+    font-size: 0.85rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 767px) {
+    .d-flex.align-items-end {
+      flex-direction: column;
+      align-items: flex-start !important;
+    }
+    
+    .d-flex.align-items-end .me-3 {
+      margin-right: 0 !important;
+      margin-bottom: 1rem;
+      width: 100% !important;
+    }
+    
+    .btn-primary {
+      width: 100%;
+    }
+  
+    .row-cols-md-4 .col {
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  /* Títulos de sección con línea decorativa */
+  h3.mb-4 {
+    position: relative;
+    padding-bottom: 0.75rem;
+  }
+  
+  h3.mb-4::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, var(--morado-claro), var(--morado-principal));
+  }

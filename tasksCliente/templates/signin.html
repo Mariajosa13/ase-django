@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/formularioss_signin.css' %}"> {# Enlace a su propio CSS #}
+    
+    <title>Ingreso</title>
+</head>
+<body>
+    <div class="container-global">
+
+        <div class="container-header">
+            <h1>Ingresar</h1>
+        </div>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="form-wrapper active">
+            <div class="social-login">
+                <p>O ingresa con tus redes sociales</p>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fab fa-google"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-apple"></i></a>
+                </div>
+            </div>
+
+            <form action="{% url 'signin' %}" method="POST" class="card card-body">
+                {% csrf_token %}
+                <div class="form-group">
+                    {% render_field signin_form.username class="form-control" placeholder="Usuario o Correo Electrónico" %}
+                    {% if signin_form.username.errors %}<ul class="errorlist">{% for error in signin_form.username.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-group">
+                    {% render_field signin_form.password class="form-control" placeholder="Contraseña" %}
+                    {% if signin_form.password.errors %}<ul class="errorlist">{% for error in signin_form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                </div>
+
+                <a href="#" class="forgot-password-link">¿Olvidaste tu contraseña?</a>
+                
+                {% if signin_form.non_field_errors %}
+                    <ul class="errorlist">{% for error in signin_form.non_field_errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
+
+                {# Mostrar el error general si lo hay (desde la vista) #}
+                {% if error %}
+                    <p class="error messages">{{ error }}</p>
+                {% endif %}
+
+                <button class="submit-button" type="submit" name="login_submit">Ingresar <i class="fas fa-arrow-right"></i></button>
+
+                <p>¿No tienes una cuenta? <a href="{% url 'signup' %}">Regístrate aquí</a></p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+{% endblock content %}

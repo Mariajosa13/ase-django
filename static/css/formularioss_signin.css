@@ -1,0 +1,350 @@
+/* Color variables */
+:root {
+    --primary: #441151;
+    --primary-hover: #733982;
+    --secondary: #dbc7f1;
+    --background: #efe8f7;
+    --error: #ff958c;
+    --success: #4caf50;
+    --white: #fff;
+    --light-gray: #f0f2f5;
+    --border-color: #ddd;
+    --text-gray: #555;
+    --placeholder-gray: #888;
+    --dark-text: #333;
+}
+
+/* Font import */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600&display=swap');
+
+/* Global styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    font-family: 'Rubik', sans-serif;
+    background: linear-gradient(to right, var(--background), var(--secondary));
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 40px;
+}
+
+/* Contenedor principal del formulario (único) */
+.container-global {
+    background-color: var(--white);
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 420px;
+    padding: 35px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* Cabecera del contenedor (solo título) */
+.container-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.container-header h1 {
+    font-size: 2.1em;
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-bottom: 0;
+}
+
+/* El 'form-wrapper' es el propio contenido del formulario */
+.form-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; 
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-wrapper form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Títulos y textos dentro de los formularios (ej. "O ingresa con...") */
+.form-wrapper p {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-gray);
+    margin: 0;
+    text-align: center;
+}
+
+/* Grupo de campos de formulario */
+.form-group {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.form-group label {
+    display: none; 
+    font-size: 13px;
+    color: var(--text-gray);
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.form-group input,
+.form-group select { 
+    background-color: var(--light-gray);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 15px;
+    width: 100%;
+    outline: none;
+    color: var(--dark-text);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group select option[disabled] {
+    color: var(--placeholder-gray);
+    font-weight: 300;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary-hover);
+    box-shadow: 0 0 0 3px rgba(var(--primary-hover), 0.15);
+}
+
+/* Lista de errores de Django */
+.form-group .errorlist {
+    color: var(--error);
+    font-size: 12px;
+    margin-top: 5px;
+    list-style: none;
+    padding-left: 0;
+    text-align: left;
+    width: 100%;
+}
+.form-group .errorlist li {
+    margin-bottom: 3px;
+}
+
+/* Botones de envío */
+.submit-button {
+    background-color: var(--primary);
+    color: var(--white);
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 220px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 5px 15px rgba(214, 187, 240, 0.3);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.submit-button:hover {
+    transform: translateY(-3px);
+    background-color: var(--primary-hover);
+    box-shadow: 0 6px 15px rgba(68, 17, 81, 0.3);
+}
+
+  .submit-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: #ff958c;
+    transition: 0.5s ease;
+    z-index: -1;
+  }
+  
+  .submit-button:hover::before {
+    width: 100%;
+  }
+
+.forgot-password-link {
+    font-size: 13px;
+    color: var(--primary);
+    text-decoration: none;
+    margin-top: -8px;
+    align-self: flex-end; 
+    transition: color 0.3s ease;
+}
+.forgot-password-link:hover {
+    color: var(--primary-hover);
+}
+
+/* Enlace a registro (dentro del formulario de login) */
+.form-wrapper form p a {
+    color: var(--error);
+    text-decoration: none;
+    font-weight: 500;
+}
+.form-wrapper form p a:hover {
+    color: var(--error);
+    text-decoration: underline;
+}
+
+/* Iconos sociales */
+.social-login {
+    width: 100%;
+    text-align: center;
+}
+
+.social-login p {
+    margin-bottom: 12px;
+    color: var(--text-gray);
+    font-size: 13px;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.social-icons a {
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3em;
+    color: var(--text-gray);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.social-icons a:hover {
+    border-color: var(--error);
+    color: var(--error);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Mensajes de Django (flash messages) */
+.messages {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    margin-top: 15px;
+    text-align: center;
+}
+.messages li {
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.messages .success {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: var(--success);
+    border: 1px solid var(--success);
+}
+.messages .error {
+    background-color: rgba(255, 87, 87, 0.1);
+    color: var(--error);
+    border: 1px solid var(--error);
+}
+
+/* Estilos de la barra de navegación (si existe fuera del formulario) */
+.navbar {
+    background-color: var(--white);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: var(--primary);
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.navbar a:hover {
+    color: var(--primary-hover);
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+    body {
+        padding: 15px;
+    }
+    .container-global {
+        padding: 30px 20px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        gap: 20px;
+    }
+    .container-header h1 {
+        font-size: 1.9em;
+    }
+    .form-group input,
+    .form-group select {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+    .submit-button {
+        font-size: 15px;
+        padding: 10px 20px;
+        max-width: 100%;
+    }
+    .social-icons a {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2em;
+    }
+    .social-login p {
+        font-size: 12px;
+    }
+}

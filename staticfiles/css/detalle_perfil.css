@@ -1,0 +1,129 @@
+
+:root {
+        --morado-oscuro: #441151;
+        --rosado-principal: #ff958c;
+        --rosado-hover: #f3a39c;
+        --morado-principal: #8e24aa;
+        --morado-claro: #dbc7f1;
+        --morado-hover: #c3b2d6;
+        --gris-oscuro: #424242;
+        --gris-medio: #757575;
+        --gris-claro: #eeeeee;
+        --blanco: #ffffff;
+        --sombra-suave: rgba(0, 0, 0, 0.08);
+        --sombra-media: rgba(0, 0, 0, 0.12);
+    }
+
+.perfil-container{
+    padding: 80px;
+    position: fixed;
+    width: 100%;
+}
+
+.perfil-card{
+    border-radius: 10px;
+    border: none;
+    padding: 40px;
+    box-shadow: 0 4px 20px var(--sombra-media);
+    background-color: var(--morado-claro);  
+}
+    
+.perfil-header {
+    border-radius: 10px 10px 0 0 !important;
+    font-weight: 600;
+    background-color: var(--morado-oscuro);
+    color: var(--blanco);
+}
+    
+input, select, textarea {
+    width: 100%;
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid var(--morado-oscuro);
+    transition: all 0.3s ease;
+    color: var(--gris-oscuro);
+    background-color: var(--blanco);
+}
+    
+input:focus, select:focus, textarea:focus {
+    border-color: var(--morado-principal);
+    box-shadow: 0 0 0 0.2rem rgba(142, 36, 170, 0.25);
+    outline: none;
+}
+    
+.perfil-btn {
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+    
+.perfil-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--sombra-media);
+}
+
+.perfil-btn-editar{
+    background-color: var(--morado-claro) !important;
+    border-color: var(--morado-claro);
+    color: var(--morado-oscuro);
+}
+
+.perfil-btn-editar:hover{
+    background-color: var(--morado-hover) !important;
+    border-color: var(--morado-hover);
+    color: var(--morado-oscuro);
+}
+
+.perfil-btn-volver{
+    background-color: var(--rosado-principal) !important;
+    border-color: var(--rosado-principal) !important;
+}
+    
+.perfil-btn-volver:hover {
+    background-color: var(--rosado-hover) !important;
+    border-color: var(--rosado-hover) !important;
+}
+    
+label {
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+    
+    /* Mejora para campos tipo date */
+input[type="date"] {
+    min-height: 45px;
+    }
+    
+    /* Estilo para los mensajes de help_text */
+.form-text {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    font-style: italic;
+    }
+    
+    /* Contenedor del formulario con un sutil fondo */
+.perfil-body {
+    background-color: var(--blanco);
+    border-radius: 0 0 10px 10px;
+}
+    
+    /* Animación al cargar el formulario */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+    
+.perfil-card {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.perfil-footer{
+    background-color: var(--morado-oscuro);
+    border-radius: 10px;
+}

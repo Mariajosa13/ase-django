@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from tasks.models import Cliente, Domiciliario, Profile, ResenaProductoMascota
+from tasks.models import Cliente, Domiciliario, Profile, ResenaProductoMascota, Tienda
 from datetime import date
 
 #para dejar reseña 
@@ -78,19 +78,20 @@ class SignupForm(forms.Form):
 #el usuario podrá completar su información personal en el profile
 class ProfileUpdateForm(forms.ModelForm):
     nombre = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}), label="Nombre")
-    segundo_apellido = forms.CharField(max_length=200, required=False)
+    apellido = forms.CharField(max_length=200, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}), label="Apellido")
     correo = forms.EmailField(required=False, widget=forms.EmailInput(attrs={'class': 'form-control'}), label="Correo Electrónico")
     fecha_nacimiento = forms.DateField(
         required=False,
         widget=forms.DateInput(attrs={'type': 'date'}),
         help_text='Debes ser mayor de edad.'
     )
+    segundo_apellido = forms.CharField(max_length=200, required=False)
     celular = forms.CharField(max_length=15, required=False)
     genero = forms.ChoiceField(choices=Profile.GENERO_OPCIONES, required=False)
     
     class Meta:
         model = Profile
-        fields = ['nombre', 'segundo_apellido', 'correo',  'fecha_nacimiento', 'celular', 'genero']
+        fields = ['nombre', 'apellido', 'correo',  'fecha_nacimiento']
 
     def __init__(self, *args, **kwargs):
         self.profile_instance = kwargs.get('instance')
@@ -103,19 +104,53 @@ class ProfileUpdateForm(forms.ModelForm):
 
         if self.profile_instance.tipo_usuario == 'cliente':
             self.role_specific_instance, created = Cliente.objects.get_or_create(profile=self.profile_instance)
+            if self.role_specific_instance:
+                self.fields['segundo_apellido'].initial = self.role_specific_instance.segundo_apellido
+                self.fields['celular'].initial = self.role_specific_instance.celular
+                self.fields['genero'].initial = self.role_specific_instance.genero
 
         elif self.profile_instance.tipo_usuario == 'domiciliario':
             self.role_specific_instance, created = Domiciliario.objects.get_or_create(profile=self.profile_instance)
 
+            if self.role_specific_instance:
+                self.fields['segundo_apellido'].initial = self.role_specific_instance.segundo_apellido
+                self.fields['celular'].initial = self.role_specific_instance.celular
+                self.fields['genero'].initial = self.role_specific_instance.genero
+                
+            # Añadir campo de vehículo para domiciliario
             self.fields['vehiculo'] = forms.CharField(
                 max_length=50, 
                 required=False, 
                 widget=forms.TextInput(attrs={'class': 'form-control'}), 
                 label="Placa del Vehículo"
             )
-
             if self.role_specific_instance:
                 self.fields['vehiculo'].initial = self.role_specific_instance.vehiculo
+
+        if self.profile_instance.tipo_usuario == 'tienda':
+            self.fields.pop('segundo_apellido', None)
+            self.fields.pop('celular', None)
+            self.fields.pop('genero', None)
+            self.fields.pop('vehiculo', None) # Asegurarse de que no exista si es tienda
+
+            self.role_specific_instance, created = Tienda.objects.get_or_create(profile=self.profile_instance)
+            # Añadir campos específicos de tienda
+            self.fields['nombre_tienda'] = forms.CharField(
+                max_length=200, 
+                required=False, 
+                widget=forms.TextInput(attrs={'class': 'form-control'}), 
+                label="Nombre de la Tienda"
+            )
+            self.fields['nit'] = forms.CharField(
+                max_length=50, 
+                required=False, 
+                widget=forms.TextInput(attrs={'class': 'form-control'}), 
+                label="NIT"
+            )
+            if self.role_specific_instance:
+                self.fields['nombre_tienda'].initial = self.role_specific_instance.nombre_tienda
+                self.fields['nit'].initial = self.role_specific_instance.nit
+        
 
     def save(self, commit=True):
 
@@ -125,19 +160,30 @@ class ProfileUpdateForm(forms.ModelForm):
         profile.apellido = self.cleaned_data.get('apellido', profile.apellido)
         profile.correo = self.cleaned_data.get('correo', profile.correo)
         profile.fecha_nacimiento = self.cleaned_data.get('fecha_nacimiento', profile.fecha_nacimiento)
-        profile.genero = self.cleaned_data.get('genero', profile.genero)
-        profile.celular = self.cleaned_data.get('celular', profile.celular)
-        profile.segundo_apellido = self.cleaned_data.get('segundo apellido', profile.segundo_apellido)
-
+    
         if commit:
             profile.save() # Guarda la instancia de Profile
 
             # Guarda los campos asociados a Cliente o Domiciliario según el tipo de usuario
             
-        elif self.profile_instance.tipo_usuario == 'domiciliario' and self.role_specific_instance:
-                self.role_specific_instance.vehiculo = self.cleaned_data.get('vehiculo')
-            
-                self.role_specific_instance.save()
+            if self.role_specific_instance:
+                if self.profile_instance.tipo_usuario == 'cliente':
+                    self.role_specific_instance.segundo_apellido = self.cleaned_data.get('segundo_apellido', self.role_specific_instance.segundo_apellido)
+                    self.role_specific_instance.celular = self.cleaned_data.get('celular', self.role_specific_instance.celular)
+                    self.role_specific_instance.genero = self.cleaned_data.get('genero', self.role_specific_instance.genero)
+                    self.role_specific_instance.save()
+
+                elif self.profile_instance.tipo_usuario == 'domiciliario':
+                    self.role_specific_instance.segundo_apellido = self.cleaned_data.get('segundo_apellido', self.role_specific_instance.segundo_apellido)
+                    self.role_specific_instance.celular = self.cleaned_data.get('celular', self.role_specific_instance.celular)
+                    self.role_specific_instance.genero = self.cleaned_data.get('genero', self.role_specific_instance.genero)
+                    self.role_specific_instance.vehiculo = self.cleaned_data.get('vehiculo', self.role_specific_instance.vehiculo)
+                    self.role_specific_instance.save()
+                
+                elif self.profile_instance.tipo_usuario == 'tienda':
+                    self.role_specific_instance.nombre_tienda = self.cleaned_data.get('nombre_tienda', self.role_specific_instance.nombre_tienda)
+                    self.role_specific_instance.nit = self.cleaned_data.get('nit', self.role_specific_instance.nit)
+                    self.role_specific_instance.save()
             
         return profile
         
