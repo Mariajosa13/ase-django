@@ -70,24 +70,6 @@ def signup(request):
                             cliente.fecha_nacimiento = None
                         cliente.save()
                         
-                    elif tipo_usuario == 'domiciliario':
-                        domiciliario, created = Domiciliario.objects.get_or_create(profile=profile)
-                        domiciliario.vehiculo = form.cleaned_data.get('vehiculo', '')
-                        domiciliario.segundo_apellido = form.cleaned_data.get('segundo_apellido', '')
-                        domiciliario.celular = form.cleaned_data.get('celular', '')
-                        domiciliario.genero = form.cleaned_data.get('genero', '')
-                        
-                        fecha_nacimiento_str_dom = form.cleaned_data.get('fecha_nacimiento')
-                        if fecha_nacimiento_str_dom:
-                            try:
-                                domiciliario.fecha_nacimiento = fecha_nacimiento_str_dom
-                            except ValueError:
-                                print("Formato de fecha de nacimiento incorrecto para domiciliario.")
-                                pass
-                        else:
-                            domiciliario.fecha_nacimiento = None
-                        domiciliario.save()
-                        
                     elif tipo_usuario == 'tienda':
                         tienda, created = Tienda.objects.get_or_create(profile=profile)
                         tienda.nombre_tienda = form.cleaned_data.get('nombre_tienda', '')
@@ -101,7 +83,7 @@ def signup(request):
                     if tipo_usuario == 'cliente':
                         return redirect('productos')
                     elif tipo_usuario == 'domiciliario':
-                        return redirect('dashboard_domiciliario')
+                        return redirect('domiciliario:completar_perfil')
                     elif tipo_usuario == 'tienda':
                         return redirect('dashboard_tienda')
                     else:
@@ -168,7 +150,7 @@ def signin(request):
                 if tipo_usuario == 'cliente':
                     return redirect('productos')
                 elif tipo_usuario == 'domiciliario':
-                    return redirect('dashboard_domiciliario')
+                    return redirect('domiciliario:completar_perfil')
                 elif tipo_usuario == 'tienda':
                     return redirect('dashboard_tienda')
                 else:
@@ -243,19 +225,12 @@ def eliminar_campo(request, campo):
     # Estos campos son parte de Cliente/Domiciliario, no directamente de Profile.
     
     campos_permitidos_cliente = ['segundo_apellido', 'celular', 'genero', 'fecha_nacimiento']
-    campos_permitidos_domiciliario = ['segundo_apellido', 'celular', 'genero', 'fecha_nacimiento', 'vehiculo']
 
     profile = get_object_or_404(Profile, user=request.user)
     
     if profile.tipo_usuario == 'cliente':
         related_profile_obj = Cliente.objects.filter(profile=profile).first()
         if not related_profile_obj or campo not in campos_permitidos_cliente:
-            messages.error(request, 'No se puede eliminar este campo o no pertenece a tu tipo de usuario.')
-            return redirect('perfil_editar')
-        
-    elif profile.tipo_usuario == 'domiciliario':
-        related_profile_obj = Domiciliario.objects.filter(profile=profile).first()
-        if not related_profile_obj or campo not in campos_permitidos_domiciliario:
             messages.error(request, 'No se puede eliminar este campo o no pertenece a tu tipo de usuario.')
             return redirect('perfil_editar')
             
@@ -539,5 +514,5 @@ def checkout(request):
 
 # Vista domi al iniciar sesión
 
-def dashboard_domiciliario(request):
-    return render(request, 'dashboard_domiciliario.html')
+def completar_perfil(request):
+    return render(request, 'completar_perfil.html')

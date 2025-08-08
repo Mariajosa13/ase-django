@@ -48,7 +48,6 @@ class SignupForm(forms.Form):
         widget=forms.DateInput(attrs={'type': 'date'}), # Esto ayuda a que el navegador muestre un selector de fecha
     ) 
 
-    vehiculo = forms.CharField(max_length=100, required=False)
     nombre_tienda = forms.CharField(max_length=200, required=False)
     nit = forms.CharField(max_length=50, required=False)
         
@@ -109,29 +108,12 @@ class ProfileUpdateForm(forms.ModelForm):
                 self.fields['celular'].initial = self.role_specific_instance.celular
                 self.fields['genero'].initial = self.role_specific_instance.genero
 
-        elif self.profile_instance.tipo_usuario == 'domiciliario':
-            self.role_specific_instance, created = Domiciliario.objects.get_or_create(profile=self.profile_instance)
 
-            if self.role_specific_instance:
-                self.fields['segundo_apellido'].initial = self.role_specific_instance.segundo_apellido
-                self.fields['celular'].initial = self.role_specific_instance.celular
-                self.fields['genero'].initial = self.role_specific_instance.genero
-                
-            # Añadir campo de vehículo para domiciliario
-            self.fields['vehiculo'] = forms.CharField(
-                max_length=50, 
-                required=False, 
-                widget=forms.TextInput(attrs={'class': 'form-control'}), 
-                label="Placa del Vehículo"
-            )
-            if self.role_specific_instance:
-                self.fields['vehiculo'].initial = self.role_specific_instance.vehiculo
 
         if self.profile_instance.tipo_usuario == 'tienda':
             self.fields.pop('segundo_apellido', None)
             self.fields.pop('celular', None)
             self.fields.pop('genero', None)
-            self.fields.pop('vehiculo', None) # Asegurarse de que no exista si es tienda
 
             self.role_specific_instance, created = Tienda.objects.get_or_create(profile=self.profile_instance)
             # Añadir campos específicos de tienda
@@ -173,13 +155,6 @@ class ProfileUpdateForm(forms.ModelForm):
                     self.role_specific_instance.genero = self.cleaned_data.get('genero', self.role_specific_instance.genero)
                     self.role_specific_instance.save()
 
-                elif self.profile_instance.tipo_usuario == 'domiciliario':
-                    self.role_specific_instance.segundo_apellido = self.cleaned_data.get('segundo_apellido', self.role_specific_instance.segundo_apellido)
-                    self.role_specific_instance.celular = self.cleaned_data.get('celular', self.role_specific_instance.celular)
-                    self.role_specific_instance.genero = self.cleaned_data.get('genero', self.role_specific_instance.genero)
-                    self.role_specific_instance.vehiculo = self.cleaned_data.get('vehiculo', self.role_specific_instance.vehiculo)
-                    self.role_specific_instance.save()
-                
                 elif self.profile_instance.tipo_usuario == 'tienda':
                     self.role_specific_instance.nombre_tienda = self.cleaned_data.get('nombre_tienda', self.role_specific_instance.nombre_tienda)
                     self.role_specific_instance.nit = self.cleaned_data.get('nit', self.role_specific_instance.nit)

@@ -47,9 +47,6 @@ urlpatterns = [
     path('cart/update/<int:item_id>/', views.update_cart_item_quantity, name='update_cart_item_quantity'),
     path('checkout/', views.checkout, name='checkout'),
 
-    # Vista domi después de ingreso
-    path('domi/', views.dashboard_domiciliario, name='dashboard_domiciliario'),
-
     # URLs de la API 
     path('api/', include(router.urls)),
 

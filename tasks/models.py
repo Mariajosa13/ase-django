@@ -62,8 +62,6 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance) # Crea un perfil vacío, la vista lo llenará
 
-# Removida la señal save_user_profile ya que era redundante y causaba conflictos.
-
 class Cliente(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
@@ -82,9 +80,23 @@ class Domiciliario(models.Model):
     celular = models.CharField(max_length=15, blank=True, null=True)
     genero = models.CharField(max_length=1, choices=Profile.GENERO_OPCIONES, default='N')
 
+    documento_frontal = models.FileField(upload_to='domiciliario/documentos/identidad/', blank=True, null=True)
+    documento_trasera = models.FileField(upload_to='domiciliario/documentos/identidad/', blank=True, null=True)
+    licencia_conducir = models.FileField(upload_to='domiciliario/documentos/licencias/', blank=True, null=True)
+    tarjeta_propiedad = models.FileField(upload_to='domiciliario/documentos/propiedad/', blank=True, null=True)
+    soat = models.FileField(upload_to='domiciliario/documentos/soat/', blank=True, null=True)
+    foto_perfil_domiciliario = models.ImageField(upload_to='domiciliario/perfiles/', blank=True, null=True)
+
+    ESTADO_VERIFICACION_CHOICES = [
+        ('PENDIENTE_DOCUMENTOS', 'Pendiente de carga de documentos'),
+        ('EN_REVISION', 'En revisión'),
+        ('APROBADO', 'Aprobado'),
+        ('RECHAZADO', 'Rechazado'),
+    ]
+    estado_verificacion = models.CharField(max_length=30, choices=ESTADO_VERIFICACION_CHOICES, default='PENDIENTE_DOCUMENTOS')
+
     def __str__(self):
         return f"Domiciliario: {self.profile.user.username}"
-
 
 class Tienda(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
