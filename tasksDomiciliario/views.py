@@ -3,7 +3,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import DomiciliarioProfileYDocumentos
-from tasks.models import Domiciliario 
+from tasks.models import Domiciliario
+from django.core.mail import send_mail
+from django.conf import settings 
 
 @login_required
 def completar_perfil(request):
@@ -26,7 +28,26 @@ def completar_perfil(request):
             if domiciliario_profile.estado_verificacion == 'PENDIENTE_DOCUMENTOS':
                 domiciliario_profile.estado_verificacion = 'EN_REVISION'
             domiciliario_profile.save()
-            messages.success(request, "Tu información de domiciliario y documentos han sido guardados y están en revisión.")
+            
+            #Código para enviar documentos al correo del administrador
+            subject = 'Nuevo Perfil de Domiciliario en Revisión'
+            message = f"""
+            ¡Hola!
+            
+            Se ha completado el perfil de un nuevo domiciliario y está listo para tu revisión.
+            
+            Detalles del domiciliario:
+            - Nombre: {request.user.profile.nombre} {request.user.profile.apellido}
+            - Correo electrónico: {request.user.profile.correo}
+            
+            Por favor, revisa su información y documentos para la aprobación.
+            """
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = ['carojm2006@gmail.com']
+            
+            send_mail(subject, message, from_email, recipient_list)
+            
+            messages.success(request, "Tu información de domiciliario y documentos han sido guardados y están en revisión. Se te notificará cuando tu cuenta sea aprobada.")
             return redirect('domiciliario:dashboard')
         else:
             messages.error(request, "Hubo errores al cargar tu información. Por favor, verifica los campos.")
@@ -38,7 +59,6 @@ def completar_perfil(request):
         'domiciliario_profile': domiciliario_profile,
     }
     return render(request, 'completar_perfil.html', context)
-
 
 @login_required
 def domiciliario_dashboard(request):

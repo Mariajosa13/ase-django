@@ -92,9 +92,9 @@ class DomiciliarioProfileYDocumentos(forms.ModelForm):
         return licencia
     
     def clean_tarjeta_propiedad(self):
-        tarjeta = self.cleaned_data.get('tarejeta_propiedad')
+        tarjeta = self.cleaned_data.get('tarjeta_propiedad')
         if not tarjeta:
-            raise forms.ValidationError("La tarejeta de propiedad es obligatoria.")
+            raise forms.ValidationError("La tarjeta de propiedad es obligatoria.")
         if tarjeta.size > 5 * 1024 * 1024:
             raise forms.ValidationError("El archivo no puede exceder los 5MB.")
         if not tarjeta.name.lower().endswith(('.png', '.jpg', '.jpeg', '.pdf')):
