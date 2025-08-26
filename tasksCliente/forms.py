@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from tasks.models import Cliente, Domiciliario, Profile, ResenaProductoMascota, Tienda
+from tasks.models import Cliente, Domiciliario, Profile, ResenaProductoMascota, Tienda, Direccion
 from datetime import date
 
 #para dejar reseña 
@@ -170,3 +170,9 @@ class ProfileUpdateForm(forms.ModelForm):
             if edad < 18:
                 raise forms.ValidationError('Debes ser mayor de edad para registrarte.')
         return fecha_nacimiento
+
+class DireccionForm(forms.ModelForm):
+    class Meta:
+        model = Direccion
+        fields = ['nombre_quien_recibe', 'pais', 'departamento', 'ciudad', 'direccion', 'codigo_postal', 'info_adicional', 'telefono', 'es_predeterminada']
+        

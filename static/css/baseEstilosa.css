@@ -151,6 +151,46 @@
   top: 0;
 }
 
+/*MENU PROFILE*/
+.profile-menu-container {
+    position: relative; /* Esencial para que el menú se posicione respecto a este contenedor */
+    display: inline-block;
+}
+
+.dropdown-menu {
+    display: none; /* Oculta el menú por defecto */
+    position: absolute;
+    top: 100%; /* Posiciona el menú debajo del icono */
+    right: 0;
+    z-index: 10;
+    /* Estilos de caja y texto */
+    background-color: white;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    padding: 10px 0;
+}
+
+/* Muestra el menú cuando tiene la clase 'active' */
+.dropdown-menu.active {
+    display: block;
+}
+
+.dropdown-menu a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    white-space: nowrap; /* Evita saltos de línea en los enlaces */
+}
+
+.dropdown-menu a:hover {
+    background-color: #f1f1f1;
+}
+
+.profile-icon {
+    cursor: pointer;
+}
+
 /* Media queries para responsividad */
 @media (max-width: 992px) {
   .navbar-collapse {

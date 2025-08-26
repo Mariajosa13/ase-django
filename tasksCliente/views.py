@@ -9,7 +9,7 @@ from tasks.models import Cart, CartItem, Cliente, Domiciliario, Productos, Profi
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Avg
 from django.contrib import messages
-from tasksCliente.forms import SignupForm, ProfileUpdateForm
+from tasksCliente.forms import SignupForm, ProfileUpdateForm, DireccionForm
 
 
 # Create your views here.
@@ -174,7 +174,22 @@ def signin(request):
                 'signin_form': signin_form,
                 'error': 'Usuario o contraseña son incorrectos'
             })
+        
+@login_required
+def agregar_direccion(request):
+    if request.method == 'POST':
+        form = DireccionForm(request.POST)
+        if form.is_valid():
+            direccion = form.save(commit=False)
+            direccion.profile = request.user.profile
+            direccion.save()
+            messages.success(request, 'Dirección agregada exitosamente.')
+            return redirect('direccion')
+    else:
+        form = DireccionForm()
+        messages.error(request, 'Por favor, corrige los errores en el formulario.')
 
+    return render(request, 'direccion.html', {'form': form})
 
 #######################################
 @login_required

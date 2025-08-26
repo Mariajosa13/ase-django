@@ -32,6 +32,7 @@ urlpatterns = [
     path('perfil/', views.perfil_detalle, name='perfil_detalle'),
     path('perfil/editar/', views.perfil_editar, name='perfil_editar'),
     path('perfil/eliminar/<str:campo>/', views.eliminar_campo, name='eliminar_campo'),
+    path('direccion/', views.agregar_direccion, name='direccion'),
 
     # Productos
     path('productos/', views.productos, name='productos'),

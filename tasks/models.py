@@ -116,6 +116,20 @@ def crear_subtipo_usuario(sender, instance, created, **kwargs):
         elif instance.tipo_usuario == 'tienda':
             Tienda.objects.create(profile=instance)
 
+class Direccion(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    nombre_quien_recibe = models.CharField(max_length=100, blank=True, null=True)
+    pais = models.CharField(max_length=100, default='Colombia')
+    departamento = models.CharField(max_length=100, blank=True, null=True)
+    ciudad = models.CharField(max_length=100)
+    direccion = models.CharField(max_length=255)
+    codigo_postal = models.CharField(max_length=20, blank=True, null=True)
+    info_adicional = models.TextField(blank=True, null=True)
+    telefono = models.CharField(max_length=15, blank=True, null=True)
+    es_predeterminada = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.direccion}, {self.ciudad} - by {self.profile.user.username}"
 
 # SECCIÓN MASCOTAS
 
