@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout
 from django.core.paginator import Paginator
 from django.db import IntegrityError
-from tasks.models import Cart, CartItem, Cliente, Domiciliario, Productos, Profile, CategoriaMascota, Tienda
+from tasks.models import Cart, CartItem, Cliente, Domiciliario, Productos, Profile, CategoriaMascota, Tienda, Direccion
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Avg
 from django.contrib import messages
@@ -174,22 +174,7 @@ def signin(request):
                 'signin_form': signin_form,
                 'error': 'Usuario o contraseña son incorrectos'
             })
-        
-@login_required
-def agregar_direccion(request):
-    if request.method == 'POST':
-        form = DireccionForm(request.POST)
-        if form.is_valid():
-            direccion = form.save(commit=False)
-            direccion.profile = request.user.profile
-            direccion.save()
-            messages.success(request, 'Dirección agregada exitosamente.')
-            return redirect('direccion')
-    else:
-        form = DireccionForm()
-        messages.error(request, 'Por favor, corrige los errores en el formulario.')
-
-    return render(request, 'direccion.html', {'form': form})
+    
 
 #######################################
 @login_required
@@ -263,6 +248,58 @@ def eliminar_campo(request, campo):
         
     return redirect('perfil_detalle')
 
+# CRUD Dirección
+@login_required
+def agregar_direccion(request):
+    if request.method == 'POST':
+        form = DireccionForm(request.POST)
+        if form.is_valid():
+            direccion = form.save(commit=False)
+            direccion.profile = request.user.profile
+            direccion.save()
+            messages.success(request, 'Direccion agregada exitosamente')
+            return redirect('lista_direcciones')
+        else:
+            messages.error(request, 'Por favor, corrige los errores en el formulario.')
+    else:
+        form = DireccionForm()
+
+    return render(request, 'agregar_direccion.html', {'form': form})
+    
+@login_required
+def lista_direcciones(request):
+    direcciones = Direccion.objects.filter(profile=request.user.profile)
+    return render(request, 'lista_direcciones.html', {'direcciones': direcciones})
+
+@login_required
+def direccion_detalle(request, direccion_id):
+    direccion = get_object_or_404(Direccion, id=direccion_id, profile=request.user.profile)
+    return render(request, 'direccion_detalle.html', {'direccion': direccion})
+
+@login_required
+def direccion_editar(request, direccion_id):
+    direccion = get_object_or_404(Direccion, id=direccion_id, profile=request.user.profile)
+
+    if request.method == 'POST':
+        form = DireccionForm(request.POST, instance=direccion)
+        if form.is_valid():
+            form.save()
+            message.success(request, 'Tu dirección ha sido actualizada con éxito')
+            return redirect('lista_direcciones')
+    else:
+        form = DireccionForm(instance=direccion)
+
+    return render(request, 'direccion_editar.html', {'form': form, 'direccion': direccion})
+
+def direccion_eliminar(request, direccion_id):
+    direccion = get_object_or_404(Direccion, id=direccion_id, profile=request.user.profile)
+
+    if request.method == 'POST':
+        direccion.delete()
+        messages.success(request, 'La direccion ha sido eliminada exitosamente.')
+        return redirect('lista_direcciones')
+
+    return render(request, 'direccion_confirmar_eliminar.html', {'direccion': direccion})
 # Productos views
 
 def productos(request):

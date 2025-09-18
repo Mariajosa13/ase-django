@@ -5,14 +5,17 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"> <!--font awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <!--font awesome-->
     <link rel="stylesheet" href="{% static 'css/producto_detail.css' %}">
-    
+
     <title>Detalle Productos</title>
 </head>
+
 <body>
     <div class="container py-5">
         <nav aria-label="breadcrumb">
@@ -20,15 +23,16 @@
                 <li class="breadcrumb-item"><a href="{% url 'productos' %}">Productos</a></li>
                 <li class="breadcrumb-item">
                     {% if producto.categoria %}
-                        <a href="{% url 'productos_por_categoria' slug=producto.categoria.slug %}">{{ producto.categoria.nombre }}</a>
+                    <a href="{% url 'productos_por_categoria' slug=producto.categoria.slug %}">{{
+                        producto.categoria.nombre }}</a>
                     {% else %}
-                        Sin categoría
+                    Sin categoría
                     {% endif %}
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">{{ producto.nombre }}</li>
             </ol>
         </nav>
-    
+
         <div class="row">
             <!-- Imagen del Producto -->
             <div class="col-md-5">
@@ -36,46 +40,51 @@
                     {% if producto.imagen %}
                     <img src="{{ producto.imagen.url }}" class="img-fluid rounded" alt="{{ producto.nombre }}">
                     {% else %}
-                    <img src="{% static 'img/producto-default.jpg' %}" class="img-fluid rounded" alt="{{ producto.nombre }}">
+                    <img src="{% static 'img/producto-default.jpg' %}" class="img-fluid rounded"
+                        alt="{{ producto.nombre }}">
                     {% endif %}
                 </div>
             </div>
-    
+
             <!-- Detalles del producto -->
             <div class="col-md-7">
                 <h1 class="mb-2">{{ producto.nombre }}</h1>
-    
+
                 <!-- Calificación promedio -->
                 <div class="mb-3">
                     {% if promedio_calificacion %}
                     <div class="d-flex align-items-center">
                         <div class="rating">
                             {% for i in "12345" %}
-                            <i class="fa{% if i|add:"0"|add:"-48" <= promedio_calificacion %}s{% elif i|add:"0"|add:"-48"|add:"-0.5" <= promedio_calificacion %}s-half-alt{% else %}r{% endif %} fa-star text-warning"></i>
+                            <i class="fa{% if i|add:" 0"|add:"-48" <=promedio_calificacion %}s{% elif
+                                i|add:"0"|add:"-48"|add:"-0.5" <=promedio_calificacion %}s-half-alt{% else %}r{% endif
+                                %} fa-star text-warning"></i>
                             {% endfor %}
                         </div>
-                        <span class="ms-2">{{ promedio_calificacion|floatformat:1 }} ({{ resenas.count }} resenas)</span>
+                        <span class="ms-2">{{ promedio_calificacion|floatformat:1 }} ({{ resenas.count }}
+                            resenas)</span>
                     </div>
                     {% else %}
                     <span class="text-muted">Sin reseñas aún</span>
                     {% endif %}
                 </div>
-    
+
                 <p class="text-muted mb-3">
                     {% if producto.categoria %}
-                        <a href="{% url 'productos_por_categoria' slug=producto.categoria.slug %}">{{ producto.categoria.nombre }}</a>
+                    <a href="{% url 'productos_por_categoria' slug=producto.categoria.slug %}">{{
+                        producto.categoria.nombre }}</a>
                     {% else %}
-                        Sin categoría
+                    Sin categoría
                     {% endif %}
-                </p>    
-    
+                </p>
+
                 <h3 class="text-primary mb-4">${{ producto.precio }}</h3>
-    
+
                 <div class="mb-4">
                     <h5>Descripción:</h5>
                     <p>{{ producto.description|linebreaks }}</p>
                 </div>
-    
+
                 <div class="d-flex align-items-center mb-4">
                     {% if producto.stock > 0 %}
                     <span class="badge bg-success me-3">En stock ({{ producto.stock }} disponibles)</span>
@@ -83,16 +92,17 @@
                     <span class="badge bg-danger me-3">Agotado</span>
                     {% endif %}
                 </div>
-    
+
                 {% if producto.stock > 0 %}
                 <form method="post" action="{% url 'add_to_cart' producto.id %}" class="d-flex align-items-end">
                     {% csrf_token %}
-    
+
                     <div class="me-3" style="width: 100px;">
                         <label for="quantity" class="form-label">Cantidad</label>
-                        <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1" max="{{ producto.stock }}">
+                        <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1"
+                            max="{{ producto.stock }}">
                     </div>
-    
+
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-shopping-cart me-2"></i>Agregar al carrito
                     </button>
@@ -101,5 +111,6 @@
             </div>
         </div>
 </body>
+
 </html>
 {% endblock %}

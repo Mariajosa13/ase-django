@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="checkout-container">
+    <h1 class="checkout-title">Detalle de la Dirección</h1>
+    <div class="checkout-row">
+        <div class="main-content">
+            <div class="order-summary-card">
+                <div class="card-header">
+                    <h5 class="card-title">{{ direccion.nombre_quien_recibe }}</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="order-items">
+                        <li class="order-item">
+                            <div class="item-info">
+                                <h6>País</h6>
+                                <small>{{ direccion.pais }}</small>
+                            </div>
+                        </li>
+                        <li class="order-item">
+                            <div class="item-info">
+                                <h6>Departamento</h6>
+                                <small>{{ direccion.departamento }}</small>
+                            </div>
+                        </li>
+                        <li class="order-item">
+                            <div class="item-info">
+                                <h6>Ciudad</h6>
+                                <small>{{ direccion.ciudad }}</small>
+                            </div>
+                        </li>
+                        <li class="order-item">
+                            <div class="item-info">
+                                <h6>Dirección</h6>
+                                <small>{{ direccion.direccion }}</small>
+                            </div>
+                        </li>
+                        <li class="order-item">
+                            <div class="item-info">
+                                <h6>Código Postal</h6>
+                                <small>{{ direccion.codigo_postal }}</small>
+                            </div>
+                        </li>
+                        <li class="order-item">
+                            <div class="item-info">
+                                <h6>Información Adicional</h6>
+                                <small>{{ direccion.info_adicional }}</small>
+                            </div>
+                        </li>
+                        <li class="order-item">
+                            <div class="item-info">
+                                <h6>Teléfono</h6>
+                                <small>{{ direccion.telefono }}</small>
+                            </div>
+                        </li>
+                        {% if direccion.es_predeterminada %}
+                        <li class="order-item total-item">
+                            <div class="item-info">
+                                <h6>Estado</h6>
+                                <small>Dirección Predeterminada</small>
+                            </div>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'direccion_editar' direccion.id %}" class="btn btn-secondary">Editar</a>
+                        <a href="{% url 'lista_direcciones' %}" class="btn btn-primary">Volver a la lista</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

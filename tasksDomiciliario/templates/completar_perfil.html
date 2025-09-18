@@ -1,4 +1,3 @@
-
 {% load static %}
 {% load widget_tweaks %}
 
@@ -6,114 +5,131 @@
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/domi/completar_perfil.css' %}">
-    
+
     <title>Completar perfil</title>
 </head>
+
 <body>
     <div class="container-global">
         <div class="container-header">
             <h1>Completa tu perfil</h1>
-            <p class="text-center">Por favor, proporciona la información adicional y sube los documentos requeridos para activar tu cuenta de domiciliario.</p>
+            <p class="text-center">Por favor, proporciona la información adicional y sube los documentos requeridos para
+                activar tu cuenta de domiciliario.</p>
 
         </div>
 
-        <form action="{% url 'domiciliario:completar_perfil' %}" method="POST" class="card card-body" enctype="multipart/form-data">
-                {% csrf_token %}
+        <form action="{% url 'domiciliario:completar_perfil' %}" method="POST" class="card card-body"
+            enctype="multipart/form-data">
+            {% csrf_token %}
 
-                {# Display status of documents #}
-                <div class="alert alert-info" role="alert">
-                    Estado de Verificación: <strong>{{ domiciliario_profile.get_estado_verificacion_display }}</strong>
-                    {% if domiciliario_profile.estado_verificacion == 'PENDIENTE_DOCUMENTOS' %}
-                        <p>Completa este formulario para que tus documentos sean revisados.</p>
-                    {% elif domiciliario_profile.estado_verificacion == 'EN_REVISION' %}
-                        <p>Tus documentos están siendo revisados. Te notificaremos cuando el proceso haya finalizado.</p>
-                    {% elif domiciliario_profile.estado_verificacion == 'RECHAZADO' %}
-                        <p style="color: red;">Tus documentos han sido rechazados. Por favor, revisa y vuelve a cargarlos si es necesario.</p>
-                    {% endif %}
-                </div>
-
-                <h3>Información Adicional</h3>
-                <div class="form-group">
-                        {{ form.segundo_apellido.label_tag }}
-                        {{ form.segundo_apellido|add_class:"form-control" }}
-                        {% if form.segundo_apellido.errors %}<ul class="errorlist">{% for error in form.segundo_apellido.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-                <div class="form-group">
-                        {{ form.celular.label_tag }}
-                        {{ form.celular|add_class:"form-control" }}
-                        {% if form.celular.errors %}<ul class="errorlist">{% for error in form.celular.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-    
-
-                <div class="form-group">
-                    {{ form.genero.label_tag }}
-                    {{ form.genero|add_class:"form-control" }}
-                    {% if form.genero.errors %}<ul class="errorlist">{% for error in form.genero.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-
-                 <div class="form-group">
-                    {{ form.vehiculo.label_tag }}
-                    {{ form.vehiculo|add_class:"form-control" }}
-                    {% if form.vehiculo.errors %}<ul class="errorlist">{% for error in form.vehiculo.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-
-                <h3>Documentos Requeridos</h3>
-                <p>Por favor, sube los siguientes documentos en formato imagen (PNG, JPG, JPEG) o PDF (máx. 5MB cada uno).</p>
-                <div class="form-group">
-                        {{ form.documento_frontal.label_tag }}
-                        {{ form.documento_frontal }}
-                        {% if form.documento_frontal.errors %}<ul class="errorlist">{% for error in form.documento_frontal.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-                    <div class="form-group">
-                        {{ form.documento_trasera.label_tag }}
-                        {{ form.documento_trasera }}
-                        {% if form.documento_trasera.errors %}<ul class="errorlist">{% for error in form.documento_trasera.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                    </div>
-
-                <div class="form-group">
-                        {{ form.licencia_conducir.label_tag }}
-                        {{ form.licencia_conducir }}
-                        {% if form.licencia_conducir.errors %}<ul class="errorlist">{% for error in form.licencia_conducir.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-                <div class="form-group">
-                        {{ form.tarjeta_propiedad.label_tag }}
-                        {{ form.tarjeta_propiedad }}
-                        {% if form.tarjeta_propiedad.errors %}<ul class="errorlist">{% for error in form.tarjeta_propiedad.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-    
-
-                <div class="form-group">
-                        {{ form.soat.label_tag }}
-                        {{ form.soat }}
-                        {% if form.soat.errors %}<ul class="errorlist">{% for error in form.soat.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-                <div class="form-group">
-                        {{ form.foto_perfil_domiciliario.label_tag }}
-                        {{ form.foto_perfil_domiciliario }}
-                        {% if form.foto_perfil_domiciliario.errors %}<ul class="errorlist">{% for error in form.foto_perfil_domiciliario.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-                
-
-                {# Display non-field errors and messages #}
-                {% if form.non_field_errors %}
-                    <ul class="errorlist">{% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {# Display status of documents #}
+            <div class="alert alert-info" role="alert">
+                Estado de Verificación: <strong>{{ domiciliario_profile.get_estado_verificacion_display }}</strong>
+                {% if domiciliario_profile.estado_verificacion == 'PENDIENTE_DOCUMENTOS' %}
+                <p>Completa este formulario para que tus documentos sean revisados.</p>
+                {% elif domiciliario_profile.estado_verificacion == 'EN_REVISION' %}
+                <p>Tus documentos están siendo revisados. Te notificaremos cuando el proceso haya finalizado.</p>
+                {% elif domiciliario_profile.estado_verificacion == 'RECHAZADO' %}
+                <p style="color: red;">Tus documentos han sido rechazados. Por favor, revisa y vuelve a cargarlos si es
+                    necesario.</p>
                 {% endif %}
-                {% if messages %}
-                    <ul class="messages">
-                        {% for message in messages %}
-                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-                
-                <button class="submit-button" type="submit">Enviar Documentos</button>
-            </form>
-        </div>
+            </div>
+
+            <h3>Información Adicional</h3>
+            <div class="form-group">
+                {{ form.segundo_apellido.label_tag }}
+                {{ form.segundo_apellido|add_class:"form-control" }}
+                {% if form.segundo_apellido.errors %}<ul class="errorlist">{% for error in form.segundo_apellido.errors
+                    %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.celular.label_tag }}
+                {{ form.celular|add_class:"form-control" }}
+                {% if form.celular.errors %}<ul class="errorlist">{% for error in form.celular.errors %}<li>{{ error }}
+                    </li>{% endfor %}</ul>{% endif %}
+            </div>
+
+
+            <div class="form-group">
+                {{ form.genero.label_tag }}
+                {{ form.genero|add_class:"form-control" }}
+                {% if form.genero.errors %}<ul class="errorlist">{% for error in form.genero.errors %}<li>{{ error }}
+                    </li>{% endfor %}</ul>{% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.vehiculo.label_tag }}
+                {{ form.vehiculo|add_class:"form-control" }}
+                {% if form.vehiculo.errors %}<ul class="errorlist">{% for error in form.vehiculo.errors %}<li>{{ error
+                        }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+
+            <h3>Documentos Requeridos</h3>
+            <p>Por favor, sube los siguientes documentos en formato imagen (PNG, JPG, JPEG) o PDF (máx. 5MB cada uno).
+            </p>
+            <div class="form-group">
+                {{ form.documento_frontal.label_tag }}
+                {{ form.documento_frontal }}
+                {% if form.documento_frontal.errors %}<ul class="errorlist">{% for error in
+                    form.documento_frontal.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.documento_trasera.label_tag }}
+                {{ form.documento_trasera }}
+                {% if form.documento_trasera.errors %}<ul class="errorlist">{% for error in
+                    form.documento_trasera.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.licencia_conducir.label_tag }}
+                {{ form.licencia_conducir }}
+                {% if form.licencia_conducir.errors %}<ul class="errorlist">{% for error in
+                    form.licencia_conducir.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.tarjeta_propiedad.label_tag }}
+                {{ form.tarjeta_propiedad }}
+                {% if form.tarjeta_propiedad.errors %}<ul class="errorlist">{% for error in
+                    form.tarjeta_propiedad.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+
+
+            <div class="form-group">
+                {{ form.soat.label_tag }}
+                {{ form.soat }}
+                {% if form.soat.errors %}<ul class="errorlist">{% for error in form.soat.errors %}<li>{{ error }}</li>{%
+                    endfor %}</ul>{% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.foto_perfil_domiciliario.label_tag }}
+                {{ form.foto_perfil_domiciliario }}
+                {% if form.foto_perfil_domiciliario.errors %}<ul class="errorlist">{% for error in
+                    form.foto_perfil_domiciliario.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+
+
+            {# Display non-field errors and messages #}
+            {% if form.non_field_errors %}
+            <ul class="errorlist">{% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}</ul>
+            {% endif %}
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                    {% endfor %}
+            </ul>
+            {% endif %}
+
+            <button class="submit-button" type="submit">Enviar Documentos</button>
+        </form>
+    </div>
 </body>
+
 </html>
 {% endblock content %}

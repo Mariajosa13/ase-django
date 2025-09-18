@@ -1,24 +1,27 @@
 {% extends 'base.html' %}
 {% load static %}
 
-    
+
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"> <!--font awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <!--font awesome-->
     <link rel="stylesheet" href="{% static 'css/editar_perfil.css' %}">
     <title>Editar perfil</title>
 </head>
+
 <body>
     <div class="editar-container">
         <h2>Editar Perfil</h2>
-        
+
         <form method="post">
             {% csrf_token %}
-            
+
             <div class="alert editar-alert-info">
                 <p>Los siguientes campos no se pueden modificar:</p>
                 <ul>
@@ -29,7 +32,7 @@
                     {% endif %}
                 </ul>
             </div>
-            
+
             <div class="form-group editar-form-group">
                 {% for field in form %}
                 <div class="mb-3">
@@ -44,11 +47,12 @@
                 </div>
                 {% endfor %}
             </div>
-            
+
             <button type="submit" class="btn btn-primary editar-btn-guardar">Guardar Cambios</button>
             <a href="{% url 'perfil_detalle' %}" class="btn btn-secondary editar-btn-cancelar">Cancelar</a>
         </form>
     </div>
 </body>
+
 </html>
 {% endblock %}

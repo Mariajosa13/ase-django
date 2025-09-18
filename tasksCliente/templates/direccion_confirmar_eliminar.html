@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/direccion.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="checkout-container">
+    <div class="card-body text-center">
+
+        <div class="checkout-row">
+            <div class="main-content">
+                <div class="alert alert-warning"
+                    style="background-color: #dbc7f1; border-color: #441151; color: #441151;">
+                    <h4 class="alert-heading">¿Estás seguro que deseas eliminar esta dirección?</h4>
+                    <p>Esta acción es irreversible y la dirección se eliminará permanentemente de tu cuenta.</p>
+                </div>
+                <div class="order-summary-card mb-4">
+                    <div class="card-body">
+                        <h5>Dirección a Eliminar</h5>
+                    </div>
+                    <div class="summary-body">
+                        <p><strong>Recibe:</strong> {{ direccion.nombre_quien_recibe }}</p>
+                        <p><strong>País:</strong> {{ direccion.pais }}</p>
+                        <p><strong>Dirección:</strong> {{ direccion.direccion }}, {{ direccion.ciudad }}, {{
+                            direccion.departamento }}</p>
+                    </div>
+                </div>
+                <form method="post" action="{% url 'direccion_eliminar' direccion.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-primary eliminar" type="submit">Sí, eliminar dirección</button>
+                </form>
+                <a href="{% url 'lista_direcciones' %}" class="btn btn-primary editar">Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

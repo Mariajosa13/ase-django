@@ -32,8 +32,14 @@ urlpatterns = [
     path('perfil/', views.perfil_detalle, name='perfil_detalle'),
     path('perfil/editar/', views.perfil_editar, name='perfil_editar'),
     path('perfil/eliminar/<str:campo>/', views.eliminar_campo, name='eliminar_campo'),
-    path('direccion/', views.agregar_direccion, name='direccion'),
 
+    #CRUD Direccion
+    path('direccion/', views.lista_direcciones, name='lista_direcciones'),
+    path('direccion/agregar/', views.agregar_direccion, name='agregar_direccion'),
+    path('direccion/<int:direccion_id>/', views.direccion_detalle, name='direccion_detalle'),
+    path('direccion/<int:direccion_id>/editar/', views.direccion_editar, name='direccion_editar'),
+    path('direccion/<int:direccion_id>/eliminar/', views.direccion_eliminar, name='direccion_eliminar'),
+    
     # Productos
     path('productos/', views.productos, name='productos'),
     path('mascotas/producto_list', views.producto_list, name='producto_list'),
