@@ -14,6 +14,13 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+CONDA_ENV_PATH = r"C:\Users\maria\.conda\envs\django-gis"
+
+# Aquí apuntas directo al archivo que existe
+GDAL_LIBRARY_PATH = os.path.join(CONDA_ENV_PATH, r"Library\bin\gdal.dll")
+
+os.environ['PATH'] = CONDA_ENV_PATH + r"\Library\bin;" + os.environ['PATH']
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -38,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'tasks',
     'tasksCliente',
     'tasksDomiciliario',
@@ -86,12 +94,24 @@ DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bdase',
-        'USER': 'root',
-        'PASSWORD': 'mariajose',
-        'HOST': '127.0.0.1',
-        'PORT': '3307',
+
+        # conexión mysql
+
+        # 'ENGINE': 'django.db.backends.mysql', 
+        # 'NAME': 'bdase'
+        # 'USER': 'root'
+        # 'PASSWORD': 'mariajose'
+        # 'HOST': '127.0.0.1',
+        # 'PORT': '3307',
+
+        # conexión postgres
+
+        'ENGINE': 'django.contrib.gis.db.backends.postgis', 
+        'NAME': 'asebd',
+        'USER': 'postgres',
+        'PASSWORD': 'BA$05V3rd3',
+        'HOST': 'localhost',
+        'PORT': '5432', 
     }
 }
 
@@ -209,3 +229,4 @@ SIMPLE_JWT = {
     # Personaliza el serializer para incluir el tipo de usuario en el token de acceso
     'TOKEN_OBTAIN_SERIALIZER': 'tasks.serializers_api.MyTokenObtainPairSerializer',
 }
+
