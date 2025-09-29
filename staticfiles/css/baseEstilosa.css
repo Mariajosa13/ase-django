@@ -1,0 +1,228 @@
+/* Color variables */
+:root {
+  --primary: #441151;
+  --primary-hover: #733982;
+  --secondary: #dbc7f1;
+  --background: #efe8f7;
+  --error: #ff958c;
+  --success: #4caf50;
+  --white: #fff;
+  --light-gray: #eee;
+  --border-color: #ccc;
+  --text-gray: #666;
+  --placeholder-gray: #888;
+}
+
+
+/* Estilos para el navbar */
+.navbar {
+  background-color: var(--Background-header);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  padding: 10px 20px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  z-index: 10000;
+  transition: all 0.3s ease;
+}
+
+/* Logo */
+.navbar .logo img {
+  max-height: 45px;
+  transition: transform 0.3s;
+}
+
+.navbar .logo img:hover {
+  transform: scale(1.05);
+}
+
+/* Contenedor */
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Enlaces de navegación */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  color: #333;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+.nav-link:hover {
+  color: var(--HoverA);
+  background-color: rgba(148, 70, 174, 0.05);
+}
+
+/* Botón de registro e ingreso especiales */
+.nav-link.register {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
+.nav-link.register:hover {
+  background-color: var(--error);
+  color: var(--background);
+}
+
+.nav-link.login {
+  color: var(--Ingreso);
+}
+
+.nav-link.login:hover {
+  color: var(--Hover-btn);
+}
+
+/* Botón toggle para móvil */
+.navbar-toggler {
+  border: none;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  transition: all 0.3s;
+  background-color: transparent;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.navbar-toggler-icon {
+  background-image: none;
+  position: relative;
+  height: 2px;
+  width: 24px;
+  background-color: #441151;
+  display: inline-block;
+  transition: all 0.3s;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  height: 2px;
+  width: 24px;
+  background-color: #441151;
+  transition: all 0.3s;
+}
+
+.navbar-toggler-icon::before {
+  top: -8px;
+}
+
+.navbar-toggler-icon::after {
+  top: 8px;
+}
+
+/* Animación del botón toggle cuando está activo */
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+  background-color: transparent;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before {
+  transform: rotate(45deg);
+  top: 0;
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after {
+  transform: rotate(-45deg);
+  top: 0;
+}
+
+/*MENU PROFILE*/
+.profile-menu-container {
+    position: relative; /* Esencial para que el menú se posicione respecto a este contenedor */
+    display: inline-block;
+}
+
+.dropdown-menu {
+    display: none; /* Oculta el menú por defecto */
+    position: absolute;
+    top: 100%; /* Posiciona el menú debajo del icono */
+    right: 0;
+    z-index: 10;
+    /* Estilos de caja y texto */
+    background-color: white;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    padding: 10px 0;
+}
+
+/* Muestra el menú cuando tiene la clase 'active' */
+.dropdown-menu.active {
+    display: block;
+}
+
+.dropdown-menu a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    white-space: nowrap; /* Evita saltos de línea en los enlaces */
+}
+
+.dropdown-menu a:hover {
+    background-color: #f1f1f1;
+}
+
+.profile-icon {
+    cursor: pointer;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 992px) {
+  .navbar-collapse {
+    background-color: var(--Background-header);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 15px;
+  }
+  
+  .navbar-nav {
+    gap: 8px;
+  }
+  
+  .nav-link {
+    padding: 10px 15px;
+    display: block;
+    text-align: center;
+  }
+  
+  .nav-link.register,
+  .nav-link.login {
+    margin-top: 5px;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar {
+    padding: 8px 12px;
+  }
+  
+  .navbar .logo img {
+    max-height: 38px;
+  }
+}

@@ -1,14 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<title>{% block title %}Dashboard Domiciliario{% endblock %}</title>
 
-<body>
-    <h1>hola</h1>
-</body>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/vendor/leaflet.css' %}">
+<link rel="stylesheet" href="{% static 'css/domi/map.css' %}">
+{% endblock %}
 
-</html>
+{% block content %}
+<div id="map" style="height: 600px; width: 100%;"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="{% static 'js/domi/map.js' %}"></script>
+{% csrf_token %}
+{% endblock %}

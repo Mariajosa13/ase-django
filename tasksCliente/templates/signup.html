@@ -2,143 +2,133 @@
 {% load static %}
 {% load widget_tweaks %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/formularioss_signup.css' %}">
+{% endblock %}
+
 {% block content %}
-
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/formularioss_signup.css' %}"> {# Nuevo CSS para registro #}
-
-    <title>Registro</title>
-</head>
-
-<body>
-    <div class="container-global">
-        <div class="container-header">
-            <h1>Registrarse</h1>
-        </div>
-
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-                {% endfor %}
-        </ul>
-        {% endif %}
-        <div class="form-wrapper active">
-            <div class="social-login">
-                <p>O regístrate con tus redes sociales</p>
-                <div class="social-icons">
-                    <a href="#" class="icon"><i class="fab fa-google"></i></a>
-                    <a href="#" class="icon"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="icon"><i class="fab fa-apple"></i></a>
-                </div>
-            </div>
-
-            <form action="{% url 'signup' %}" method="POST" class="card card-body">
-                {% csrf_token %}
-                <div class="form-group">
-                    {% render_field signup_form.username class="form-control" placeholder="Nombre de Usuario" %}
-                    {% if signup_form.username.errors %}<ul class="errorlist">{% for error in
-                        signup_form.username.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-
-                <div class="form-group">
-                    {% render_field signup_form.nombre class="form-control" placeholder="Nombre" %}
-                    {% if signup_form.nombre.errors %}<ul class="errorlist">{% for error in signup_form.nombre.errors %}
-                        <li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-
-                <div class="form-group">
-                    {% render_field signup_form.apellido class="form-control" placeholder="Apellido" %}
-                    {% if signup_form.apellido.errors %}<ul class="errorlist">{% for error in
-                        signup_form.apellido.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-
-                <div class="form-group">
-                    {% render_field signup_form.correo class="form-control" placeholder="Correo Electrónico" %}
-                    {% if signup_form.correo.errors %}<ul class="errorlist">{% for error in signup_form.correo.errors %}
-                        <li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-
-                <div class="form-group">
-                    {% render_field signup_form.tipo_usuario class="form-control" id="rol-select"
-                    onchange="mostrarCamposEspecificos()" %}
-                    {% if signup_form.tipo_usuario.errors %}<ul class="errorlist">{% for error in
-                        signup_form.tipo_usuario.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-
-                <div class="form-group">
-                    {% render_field signup_form.password class="form-control" placeholder="Contraseña" %}
-                    {% if signup_form.password.errors %}<ul class="errorlist">{% for error in
-                        signup_form.password.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-
-                <div class="form-group">
-                    {% render_field signup_form.password2 class="form-control" placeholder="Confirmar Contraseña" %}
-                    {% if signup_form.password2.errors %}<ul class="errorlist">{% for error in
-                        signup_form.password2.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-
-                {% if signup_form.non_field_errors %}
-                <ul class="errorlist">{% for error in signup_form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
-                </ul>
-                {% endif %}
-                {% if error %}
-                <p class="error messages">{{ error }}</p>
-                {% endif %}
-
-                <button class="submit-button" type="submit" name="register_submit">Registrarse <i
-                        class="fas fa-arrow-right"></i></button>
-
-                <p>¿Ya tienes una cuenta? <a href="{% url 'signin' %}">Inicia sesión aquí</a></p>
-            </form>
-        </div>
+<div class="container-global">
+    <div class="container-header">
+        <h1>Registrarse</h1>
     </div>
 
-    <script>
-        // Función para mostrar/ocultar campos específicos según el tipo de usuario
-        function mostrarCamposEspecificos() {
-            // Asegúrate de que el ID sea correcto, Django a menudo prefija los IDs
-            const tipoUsuarioSelect = document.getElementById('rol-select');
-            if (!tipoUsuarioSelect) return; // Salir si el select no existe
+    {# Bloque de mensajes #}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-            const camposCliente = document.getElementById('campos_cliente');
-            const camposDomiciliario = document.getElementById('campos_domiciliario');
-            const camposTienda = document.getElementById('campos_tienda');
+    <div class="form-wrapper active">
+        <div class="social-login">
+            <p>O regístrate con tus redes sociales</p>
+            <div class="social-icons">
+                <a href="#" class="icon"><i class="fab fa-google"></i></a>
+                <a href="#" class="icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="icon"><i class="fab fa-apple"></i></a>
+            </div>
+        </div>
 
-            // Ocultar todos los campos primero
-            if (camposCliente) camposCliente.style.display = 'none';
-            if (camposDomiciliario) camposDomiciliario.style.display = 'none';
-            if (camposTienda) camposTienda.style.display = 'none';
+        <form action="{% url 'signup' %}" method="POST" class="card card-body">
+            {% csrf_token %}
 
-            // Mostrar los campos según el tipo de usuario seleccionado
-            const selectedValue = tipoUsuarioSelect.value;
-            if (selectedValue === 'cliente') {
-                if (camposCliente) camposCliente.style.display = 'block';
-            } else if (selectedValue === 'domiciliario') {
-                if (camposDomiciliario) camposDomiciliario.style.display = 'block';
-            } else if (selectedValue === 'tienda') {
-                if (camposTienda) camposTienda.style.display = 'block';
-            }
-        }
+            <div class="form-group">
+                {% render_field signup_form.username class="form-control" placeholder="Nombre de Usuario" %}
+                {% if signup_form.username.errors %}
+                    <ul class="errorlist">
+                        {% for error in signup_form.username.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
 
-        // Llama a la función al cargar la página para establecer el estado inicial
-        document.addEventListener('DOMContentLoaded', () => {
-            const tipoUsuarioSelect = document.getElementById('rol-select');
-            if (tipoUsuarioSelect) {
-                mostrarCamposEspecificos(); // Llama al cargar la página para campos dinámicos
-                tipoUsuarioSelect.addEventListener('change', mostrarCamposEspecificos); // Llama al cambiar la selección
-            }
-        });
-    </script>
+            <div class="form-group">
+                {% render_field signup_form.nombre class="form-control" placeholder="Nombre" %}
+                {% if signup_form.nombre.errors %}
+                    <ul class="errorlist">
+                        {% for error in signup_form.nombre.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
 
-</body>
+            <div class="form-group">
+                {% render_field signup_form.apellido class="form-control" placeholder="Apellido" %}
+                {% if signup_form.apellido.errors %}
+                    <ul class="errorlist">
+                        {% for error in signup_form.apellido.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
 
-</html>
+            <div class="form-group">
+                {% render_field signup_form.correo class="form-control" placeholder="Correo Electrónico" %}
+                {% if signup_form.correo.errors %}
+                    <ul class="errorlist">
+                        {% for error in signup_form.correo.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
 
+            <div class="form-group">
+                {% render_field signup_form.tipo_usuario class="form-control" id="rol-select" onchange="mostrarCamposEspecificos()" %}
+                {% if signup_form.tipo_usuario.errors %}
+                    <ul class="errorlist">
+                        {% for error in signup_form.tipo_usuario.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {% render_field signup_form.password class="form-control" placeholder="Contraseña" %}
+                {% if signup_form.password.errors %}
+                    <ul class="errorlist">
+                        {% for error in signup_form.password.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {% render_field signup_form.password2 class="form-control" placeholder="Confirmar Contraseña" %}
+                {% if signup_form.password2.errors %}
+                    <ul class="errorlist">
+                        {% for error in signup_form.password2.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            {% if signup_form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in signup_form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if error %}
+                <p class="error messages">{{ error }}</p>
+            {% endif %}
+
+            <button class="submit-button" type="submit" name="register_submit">
+                Registrarse <i class="fas fa-arrow-right"></i>
+            </button>
+
+            <p>¿Ya tienes una cuenta? <a href="{% url 'signin' %}">Inicia sesión aquí</a></p>
+        </form>
+    </div>
+</div>
 {% endblock content %}

@@ -1,144 +1,136 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/homii.css' %}">
+<script src="{% static 'js/script_js.js' %}"></script>
+{% endblock %}
+
 {% block content %}
+<div class="container-fluid">
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-  <!--font awesome-->
-  <link rel="stylesheet" href="{% static 'css/homii.css' %}">
-  <script src="{% static 'js/script_js.js' %}"></script> <!--link java script personalizado-->
-  <title>Home</title>
-</head>
-
-<body>
-  <div class="container-fluid">
-    <div class="showcase-area mb-3"> <!--bienvenida -->
-      <div class="left">
-        <div class="big-title">
-          <p>Todo</p>
-          <b>
-            <p>para tu mascota</p>
-          </b>
-        </div>
-        <p class="text">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut perspiciatis autem, obcaecati et aperiam quo.
-          Culpa aut soluta natus?
-        </p>
-        {% if user.is_authenticated %}
-        <div class="cta">
-          <h1 class="btn">Bienvenido {{user.username}}</h1>
-        </div>
-        {% else %}
-        <div class="cta">
-          <a href="/tasksCliente/templates/signup.html" class="btn">Empezar ahora</a>
-        </div>
-        {% endif %}
+  <!-- Bienvenida -->
+  <div class="showcase-area mb-3">
+    <div class="left">
+      <div class="big-title">
+        <p>Todo</p>
+        <b><p>para tu mascota</p></b>
       </div>
-      <div class="right">
-        <img src="{% static 'img/secondImage.png' %}" alt="" class="person">
-      </div>
-    </div> <!--Finaliza bienvenida-->
+      <p class="text">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut perspiciatis autem, obcaecati et aperiam quo.
+        Culpa aut soluta natus?
+      </p>
 
-    <!--Inicia slider-->
-    <div class="wrapper">
-      <h2>Nuestras tiendas más buscadas</h2>
-      <i id="left" class="fa-solid fa-left-long left" style="color: #ffffff;"></i>
-      <ul class="carousel">
-        <li class="card">
-          <div class="img">
-            <img src="{% static 'img/kanu.png' %}" alt="" draggable="false">
-          </div>
-          <h2>Kanu</h2>
-          <button class="visit-button">Ver tienda</button>
-        </li>
-        <li class="card">
-          <div class="img">
-            <img src="{% static 'img/laikaLogo.jpeg' %}" alt="" draggable="false">
-          </div>
-          <h2>Laika</h2>
-          <button class="visit-button">Ver tienda</button>
-        </li>
-        <li class="card">
-          <div class="img">
-            <img src="{% static 'img/movet.webp' %}" alt="" draggable="false">
-          </div>
-          <h2>Movet</h2>
-          <button class="visit-button">Ver tienda</button>
-        </li>
-        <li class="card">
-          <div class="img">
-            <img src="{% static 'img/pamascotas.webp' %}" alt="" draggable="false">
-          </div>
-          <h2>Pa'mascotas</h2>
-          <button class="visit-button">Ver tienda</button>
-        </li>
-        <li class="card">
-          <div class="img">
-            <img src="{% static 'img/puntovet.jpeg' %}" alt="" draggable="false">
-          </div>
-          <h2>Punto Vet</h2>
-          <button class="visit-button">Ver tienda</button>
-        </li>
-        <li class="card">
-          <div class="img">
-            <img src="{% static 'img/puppis.png' %}" alt="" draggable="false">
-          </div>
-          <h2>Puppis</h2>
-          <button class="visit-button">Ver tienda</button>
-        </li>
-      </ul>
-      <i id="right" class="fa-solid fa-right-long" style="color: #ffffff;"></i>
+      {% if user.is_authenticated %}
+        <div class="cta">
+          <h1 class="btn">Bienvenido {{ user.username }}</h1>
+        </div>
+      {% else %}
+        <div class="cta">
+          <a href="{% url 'signup' %}" class="btn">Empezar ahora</a>
+        </div>
+      {% endif %}
     </div>
-    <!--Finaliza slider-->
-    <section class="registro-section"><!--Sección no sabes como registrarte-->
-      <h2 class="registro-title">Forma parte del equipo <span class="highlight">ASE</span></h2>
 
-      <div class="registro-options">
-        <!-- Domiciliario -->
-        <div class="registro-card domiciliario">
-          <div class="registro-card-inner">
-            <div class="registro-type">
-              <span class="registro-icon">🚚</span>
-              Regístrate como domiciliario
-            </div>
-            <button class="registro-btn">Domi</button>
-          </div>
+    <div class="right">
+      <img src="{% static 'img/secondImage.png' %}" alt="" class="person">
+    </div>
+  </div>
+  <!-- Fin Bienvenida -->
+
+  <!-- Slider -->
+  <div class="wrapper">
+    <h2>Nuestras tiendas más buscadas</h2>
+    <i id="left" class="fa-solid fa-left-long left" style="color: #ffffff;"></i>
+    <ul class="carousel">
+      <li class="card">
+        <div class="img">
+          <img src="{% static 'img/kanu.png' %}" alt="" draggable="false">
         </div>
-
-        <!-- Tienda -->
-        <div class="registro-card tienda">
-          <div class="registro-card-inner">
-            <div class="registro-type">
-              <span class="registro-icon">🏪</span>
-              Regístrate como tienda
-            </div>
-            <button class="registro-btn">Tienda</button>
-          </div>
+        <h2>Kanu</h2>
+        <button class="visit-button">Ver tienda</button>
+      </li>
+      <li class="card">
+        <div class="img">
+          <img src="{% static 'img/laikaLogo.jpeg' %}" alt="" draggable="false">
         </div>
+        <h2>Laika</h2>
+        <button class="visit-button">Ver tienda</button>
+      </li>
+      <li class="card">
+        <div class="img">
+          <img src="{% static 'img/movet.webp' %}" alt="" draggable="false">
+        </div>
+        <h2>Movet</h2>
+        <button class="visit-button">Ver tienda</button>
+      </li>
+      <li class="card">
+        <div class="img">
+          <img src="{% static 'img/pamascotas.webp' %}" alt="" draggable="false">
+        </div>
+        <h2>Pa'mascotas</h2>
+        <button class="visit-button">Ver tienda</button>
+      </li>
+      <li class="card">
+        <div class="img">
+          <img src="{% static 'img/puntovet.jpeg' %}" alt="" draggable="false">
+        </div>
+        <h2>Punto Vet</h2>
+        <button class="visit-button">Ver tienda</button>
+      </li>
+      <li class="card">
+        <div class="img">
+          <img src="{% static 'img/puppis.png' %}" alt="" draggable="false">
+        </div>
+        <h2>Puppis</h2>
+        <button class="visit-button">Ver tienda</button>
+      </li>
+    </ul>
+    <i id="right" class="fa-solid fa-right-long" style="color: #ffffff;"></i>
+  </div>
+  <!-- Fin Slider -->
 
-        <!-- Cliente -->
-        <div class="registro-card cliente">
-          <div class="registro-card-inner">
-            <div class="registro-type">
-              <span class="registro-icon">👤</span>
-              Regístrate como cliente
-            </div>
-            <a href="#" class="registro-btn">Cliente</a>
+  <!-- Sección de registro -->
+  <section class="registro-section">
+    <h2 class="registro-title">Forma parte del equipo <span class="highlight">ASE</span></h2>
+
+    <div class="registro-options">
+      <!-- Domiciliario -->
+      <div class="registro-card domiciliario">
+        <div class="registro-card-inner">
+          <div class="registro-type">
+            <span class="registro-icon">🚚</span>
+            Regístrate como domiciliario
           </div>
+          <button class="registro-btn">Domi</button>
         </div>
       </div>
-    </section><!--Finaliza no sabes como registrarte-->
-  </div> <!--finaliza global container-fluid-->
-  {% endblock %}
 
+      <!-- Tienda -->
+      <div class="registro-card tienda">
+        <div class="registro-card-inner">
+          <div class="registro-type">
+            <span class="registro-icon">🏪</span>
+            Regístrate como tienda
+          </div>
+          <button class="registro-btn">Tienda</button>
+        </div>
+      </div>
 
+      <!-- Cliente -->
+      <div class="registro-card cliente">
+        <div class="registro-card-inner">
+          <div class="registro-type">
+            <span class="registro-icon">👤</span>
+            Regístrate como cliente
+          </div>
+          <a href="#" class="registro-btn">Cliente</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Fin Sección de registro -->
 
-</body>
-
-</html>
+</div>
+{% endblock content %}

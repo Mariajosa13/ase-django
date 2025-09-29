@@ -1,76 +1,65 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/detalle_perfil.css' %}">
+{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
+<div class="perfil-container">
+    <h2>Mi Perfil</h2>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-    <!--font awesome-->
-    <link rel="stylesheet" href="{% static 'css/detalle_perfil.css' %}">
+    <div class="card perfil-card mb-4">
+        <div class="card-header perfil-header">
+            <h3>Información Personal</h3>
+        </div>
+        <div class="card-body perfil-body">
+            <p><strong>Usuario:</strong> {{ request.user }}</p>
+            <p><strong>Nombre:</strong> {{ profile.nombre }}</p>
+            <p><strong>Apellido:</strong> {{ profile.apellido }}</p>
+            <p><strong>Correo:</strong> {{ profile.correo }}</p>
 
-    <title>Detalle Perfil</title>
-</head>
+            {% if profile.segundo_apellido %}
+            <p>
+                <strong>Segundo Apellido:</strong> {{ profile.segundo_apellido }}
+                <a href="{% url 'eliminar_campo' 'segundo_apellido' %}" 
+                   class="btn perfil-btn btn-sm btn-danger"
+                   onclick="return confirm('¿Estás seguro de eliminar este dato?')">
+                    Eliminar
+                </a>
+            </p>
+            {% endif %}
 
-<body>
-    <div class="perfil-container">
-        <h2>Mi Perfil</h2>
+            {% if profile.fecha_nacimiento %}
+            <p><strong>Fecha de Nacimiento:</strong> {{ profile.fecha_nacimiento }}</p>
+            {% endif %}
 
-        <div class="card perfil-card mb-4">
-            <div class="card-header perfil-header">
-                <h3>Información Personal</h3>
-            </div>
-            <div class="card-body perfil-body">
-                <p><strong>Usuario:</strong> {{ request.user }}</p>
-                <p><strong>Nombre:</strong> {{ profile.nombre }}</p>
-                <p><strong>Apellido:</strong> {{ profile.apellido }}</p>
-                <p><strong>Correo:</strong> {{ profile.correo }}</p>
+            {% if profile.celular %}
+            <p>
+                <strong>Celular:</strong> {{ profile.celular }}
+                <a href="{% url 'eliminar_campo' 'celular' %}" 
+                   class="btn btn-sm btn-danger"
+                   onclick="return confirm('¿Estás seguro de eliminar este dato?')">
+                    Eliminar
+                </a>
+            </p>
+            {% endif %}
 
-                {% if profile.segundo_apellido %}
-                <p>
-                    <strong>Segundo Apellido:</strong> {{ profile.segundo_apellido }}
-                    <a href="{% url 'eliminar_campo' 'segundo_apellido' %}" class="btn perfil-btn btn-sm btn-danger"
-                        onclick="return confirm('¿Estás seguro de eliminar este dato?')">
-                        Eliminar
-                    </a>
-                </p>
-                {% endif %}
-
-                {% if profile.fecha_nacimiento %}
-                <p><strong>Fecha de Nacimiento:</strong> {{ profile.fecha_nacimiento }}</p>
-                {% endif %}
-
-                {% if profile.celular %}
-                <p>
-                    <strong>Celular:</strong> {{ profile.celular }}
-                    <a href="{% url 'eliminar_campo' 'celular' %}" class="btn btn-sm btn-danger"
-                        onclick="return confirm('¿Estás seguro de eliminar este dato?')">
-                        Eliminar
-                    </a>
-                </p>
-                {% endif %}
-
-                {% if profile.genero %}
-                <p>
-                    <strong>Género:</strong> {{ profile.get_genero_display }}
-                    <a href="{% url 'eliminar_campo' 'genero' %}" class="btn perfil-btn btn-sm btn-danger"
-                        onclick="return confirm('¿Estás seguro de eliminar este dato?')">
-                        Eliminar
-                    </a>
-                </p>
-                {% endif %}
-            </div>
-            <div class="card-footer perfil-footer">
-                <a href="{% url 'perfil_editar' %}" class="btn btn-primary perfil-btn-editar">Editar Perfil</a>
-                <a href="{% url 'productos' %}" class="btn btn-secondary perfil-btn-volver">Volver</a>
-            </div>
+            {% if profile.genero %}
+            <p>
+                <strong>Género:</strong> {{ profile.get_genero_display }}
+                <a href="{% url 'eliminar_campo' 'genero' %}" 
+                   class="btn perfil-btn btn-sm btn-danger"
+                   onclick="return confirm('¿Estás seguro de eliminar este dato?')">
+                    Eliminar
+                </a>
+            </p>
+            {% endif %}
+        </div>
+        <div class="card-footer perfil-footer">
+            <a href="{% url 'perfil_editar' %}" class="btn btn-primary perfil-btn-editar">Editar Perfil</a>
+            <a href="{% url 'productos' %}" class="btn btn-secondary perfil-btn-volver">Volver</a>
         </div>
     </div>
-</body>
-
-</html>
+</div>
 {% endblock %}

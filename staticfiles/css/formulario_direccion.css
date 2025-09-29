@@ -1,0 +1,180 @@
+:root {
+    --primary: #441151;
+    --primary-hover: #733982;
+    --secondary: #dbc7f1;
+    --background: #efe8f7;
+    --error: #ff958c;
+    --error_hover: #ffb9b3;
+    --success: #4caf50;
+    --white: #fff;
+    --light-gray: #f0f2f5;
+    --border-color: #ddd;
+    --text-gray: #555;
+    --placeholder-gray: #888;
+    --dark-text: #333;
+    --shadow-light: 0 2px 10px rgba(68, 17, 81, 0.1);
+    --shadow-medium: 0 4px 20px rgba(68, 17, 81, 0.15);
+    --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--background) 100%);
+}
+
+/* Reset básico */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--background);
+}
+
+/* Contenedor principal */
+.checkout-container {
+    background: var(--white);
+    padding: 2rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 3rem auto;
+    max-width: 800px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-medium);
+    margin-top: 5rem;
+}
+
+/* Título principal */
+.checkout-title {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.checkout-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+/* Estilos de los campos del formulario */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--dark-text);
+    background-color: var(--light-gray);
+    background-clip: padding-box;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    color: var(--dark-text);
+    background-color: var(--white);
+    border-color: var(--primary-hover);
+    outline: 0;
+    box-shadow: 0 0 0 4px rgba(68, 17, 81, 0.1);
+}
+
+.form-check-input {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-top: 0.25rem;
+    vertical-align: top;
+    background-color: var(--light-gray);
+    border: 2px solid var(--border-color);
+    border-radius: 0.25em;
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.alert-danger {
+    color: var(--white);
+    background-color: var(--error);
+    border-color: var(--error);
+    padding: 0.75rem 1rem;
+    margin-top: 0.5rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+}
+
+/* Botón de envío */
+.btn {
+    display: inline-block;
+    border-radius: 12px;
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.btn-primary.btn-large {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    background: var(--primary);
+    color: var(--white);
+    box-shadow: var(--shadow-medium);
+}
+
+.btn-primary.btn-large:hover {
+    transform: translateY(-2px);
+    background: var(--primary-hover);
+    box-shadow: 0 6px 20px rgba(68, 17, 81, 0.4);
+}
+
+/* Estilos de la barra de navegación (si existe fuera del formulario) */
+.navbar {
+    background-color: var(--white);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: var(--primary);
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.navbar a:hover {
+    color: var(--primary-hover);
+}

@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from datetime import date
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.gis.db import models as gis_models
 
 # SECCIÓN USUARIOS
 
@@ -98,10 +99,12 @@ class Domiciliario(models.Model):
     def __str__(self):
         return f"Domiciliario: {self.profile.user.username}"
 
-class Tienda(models.Model):
+class Tienda(gis_models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    nombre_tienda = models.CharField(max_length=200, blank=True, null=True) # Agregué estos campos
-    nit = models.CharField(max_length=50, blank=True, null=True) # Agregué estos campos
+    nombre_tienda = models.CharField(max_length=200, blank=True, null=True)
+    nit = models.CharField(max_length=50, blank=True, null=True)
+    ubicacion = gis_models.PointField(null=True, blank=True, srid=4326) # sistema de coordenadas estandar Lat Lng
+
 
     def __str__(self):
         return f"Tienda: {self.profile.user.username} ({self.nombre_tienda})"
@@ -116,6 +119,23 @@ def crear_subtipo_usuario(sender, instance, created, **kwargs):
         elif instance.tipo_usuario == 'tienda':
             Tienda.objects.create(profile=instance)
 
+class Pedido(models.Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+    domiciliario_asignado = models.ForeignKey(Domiciliario, on_delete=models.SET_NULL, null=True, blank=True)
+    ubicacion_recogida = gis_models.PointField(srid=4326) 
+    ubicacion_entrega = gis_models.PointField(srid=4326)
+
+    ESTADOS = [
+        ('DISPONIBLE', 'Esperando domiciliario'),
+        ('EN_CURSO', 'Asignado, en camino a recoger'),
+        ('EN_CAMINO', 'Recogido, en camino a entregar'),
+        ('ENTREGADO', 'Completado'),
+    ]
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='DISPONIBLE')
+    codigo_entrega_tienda = models.CharField(max_length=6, null=True, blank=True, unique=True)
+    codigo_recepcion_cliente = models.CharField(max_length=6, null=True, blank=True, unique=True)
+    
 class Direccion(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     nombre_quien_recibe = models.CharField(max_length=100, blank=True, null=True)

@@ -7,18 +7,18 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
-#importacion vistas API
-from tasks.views_api import (
-    SignupAPIView, ProfileDetailAPIView, ProfileUpdateAPIView,
-    DeleteProfileFieldAPIView, ProductosViewSet, CategoriaMascotaViewSet,
-    ResenaProductoMascotaViewSet, MyTokenObtainPairAPIView
-)
+# #importacion vistas API
+# from tasks.views_api import (
+#     SignupAPIView, ProfileDetailAPIView, ProfileUpdateAPIView,
+#     DeleteProfileFieldAPIView, ProductosViewSet, CategoriaMascotaViewSet,
+#     ResenaProductoMascotaViewSet, MyTokenObtainPairAPIView
+# )
 
 # Crea un router para ViewSets
-router = DefaultRouter()
-router.register(r'productos', ProductosViewSet)
-router.register(r'categorias', CategoriaMascotaViewSet)
-router.register(r'resenas', ResenaProductoMascotaViewSet)
+# router = DefaultRouter()
+# router.register(r'productos', ProductosViewSet)
+# router.register(r'categorias', CategoriaMascotaViewSet)
+# router.register(r'resenas', ResenaProductoMascotaViewSet)
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -54,18 +54,18 @@ urlpatterns = [
     path('cart/update/<int:item_id>/', views.update_cart_item_quantity, name='update_cart_item_quantity'),
     path('checkout/', views.checkout, name='checkout'),
 
-    # URLs de la API 
-    path('api/', include(router.urls)),
+    # # URLs de la API 
+    # path('api/', include(router.urls)),
 
-    # URLs de autenticación JWT
-    path('api/token/', MyTokenObtainPairAPIView.as_view(), name='api_token_obtain_pair'), #signin
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='api_token_refresh'), 
+    # # URLs de autenticación JWT
+    # path('api/token/', MyTokenObtainPairAPIView.as_view(), name='api_token_obtain_pair'), #signin
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='api_token_refresh'), 
 
-    # URLs específicas de gestión de usuarios/perfiles API
-    path('api/register/', SignupAPIView.as_view(), name='api_register'), #signup
-    path('api/profile/', ProfileDetailAPIView.as_view(), name='api_profile_detail'), #profile
-    path('api/profile/update/', ProfileUpdateAPIView.as_view(), name='api_profile_update'), #profile_update
-    path('api/profile/delete-field/<str:campo>/', DeleteProfileFieldAPIView.as_view(), name='api_delete_profile_field'), #profile_delete_field
+    # # URLs específicas de gestión de usuarios/perfiles API
+    # path('api/register/', SignupAPIView.as_view(), name='api_register'), #signup
+    # path('api/profile/', ProfileDetailAPIView.as_view(), name='api_profile_detail'), #profile
+    # path('api/profile/update/', ProfileUpdateAPIView.as_view(), name='api_profile_update'), #profile_update
+    # path('api/profile/delete-field/<str:campo>/', DeleteProfileFieldAPIView.as_view(), name='api_delete_profile_field'), #profile_delete_field
 ]
 
 if settings.DEBUG:
