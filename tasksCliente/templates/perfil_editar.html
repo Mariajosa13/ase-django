@@ -1,21 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Editar Perfil{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/editar_perfill.css' %}">
+{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-    <!--font awesome-->
-    <link rel="stylesheet" href="{% static 'css/editar_perfil.css' %}">
-    <title>Editar perfil</title>
-</head>
 
-<body>
     <div class="editar-container">
         <h2>Editar Perfil</h2>
 
@@ -52,7 +46,4 @@
             <a href="{% url 'perfil_detalle' %}" class="btn btn-secondary editar-btn-cancelar">Cancelar</a>
         </form>
     </div>
-</body>
-
-</html>
 {% endblock %}

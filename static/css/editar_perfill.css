@@ -1,0 +1,121 @@
+
+.editar-container {
+    max-width: 600px;
+    margin: 60px auto;
+    background-color: rgb(255, 255, 255);
+    padding: 30px 40px;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(128, 0, 128, 0.2);
+    position: relative;
+    z-index: 1000;
+}
+
+h2 {
+    text-align: center;
+    color: #6a0dad;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.editar-alert-info {
+    background-color: #f0e5ff;
+    border-left: 5px solid #a259ff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    color: #4b0082;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+.editar-form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    font-weight: 600;
+    color: #5a189a;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #a259ff;
+    outline: none;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s;
+    margin-right: 10px;
+}
+
+.editar-btn-guardar {
+    background-color: #8a2be2;
+    color: white;
+}
+
+.editar-btn-guardar:hover {
+    background-color: #6a0dad;
+    transform: scale(1.05);
+}
+
+.editar-btn-cancelar {
+    background-color: #ccc;
+    color: #333;
+}
+
+.editar-btn-cancelar:hover {
+    background-color: #bbb;
+    transform: scale(1.05);
+}
+
+.text-danger {
+    color: #c1121f;
+    font-size: 0.9em;
+}
+
+/* Estilos de la barra de navegación (si existe fuera del formulario) */
+.navbar {
+    background-color: var(--white);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: var(--primary);
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.navbar a:hover {
+    color: var(--primary-hover);
+}

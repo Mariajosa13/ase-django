@@ -47,19 +47,15 @@
             </div>
 
             <!-- Detalles del producto -->
-            <div class="col-md-7">
-                <h1 class="mb-2">{{ producto.nombre }}</h1>
+            <!-- <div class="col-md-7">
+                <h1 class="mb-2">{{ producto.nombre }}</h1> -->
 
                 <!-- Calificación promedio -->
                 <div class="mb-3">
                     {% if promedio_calificacion %}
                     <div class="d-flex align-items-center">
                         <div class="rating">
-                            {% for i in "12345" %}
-                            <i class="fa{% if i|add:" 0"|add:"-48" <=promedio_calificacion %}s{% elif
-                                i|add:"0"|add:"-48"|add:"-0.5" <=promedio_calificacion %}s-half-alt{% else %}r{% endif
-                                %} fa-star text-warning"></i>
-                            {% endfor %}
+                            <p>Aquí va la Calificación</p>
                         </div>
                         <span class="ms-2">{{ promedio_calificacion|floatformat:1 }} ({{ resenas.count }}
                             resenas)</span>

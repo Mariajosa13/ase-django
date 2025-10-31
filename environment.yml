@@ -60,17 +60,20 @@ dependencies:
   - pip:
       - asgiref==3.8.1
       - django==5.2
+      - django-filter==25.1
       - django-widget-tweaks==1.5.0
       - djangorestframework==3.16.0
+      - djangorestframework-gis==1.2.0
       - djangorestframework-simplejwt==5.5.0
-      - mysql==0.0.3
-      - mysqlclient==2.2.7
       - pillow==11.2.1
+      - postgis==1.0.4
+      - psycopg2==2.9.10
       - pyjwt==2.9.0
       - sqlparse==0.5.3
       - tzdata==2025.2
 prefix: C:\Users\maria\.conda\envs\django-gis
 
-# conda env create -f environment.yml PARA VOLVER A CREAR EL ENTORNO EN OTRO COMPUTADOR
-# conda activate django-gis PARA ACTIVAR EL ENTORNO EN EL MISMO COMPUTADOR
 
+# para actualizar documento - conda env export > environment.yml
+# conda activate django-gis - para activar entorno
+# conda env create -f environment.yml - para crear entorno en otro computador 

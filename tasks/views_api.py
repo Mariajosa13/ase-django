@@ -18,7 +18,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 # Importa los modelos generales de 'tasks'
-from .models import Profile, CategoriaMascota, Productos, ResenaProductoMascota, Cliente, Domiciliario, Tienda, Pedido
+from .models import Profile, CategoriaMascota, Productos, ResenaProductoMascota, Cliente, Domiciliario, Tienda, Pedido, ApiKey
 
 from .serializers_api import (
     # SignupAPISerializer, ProfileSerializer, ClienteSpecificSerializer,
@@ -28,6 +28,68 @@ from .serializers_api import (
     PedidoGeoSerializer
 )
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+@api_view(['POST'])
+def recibir_producto(request):
+    api_key = request.headers.get('Authorization')
+
+    if not api_key:
+        return Response({'error': 'No API Key provided'}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    try:
+        api_key_obj = ApiKey.objects.get(key=api_key)
+    except ApiKey.DoesNotExist:
+        return Response({'error': 'Invalid API Key'}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    tienda = api_key_obj
+
+    nombre_producto = request.data.get('nombre')
+    descripcion_producto = request.data.get('descripcion')
+    precio_producto = request.data.get('precio')
+    stock_producto = request.data.get('stock')
+    imagen_producto = request.data.get('imagen')
+    categoria_producto = request.data.get('categoria')
+    tipo_mascota_producto = request.data.get('tipo_mascota')
+    destacado_producto = request.data.get('destacado')
+    fechaVencimiento_producto = request.data.get('fechaVencimiento')
+    important_producto = request.data.get('important')
+    datos_extra_producto = request.data.get('datos_extra', {})
+
+    campos = {
+        'nombre': nombre_producto,
+        'descripcion': descripcion_producto,
+        'precio': precio_producto,
+        'stock': stock_producto,
+        'imagen': imagen_producto,
+        'categoria': categoria_producto,
+        'tipo_mascota': tipo_mascota_producto,
+        'destacado': destacado_producto,
+        'fechaVencimiento': fechaVencimiento_producto,
+        'important': important_producto,
+        'datos_extra': datos_extra_producto,
+    }
+
+    if not campos:
+        return Response({'error': 'Missing fields'}, status=status.HTTP_400_BAD_REQUEST)
+
+    producto = Productos.objects.create(
+        tienda=api_key_obj.tienda,
+        nombre=nombre_producto,
+        descripcion=descripcion_producto,
+        precio=precio_producto,
+        stock=stock_producto,
+        imagen=imagen_producto,
+        categoria=categoria_producto,
+        tipo_mascota=tipo_mascota_producto,
+        destacado=destacado_producto,
+        fechaVencimiento=fechaVencimiento_producto,
+        important=important_producto,
+        datos_extra=datos_extra_producto
+    )
+
+    return Response({'message': 'Producto creado exitosamente', 'producto_id': producto.id}, status=status.HTTP_201_CREATED)
+
+
 
 def generar_codigo():
     # Asegura un código de 6 dígitos con ceros iniciales

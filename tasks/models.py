@@ -1,4 +1,5 @@
 from urllib import request
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -99,6 +100,10 @@ class Domiciliario(models.Model):
     def __str__(self):
         return f"Domiciliario: {self.profile.user.username}"
 
+class ApiKey(models.Model):
+    tienda = models.OneToOneField(Profile, on_delete=models.CASCADE, limit_choices_to={'TIPO_USUARIOS_CHOICES':'tienda'})
+    key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
 class Tienda(gis_models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     nombre_tienda = models.CharField(max_length=200, blank=True, null=True)
@@ -171,15 +176,13 @@ class Meta:
     verbose_name_plural = "Categorías de Mascotas"
 
 class Productos(models.Model):
+    tienda = models.ForeignKey(Profile, on_delete=models.CASCADE, limit_choices_to={'TIPO_USUARIOS_CHOICES': 'tienda'})
     TIPO_MASCOTA_CHOICES = [
         ('perro', 'Perro'),
         ('gato', 'Gato'),
-        ('ave', 'Ave'),
-        ('pez', 'Pez'),
         ('otro', 'Otro'),
     ]
     nombre = models.CharField(max_length=200)
-    slug = models.SlugField(null=True, blank=True)
     description = models.TextField(blank=True)
     precio = models.BigIntegerField()
     stock = models.PositiveIntegerField(default=0)
@@ -190,6 +193,7 @@ class Productos(models.Model):
     fechaVencimiento = models.DateField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     important = models.BooleanField(default=False)
+    datos_extra = models.JSONField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
     def save(self, *args, **kwargs):

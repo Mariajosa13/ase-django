@@ -3,14 +3,11 @@
 {% load widget_tweaks %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/formularioss_signin.css' %}"> {% endblock %}
+<link rel="stylesheet" href="{% static 'css/formularios_signin.css' %}"> {% endblock %}
 
 {% block content %}
 <div class="container-global">
-
-    <div class="container-header">
-        <h1>Ingresar</h1>
-    </div>
+        <h2>Ingresar</h2>
 
     {# Bloque de mensajes #}
     {% if messages %}
@@ -22,15 +19,6 @@
     {% endif %}
 
     <div class="form-wrapper active">
-
-        <div class="social-login">
-            <p>O ingresa con tus redes sociales</p>
-            <div class="social-icons">
-                <a href="#" class="icon"><i class="fab fa-google"></i></a>
-                <a href="#" class="icon"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="icon"><i class="fab fa-apple"></i></a>
-            </div>
-        </div>
 
         <form action="{% url 'signin' %}" method="POST" class="card card-body">
             {% csrf_token %}
