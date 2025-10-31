@@ -5,7 +5,7 @@ Este proyecto se crea bajo una licencia propietaria (por favor leer las condicio
 
 Documentación
 
-  <code> <img height="50" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/notion/notion-original-wordmark.svg"> </code>
+  <code> <img height="50" src="https://raw.githubusercontent.com/tandpfun/skill-icons/refs/heads/main/icons/Notion-Dark.svg"> </code>
 
 
 
