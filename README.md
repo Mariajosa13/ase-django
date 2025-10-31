@@ -5,7 +5,7 @@ Este proyecto se crea bajo una licencia propietaria (por favor leer las condicio
 
 Documentación
 
-  <code> <img height="50" src="https://raw.githubusercontent.com/tandpfun/skill-icons/refs/heads/main/icons/Notion-Dark.svg"> </code>
+  <code> <a href="https://www.notion.so/1c90e81589c1809fa9b5de337e291afa?v=1c90e81589c180e9998f000c6cf252e8" target="blank"> <img height="50" src="https://raw.githubusercontent.com/tandpfun/skill-icons/refs/heads/main/icons/Notion-Dark.svg"> </code> </a>
 
 
 
