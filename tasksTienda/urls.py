@@ -5,6 +5,8 @@ from django.conf.urls.static import static
 from tasks import views_api
 
 urlpatterns = [
+    path('api/obtener-api-key/', views_api.obtener_api_key, name='obtener_api_key'),
+    path('api/regenerar-api-key/', views_api.regenerar_api_key, name='regenerar_api_key'),
     path('api/recibir-producto/', views_api.recibir_producto, name='recibir_producto'),
 ]
 

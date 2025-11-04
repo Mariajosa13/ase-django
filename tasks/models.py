@@ -101,8 +101,11 @@ class Domiciliario(models.Model):
         return f"Domiciliario: {self.profile.user.username}"
 
 class ApiKey(models.Model):
-    tienda = models.OneToOneField(Profile, on_delete=models.CASCADE, limit_choices_to={'TIPO_USUARIOS_CHOICES':'tienda'})
+    tienda = models.OneToOneField(Profile, on_delete=models.CASCADE, limit_choices_to={'tipo_usuario':'tienda'})
     key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+
+    def __call__(self):
+        return f"{self.tienda.user} - {self.key}"
 
 class Tienda(gis_models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
@@ -176,7 +179,7 @@ class Meta:
     verbose_name_plural = "Categorías de Mascotas"
 
 class Productos(models.Model):
-    tienda = models.ForeignKey(Profile, on_delete=models.CASCADE, limit_choices_to={'TIPO_USUARIOS_CHOICES': 'tienda'})
+    tienda = models.ForeignKey(Profile, on_delete=models.CASCADE, limit_choices_to={'tipo_usuario': 'tienda'}, null=True)
     TIPO_MASCOTA_CHOICES = [
         ('perro', 'Perro'),
         ('gato', 'Gato'),
@@ -195,11 +198,6 @@ class Productos(models.Model):
     important = models.BooleanField(default=False)
     datos_extra = models.JSONField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.nombre)
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.nombre} - {self.get_tipo_mascota_display()} - by {self.user.username}"
