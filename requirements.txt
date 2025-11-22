@@ -10,6 +10,10 @@ PyJWT==2.9.0
 sqlparse==0.5.3
 tzdata==2025.2
 
+Django>=4.2
+psycopg2-binary>=2.9
+gunicorn
+
 
 # pip install -r requirements.txt
 
