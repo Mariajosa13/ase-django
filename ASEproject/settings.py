@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(=-y9!b+qjazo*ehn2cv4i-oled)*c6fsr8^%-xcr6_2wu)y^%'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-(=-y9!b+qjazo*ehn2cv4i-oled)*c6fsr8^%-xcr6_2wu)y^%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
 
 # Application definition
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -86,26 +87,12 @@ WSGI_APPLICATION = 'ASEproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
-        'NAME': BASE_DIR / 'db.sqlite3',
-
-        # conexión mysql
-
-        # 'ENGINE': 'django.db.backends.mysql', 
-        # 'NAME': 'bdase'
-        # 'USER': 'root'
-        # 'PASSWORD': 'mariajose'
-        # 'HOST': '127.0.0.1',
-        # 'PORT': '3307',
-
-        # conexión postgres
-
-        # 'ENGINE': 'django.contrib.gis.db.backends.postgis', 
-        # 'NAME': 'asebd',
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'BA$05V3rd3',
-        # 'HOST': 'localhost',
-        # 'PORT': '5432', 
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': os.environ.get('DB_NAME', 'asebd'),
+        'USER': os.environ.get('DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
@@ -165,6 +152,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# WhiteNoise configuration
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 LOGIN_URL = '/signin'
