@@ -45,6 +45,9 @@ db.sqlite3-journal
 /media
 /staticfiles
 
+# Environment variables
+.env
+
 # IDE
 .vscode/
 .idea/
