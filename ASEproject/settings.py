@@ -14,13 +14,6 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-CONDA_ENV_PATH = r"C:\Users\maria\.conda\envs\django-gis"
-
-# Aquí apuntas directo al archivo que existe
-GDAL_LIBRARY_PATH = os.path.join(CONDA_ENV_PATH, r"Library\bin\gdal.dll")
-
-os.environ['PATH'] = CONDA_ENV_PATH + r"\Library\bin;" + os.environ['PATH']
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -93,8 +86,8 @@ WSGI_APPLICATION = 'ASEproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+        'NAME': BASE_DIR / 'db.sqlite3',
 
         # conexión mysql
 
@@ -107,12 +100,12 @@ DATABASES = {
 
         # conexión postgres
 
-        'ENGINE': 'django.contrib.gis.db.backends.postgis', 
-        'NAME': 'asebd',
-        'USER': 'postgres',
-        'PASSWORD': 'BA$05V3rd3',
-        'HOST': 'localhost',
-        'PORT': '5432', 
+        # 'ENGINE': 'django.contrib.gis.db.backends.postgis', 
+        # 'NAME': 'asebd',
+        # 'USER': 'postgres',
+        # 'PASSWORD': 'BA$05V3rd3',
+        # 'HOST': 'localhost',
+        # 'PORT': '5432', 
     }
 }
 
