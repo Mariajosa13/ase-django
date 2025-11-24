@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: ase-django
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn ASEproject.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        sync: false
+
+databases:
+  - name: ase-postgres
+    databaseName: asebd
+    user: postgres
+    plan: free
+    postgresMajorVersion: 16
