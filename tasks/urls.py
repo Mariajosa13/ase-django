@@ -8,8 +8,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     path('cliente/', include('tasksCliente.urls')),
-    path('tienda/', include('tasksTienda.urls')),
-    path('domiciliario/', include('tasksDomiciliario.urls')),
+    path('tienda/', include(('tasksTienda.urls', 'tienda'), namespace='tienda')),
+    path('domiciliario/', include(('tasksDomiciliario.urls', 'domiciliario'), namespace='domiciliario')),
 ]
 
 

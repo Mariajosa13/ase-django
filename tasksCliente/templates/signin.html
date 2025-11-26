@@ -20,7 +20,7 @@
 
     <div class="form-wrapper active">
 
-        <form action="{% url 'signin' %}" method="POST" class="card card-body">
+        <form action="{% url 'cliente:signin' %}" method="POST" class="card card-body">
             {% csrf_token %}
 
             <div class="form-group">
@@ -63,7 +63,7 @@
                 Ingresar <i class="fas fa-arrow-right"></i>
             </button>
 
-            <p>¿No tienes una cuenta? <a href="{% url 'signup' %}">Regístrate aquí</a></p>
+            <p>¿No tienes una cuenta? <a href="{% url 'cliente:signup' %}">Regístrate aquí</a></p>
         </form>
     </div>
 </div>

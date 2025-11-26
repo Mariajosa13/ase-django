@@ -81,13 +81,11 @@ def signup(request):
                     
                     # Redirección según el tipo de usuario
                     if tipo_usuario == 'cliente':
-                        return redirect('productos')
+                        return redirect('cliente:productos')
                     elif tipo_usuario == 'domiciliario':
                         return redirect('domiciliario:completar_perfil')
-                    elif tipo_usuario == 'tienda':
-                        return redirect('dashboard_tienda')
                     else:
-                        return redirect('home')
+                        return redirect('cliente:home')
 
                 except IntegrityError as e:
                     print(f"IntegrityError during signup: {e}")
@@ -125,7 +123,7 @@ def signup(request):
 def signout(request):
     logout(request)
     messages.info(request, 'Has cerrado sesión exitosamente.')
-    return redirect('home')
+    return redirect('cliente:home')
 
 def signin(request):
     if request.method == 'GET':
@@ -148,13 +146,13 @@ def signin(request):
                 print("Tipo de usuario: (Signin) ", tipo_usuario)
 
                 if tipo_usuario == 'cliente':
-                    return redirect('productos')
+                    return redirect('cliente:productos')
                 elif tipo_usuario == 'domiciliario':
-                    return redirect('domiciliario:completar_perfil')
+                    return redirect('domiciliario:dashboard')
                 elif tipo_usuario == 'tienda':
-                    return redirect('dashboard_tienda')
+                    return redirect('tienda:dashboard_tienda')
                 else:
-                    return redirect('home')
+                    return redirect('clientehome')
 
             except Profile.DoesNotExist:
                 signup_form = SignupForm(prefix='signup')
@@ -213,7 +211,7 @@ def perfil_editar(request):
             form.save()
 
             messages.success(request, 'Tu perfil ha sido actualizado correctamente.')
-            return redirect('perfil_detalle')
+            return redirect('cliente:perfil_detalle')
     else:
         form = ProfileUpdateForm(instance=profile)
     
@@ -232,11 +230,11 @@ def eliminar_campo(request, campo):
         related_profile_obj = Cliente.objects.filter(profile=profile).first()
         if not related_profile_obj or campo not in campos_permitidos_cliente:
             messages.error(request, 'No se puede eliminar este campo o no pertenece a tu tipo de usuario.')
-            return redirect('perfil_editar')
+            return redirect('cliente:perfil_editar')
             
     else:
         messages.error(request, 'Tu tipo de usuario no permite eliminar campos de esta forma.')
-        return redirect('perfil_editar')
+        return redirect('cliente:perfil_editar')
 
     # Si existe lo pone en none (campo vacío)
     if hasattr(related_profile_obj, campo):
@@ -246,7 +244,7 @@ def eliminar_campo(request, campo):
     else:
         messages.error(request, 'Campo no encontrado en tu perfil específico.')
         
-    return redirect('perfil_detalle')
+    return redirect('cliente:perfil_detalle')
 
 # CRUD Dirección
 @login_required
@@ -258,7 +256,7 @@ def agregar_direccion(request):
             direccion.profile = request.user.profile
             direccion.save()
             messages.success(request, 'Direccion agregada exitosamente')
-            return redirect('lista_direcciones')
+            return redirect('cliente:lista_direcciones')
         else:
             messages.error(request, 'Por favor, corrige los errores en el formulario.')
     else:
@@ -285,7 +283,7 @@ def direccion_editar(request, direccion_id):
         if form.is_valid():
             form.save()
             message.success(request, 'Tu dirección ha sido actualizada con éxito')
-            return redirect('lista_direcciones')
+            return redirect('cliente:lista_direcciones')
     else:
         form = DireccionForm(instance=direccion)
 
@@ -297,7 +295,7 @@ def direccion_eliminar(request, direccion_id):
     if request.method == 'POST':
         direccion.delete()
         messages.success(request, 'La direccion ha sido eliminada exitosamente.')
-        return redirect('lista_direcciones')
+        return redirect('cliente:lista_direcciones')
 
     return render(request, 'direccion_confirmar_eliminar.html', {'direccion': direccion})
 # Productos views
@@ -474,7 +472,7 @@ def add_to_cart(request, producto_id):
         # Si no existe, crea un nuevo item en el carrito
         CartItem.objects.create(cart=cart, producto=producto, quantity=quantity_to_add)
 
-    return redirect('view_cart') # Redirige a la vista del carrito
+    return redirect('cliente:view_cart') # Redirige a la vista del carrito
 
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id)
@@ -485,7 +483,7 @@ def remove_from_cart(request, item_id):
         return HttpResponseBadRequest("Este item no pertenece a tu carrito.")
 
     cart_item.delete()
-    return redirect('view_cart')
+    return redirect('cliente:view_cart')
 
 def update_cart_item_quantity(request, item_id):
     if request.method == 'POST':
@@ -505,7 +503,7 @@ def update_cart_item_quantity(request, item_id):
         except ValueError:
             return HttpResponseBadRequest("Cantidad inválida.")
     
-    return redirect('view_cart')
+    return redirect('cliente:view_cart')
 
 def view_cart(request):
     cart = _get_or_create_cart(request)
@@ -568,3 +566,9 @@ def checkout(request):
 
 def completar_perfil(request):
     return render(request, 'completar_perfil.html')
+
+def domiciliario_dashboard(request):
+    return render(request, 'dashboard.html')
+
+# vista tienda al iniciar sesión
+

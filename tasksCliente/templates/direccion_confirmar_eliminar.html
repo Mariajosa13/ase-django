@@ -26,11 +26,11 @@
                             direccion.departamento }}</p>
                     </div>
                 </div>
-                <form method="post" action="{% url 'direccion_eliminar' direccion.id %}">
+                <form method="post" action="{% url 'cliente:direccion_eliminar' direccion.id %}">
                     {% csrf_token %}
                     <button class="btn btn-primary eliminar" type="submit">Sí, eliminar dirección</button>
                 </form>
-                <a href="{% url 'lista_direcciones' %}" class="btn btn-primary editar">Cancelar</a>
+                <a href="{% url 'cliente:lista_direcciones' %}" class="btn btn-primary editar">Cancelar</a>
             </div>
         </div>
     </div>

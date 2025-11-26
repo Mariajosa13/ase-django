@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Productos, Profile, Cart, CartItem, CategoriaMascota, Cliente, Domiciliario, Tienda, Direccion
+from .models import Productos, Profile, Cart, CartItem, CategoriaMascota, Cliente, Domiciliario, Tienda, Direccion, ApiKey
 
 # --- Productos Admin ---
 @admin.register(Productos)
@@ -81,8 +81,16 @@ class DomiciliarioAdmin(admin.ModelAdmin):
     search_fields = ('profile__user__username', 'vehiculo', 'celular')
 
 # --- Tienda Admin ---
+@admin.register(ApiKey)
+class ApiKeyAdmin(admin.ModelAdmin):
+    list_display = ('tienda', 'key', 'created_at')
+    readonly_fields = ('key', 'created_at')
+    search_fields = ('tienda__nombre_tienda', 'tienda__profile__user__username')
+    # evitar creación manual desde admin (opcional)
+    def has_add_permission(self, request):
+        return False
+
 @admin.register(Tienda)
 class TiendaAdmin(admin.ModelAdmin):
     list_display = ('profile', 'nombre_tienda', 'nit')
-    list_display_links = ('profile', 'nombre_tienda')
-    search_fields = ('profile__user__username', 'nombre_tienda', 'nit')
+    search_fields = ('nombre_tienda','profile__user__username')

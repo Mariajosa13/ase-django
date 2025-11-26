@@ -226,3 +226,8 @@
     max-height: 38px;
   }
 }
+
+footer {
+    flex-shrink: 0; /* Asegura que el footer no se encoja */
+    width: 100%;    /* Asegura el ancho completo */
+}

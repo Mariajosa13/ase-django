@@ -64,8 +64,8 @@
                         {% endif %}
                     </ul>
                     <div class="d-flex justify-content-between mt-4">
-                        <a href="{% url 'direccion_editar' direccion.id %}" class="btn btn-secondary">Editar</a>
-                        <a href="{% url 'lista_direcciones' %}" class="btn btn-primary">Volver a la lista</a>
+                        <a href="{% url 'cliente:direccion_editar' direccion.id %}" class="btn btn-secondary">Editar</a>
+                        <a href="{% url 'cliente:lista_direcciones' %}" class="btn btn-primary">Volver a la lista</a>
                     </div>
                 </div>
             </div>

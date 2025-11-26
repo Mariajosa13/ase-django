@@ -21,10 +21,10 @@
                     <div class="item-layout">
                         <div class="item-content">
                             <h5 class="product-title">
-                                <a href="{% url 'producto_detail' item.producto.id %}">{{ item.producto.nombre }}</a>
+                                <a href="{% url 'cliente:producto_detail' item.producto.id %}">{{ item.producto.nombre }}</a>
                             </h5>
                             <p class="product-price">Precio unitario: ${{ item.producto.precio|floatformat:2 }}</p>
-                            <form action="{% url 'update_cart_item_quantity' item.id %}" method="post"
+                            <form action="{% url 'cliente:update_cart_item_quantity' item.id %}" method="post"
                                 class="quantity-form">
                                 {% csrf_token %}
                                 <label for="quantity-{{ item.id }}" class="quantity-label">Cantidad:</label>
@@ -35,7 +35,7 @@
                         </div>
                         <div class="item-actions">
                             <span class="price-badge">${{ item.get_total_price|floatformat:2 }}</span>
-                            <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-remove">Eliminar</a>
+                            <a href="{% url 'cliente:remove_from_cart' item.id %}" class="btn btn-remove">Eliminar</a>
                         </div>
                     </div>
                 </li>
@@ -51,7 +51,7 @@
                     <p class="summary-text">Total de ítems: {{ cart_items.count }}</p>
                     <hr class="summary-divider">
                     <h5 class="summary-total">Total a pagar: <strong>${{ cart_total_price|floatformat:2 }}</strong></h5>
-                    <a href="{% url 'checkout' %}" class="btn btn-success" id="pago">Proceder al Pago</a>
+                    <a href="{% url 'cliente:checkout' %}" class="btn btn-success" id="pago">Proceder al Pago</a>
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@
     <div class="empty-cart">
         Tu carrito está vacío. ¡Explora nuestros productos y añade algunos!
         <br>
-        <a href="{% url 'productos' %}" class="btn btn-primary">Ver Productos</a>
+        <a href="{% url 'cliente:productos' %}" class="btn btn-primary">Ver Productos</a>
     </div>
     {% endif %}
 </div>

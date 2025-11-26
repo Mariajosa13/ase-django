@@ -22,7 +22,7 @@
             {% if profile.segundo_apellido %}
             <p>
                 <strong>Segundo Apellido:</strong> {{ profile.segundo_apellido }}
-                <a href="{% url 'eliminar_campo' 'segundo_apellido' %}" 
+                <a href="{% url 'cliente:eliminar_campo' 'segundo_apellido' %}" 
                    class="btn perfil-btn btn-sm btn-danger"
                    onclick="return confirm('¿Estás seguro de eliminar este dato?')">
                     Eliminar
@@ -37,7 +37,7 @@
             {% if profile.celular %}
             <p>
                 <strong>Celular:</strong> {{ profile.celular }}
-                <a href="{% url 'eliminar_campo' 'celular' %}" 
+                <a href="{% url 'cliente:eliminar_campo' 'celular' %}" 
                    class="btn btn-sm btn-danger"
                    onclick="return confirm('¿Estás seguro de eliminar este dato?')">
                     Eliminar
@@ -48,7 +48,7 @@
             {% if profile.genero %}
             <p>
                 <strong>Género:</strong> {{ profile.get_genero_display }}
-                <a href="{% url 'eliminar_campo' 'genero' %}" 
+                <a href="{% url 'cliente:eliminar_campo' 'genero' %}" 
                    class="btn perfil-btn btn-sm btn-danger"
                    onclick="return confirm('¿Estás seguro de eliminar este dato?')">
                     Eliminar
@@ -57,8 +57,8 @@
             {% endif %}
         </div>
         <div class="card-footer perfil-footer">
-            <a href="{% url 'perfil_editar' %}" class="btn btn-primary perfil-btn-editar">Editar Perfil</a>
-            <a href="{% url 'productos' %}" class="btn btn-secondary perfil-btn-volver">Volver</a>
+            <a href="{% url 'cliente:perfil_editar' %}" class="btn btn-primary perfil-btn-editar">Editar Perfil</a>
+            <a href="{% url 'cliente:productos' %}" class="btn btn-secondary perfil-btn-volver">Volver</a>
         </div>
     </div>
 </div>

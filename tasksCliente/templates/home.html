@@ -3,7 +3,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-<link rel="stylesheet" href="{% static 'css/homii.css' %}">
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
 <script src="{% static 'js/script_js.js' %}"></script>
 {% endblock %}
 
@@ -14,8 +14,7 @@
   <div class="showcase-area mb-3">
     <div class="left">
       <div class="big-title">
-        <p>Todo</p>
-        <b><p>para tu mascota</p></b>
+        <b><p>Me gustaría ser tienda</p></b>
       </div>
       {% if user.is_authenticated %}
         <div class="cta">
@@ -23,7 +22,7 @@
         </div>
       {% else %}
         <div class="cta">
-          <a href="{% url 'signup' %}" class="btn">Empezar ahora</a>
+          <a href="{% url 'tienda:signupTienda' %}" class="btn">Empezar ahora</a>
         </div>
       {% endif %}
     </div>
@@ -98,7 +97,7 @@
             <span class="registro-icon">🚚</span>
             Regístrate como domiciliario
           </div>
-          <button class="registro-btn">Domi</button>
+          <button class="registro-btn" ><a href="{% url 'cliente:signup' %}">Domi</a></button>
         </div>
       </div>
 
@@ -109,7 +108,7 @@
             <span class="registro-icon">🏪</span>
             Regístrate como tienda
           </div>
-          <button class="registro-btn">Tienda</button>
+          <button class="registro-btn"><a href="{% url 'tienda:signupTienda' %}">Tienda</a></button>
         </div>
       </div>
 
@@ -120,7 +119,7 @@
             <span class="registro-icon">👤</span>
             Regístrate como cliente
           </div>
-          <a href="#" class="registro-btn">Cliente</a>
+          <button class="registro-btn"><a href="{% url 'cliente:signup' %}">Cliente</a></button>
         </div>
       </div>
     </div>
@@ -128,4 +127,13 @@
   <!-- Fin Sección de registro -->
 
 </div>
+
+  <footer class="text-white text-center py-3 mt-auto" style="background-color: #441151;">
+        <div class="container">
+            <p class="mb-0">© {% now "Y" %} Mi Tienda de Mascotas ASE. Todos los derechos reservados.</p>
+            <p class="small">Contacto | Términos de Servicio | <a href="{% url 'tienda:productos_tienda_list' %}" class="text-white">Panel Tienda</a></p>
+        </div>
+</footer>
 {% endblock content %}
+
+

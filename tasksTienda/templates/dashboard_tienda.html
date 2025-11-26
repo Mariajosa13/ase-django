@@ -1,0 +1,109 @@
+{% extends 'baseTienda.html' %} 
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1>Dashboard de Tienda: {{ tienda_info.nombre_tienda|default:profile.user.username }}</h1>
+            <p class="lead">Bienvenido/a al centro de gestión de tu negocio. Aquí puedes encontrar tu clave de acceso a la API y gestionar tus productos.</p>
+        </div>
+    </div>
+
+    {% if messages %}
+        <div class="row">
+            <div class="col-12">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row mt-4">
+
+        <div class="col-md-6 mb-4">
+            <div class="card border-primary h-100 shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">API Key (Autenticación)</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Esta clave es necesaria para enviar tus productos a través de nuestra API.</p>
+                    <div class="input-group mb-3">
+                        <input type="text" id="apiKeyDisplay" class="form-control" value="{{ api_key }}" readonly>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" onclick="copyApiKey()">Copiar</button>
+                        </div>
+                    </div>
+                    <small class="text-danger">🚨 **¡IMPORTANTE!** No compartas esta clave. Es tu contraseña para la API.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card border-info h-100 shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Resumen de Inventario</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Total de Productos Registrados
+                            <span class="badge badge-primary badge-pill">{{ productos_count }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Productos Actualmente en Stock
+                            <span class="badge badge-success badge-pill">{{ productos_en_stock }}</span>
+                        </li>
+                    </ul>
+                    <a href="{% url 'tienda:productos_tienda_list' %}" class="btn btn-sm btn-outline-info mt-3">Ver Todos los Productos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mb-4">
+            <div class="card border-secondary shadow">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Cómo Usar la API para Subir Productos</h5>
+                </div>
+                <div class="card-body">
+                    <p>Utiliza la siguiente estructura de solicitud **POST** para enviar un nuevo producto. Reemplaza `&lt;TU_API_KEY&gt;` con la clave que se muestra arriba.</p>
+                    
+                    <p><strong>Endpoint:</strong> <code>{% url 'tienda:recibir_producto' %}</code></p>
+                    
+                    <h6>Ejemplo de Solicitud (cURL):</h6>
+                    <pre class="bg-dark text-white p-2 rounded">
+curl -X POST {% url 'tienda:recibir_producto' %} \
+-H "Authorization: {{ api_key }}" \
+-H "Content-Type: application/json" \
+-d '{
+  "nombre": "Juguete de Gato",
+  "description": "Pelota con cascabel",
+  "precio": 12000,
+  "stock": 50,
+  "categoria": 1, 
+  "tipo_mascota": "gato"
+}'</pre>
+                    <small>Asegúrate de que el `id` de `categoria` exista.</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function copyApiKey() {
+        var copyText = document.getElementById("apiKeyDisplay");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); 
+        document.execCommand("copy");
+        alert("API Key copiada al portapapeles: " + copyText.value);
+    }
+</script>
+{% endblock %}

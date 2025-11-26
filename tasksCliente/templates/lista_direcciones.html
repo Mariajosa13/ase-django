@@ -27,9 +27,9 @@
                     {% endif %}
                     <hr>
                     <div class="d-flex">
-                        <a href="{% url 'direccion_editar' direccion.id %}" class="btn btn-primary editar">Editar</a>
-                        <a href="{% url 'agregar_direccion' %}" class="btn btn-primary agregar">Agregar</a>
-                        <a href="{% url 'direccion_eliminar' direccion.id %}"
+                        <a href="{% url 'cliente:direccion_editar' direccion.id %}" class="btn btn-primary editar">Editar</a>
+                        <a href="{% url 'cliente:agregar_direccion' %}" class="btn btn-primary agregar">Agregar</a>
+                        <a href="{% url 'cliente:direccion_eliminar' direccion.id %}"
                             class="btn btn-primary eliminar">Eliminar</a>
 
 
@@ -40,7 +40,7 @@
             {% else %}
             <div class="empty-cart">
                 <p>¡Aún no tienes direcciones guardadas!</p>
-                <a href="{% url 'agregar_direccion' %}" class="btn btn-primary">Agregar una ahora</a>
+                <a href="{% url 'cliente:agregar_direccion' %}" class="btn btn-primary">Agregar una ahora</a>
             </div>
             {% endif %}
         </div>

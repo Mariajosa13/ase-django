@@ -3,55 +3,12 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.db.models import Avg, Q
 from django.db import IntegrityError
-from .models import Profile, CategoriaMascota, Productos, ResenaProductoMascota, Cliente, Domiciliario, Tienda, Pedido
+from .models import Pedido
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 #Geolocalización
 from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
 from django.contrib.gis.measure import D
-
-class ProductoSerializer(serializers.ModelSerializer):
-    tienda = serializers.StringRelatedField(read_only=True)
-    categoria = serializers.PrimaryKeyRelatedField(
-        queryset=CategoriaMascota.objects.all(),
-        required=False,
-        allow_null=True
-    )
-
-    class Meta:
-        model = Productos
-        fields = [
-            'id',
-            'tienda',
-            'nombre',
-            'description',
-            'precio',
-            'stock',
-            'imagen',
-            'categoria',
-            'tipo_mascota',
-            'destacado',
-            'fechaVencimiento',
-            'created',
-            'important',
-            'datos_extra',
-        ]
-        read_only_fields = ['id', 'created', 'tienda']
-
-    def create(self, validated_data):
-        """
-        Crea el producto asignando automáticamente a la tienda.
-        """
-        request = self.context.get('request')
-        tienda = self.context.get('tienda')  # se pasará desde la vista
-        if not tienda:
-            raise serializers.ValidationError("No se ha proporcionado una tienda válida para el producto.")
-
-        nombre = validated_data.get('nombre')
-        validated_data['tienda'] = tienda
-        validated_data['user'] = tienda.user  # el dueño de la tienda
-
-        return super().create(validated_data)
 
 class PedidoGeoSerializer(GeoFeatureModelSerializer):
     distancia_a_domiciliario = serializers.SerializerMethodField()
@@ -70,8 +27,7 @@ class PedidoGeoSerializer(GeoFeatureModelSerializer):
         )  # Los campos necesarios en el mapa
 
     def get_distancia_a_domiciliario(self, obj):
-        """
-        Este método calcula la distancia entre el punto de recogida y el punto del domiciliario
+        """ se calcula la distancia entre el punto de recogida y el punto del domiciliario
         pasado en el contexto. Si no se pasa, retorna None.
         """
         if 'domiciliario_point' in self.context:

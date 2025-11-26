@@ -1,4 +1,3 @@
-{% extends 'base.html' %}
 {% load static %}
 {% load widget_tweaks %}
 
@@ -10,8 +9,14 @@
 {% endblock %}
 
 {% block content %}
-<div id="map" style="height: 600px; width: 100%;"></div>
+<div id="map" style="height: 500px; width: 100%;"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="{% static 'js/domi/map.js' %}"></script>
+
+<button type="button" class="btn btn-sm btn-danger" data-dismiss="alert" aria-label="Close">
+    <a href="{% url 'cliente:logout' %}" class="nav-link">Salir</a>
+</button>
+
+
 {% csrf_token %}
 {% endblock %}

@@ -16,6 +16,9 @@ from django.conf.urls.static import static
 # router.register(r'categorias', CategoriaMascotaViewSet)
 # router.register(r'resenas', ResenaProductoMascotaViewSet)
 
+app_name = 'cliente'
+
+
 urlpatterns = [
     path('', views.home, name='home'),
 

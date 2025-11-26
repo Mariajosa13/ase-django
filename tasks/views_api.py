@@ -29,58 +29,10 @@ from .serializers_api import (
     # DomiciliarioSpecificSerializer, TiendaSpecificSerializer,
     # CategoriaMascotaSerializer, ProductosSerializer, ResenaProductoMascotaSerializer,
     # MyTokenObtainPairSerializer
-    PedidoGeoSerializer, ProductoSerializer
+    PedidoGeoSerializer
 )
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def obtener_api_key(request):
-    profile = request.user.profile
-    if profile.tipo_usuario != 'tienda':
-        return Response({'error': 'Solo las tiendas pueden obtener una API Key'}, status=status.HTTP_403_FORBIDDEN)
-    api_key_obj, created = ApiKey.objects.get_or_create(tienda=profile)
-
-    return Response({
-        'tienda': profile.tienda.nombre_tienda if hasattr(profile, 'tienda') else profile.user.username
-    })
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def regenerar_api_key(request):
-    profile = request.user.profile
-
-    if profile.tipo_usuario != 'tienda':
-        return Response({'error': 'Solo las tiendas pueden regenerar una API Key'}, status=status.HTTP_403_FORBIDDEN)
-    try:
-        api_key_obj = ApiKey.objects.get(tienda=profile)
-    except ApiKey.DoesNotExist:
-        api_key_obj = ApiKey.objects.create(tienda=profile)
-        
-        api_key_obj.key = uuid.uuid4()
-        api_key_obj.save()
-    return Response ({ 'message': 'API Key generada exitosamente', 'nueva_api_key': str(api_key_obj.key) }, status=status.HTTP_200_OK)
-
-
-@api_view(['POST'])
-def recibir_producto(request):
-    api_key = request.headers.get('Authorization')
-
-    if not api_key:
-        return Response({'error': 'No API Key provided'}, status=status.HTTP_401_UNAUTHORIZED)
-    
-    try:
-        api_key_obj = ApiKey.objects.get(key=api_key)
-    except ApiKey.DoesNotExist:
-        return Response({'error': 'Invalid API Key'}, status=status.HTTP_401_UNAUTHORIZED)
-    
-    tienda = api_key_obj.tienda
-
-    serializer = ProductoSerializer(data=request.data, context={'request': request, 'tienda': tienda})
-    if serializer.is_valid():
-        producto = serializer.save()
-        return Response({'message': 'Producto recibido exitosamente', 'producto_id': producto.id, 'tienda':'tienda.user.username'}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def generar_codigo():
     # Asegura un código de 6 dígitos con ceros iniciales

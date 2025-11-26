@@ -10,7 +10,7 @@
 <div class="checkout-container">
     <div class="card-body">
         <h1 class="checkout-title">Editar Dirección</h1>
-        <form method="post" action="{% url 'direccion_editar' direccion.id %}">
+        <form method="post" action="{% url 'cliente:direccion_editar' direccion.id %}">
             {% csrf_token %}
 
             {% for field in form %}

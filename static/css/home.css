@@ -88,6 +88,7 @@
   background-color: #5a1c6b;
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(68, 17, 81, 0.3);
+  color: #fbfefb;
 }
 
 .btn:active {
@@ -442,6 +443,11 @@
     background-color: #733982;
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(68, 17, 81, 0.3);
+  }
+
+  .registro-btn a{
+    text-decoration: none;
+    color: white;
   }
   
   /* Colores específicos para cada tipo */

@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <!--font awesome-->
-    <link rel="stylesheet" href="{% static 'css/producto_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/producto_details.css' %}">
 
     <title>Detalle Productos</title>
 </head>
@@ -20,10 +20,10 @@
     <div class="container py-5">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'productos' %}">Productos</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'cliente:productos' %}">Productos</a></li>
                 <li class="breadcrumb-item">
                     {% if producto.categoria %}
-                    <a href="{% url 'productos_por_categoria' slug=producto.categoria.slug %}">{{
+                    <a href="{% url 'cliente:productos_por_categoria' slug=producto.categoria.slug %}">{{
                         producto.categoria.nombre }}</a>
                     {% else %}
                     Sin categoría
@@ -67,7 +67,7 @@
 
                 <p class="text-muted mb-3">
                     {% if producto.categoria %}
-                    <a href="{% url 'productos_por_categoria' slug=producto.categoria.slug %}">{{
+                    <a href="{% url 'cliente:productos_por_categoria' slug=producto.categoria.slug %}">{{
                         producto.categoria.nombre }}</a>
                     {% else %}
                     Sin categoría
@@ -90,7 +90,7 @@
                 </div>
 
                 {% if producto.stock > 0 %}
-                <form method="post" action="{% url 'add_to_cart' producto.id %}" class="d-flex align-items-end">
+                <form method="post" action="{% url 'cliente:add_to_cart' producto.id %}" class="d-flex align-items-end">
                     {% csrf_token %}
 
                     <div class="me-3" style="width: 100px;">

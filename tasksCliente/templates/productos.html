@@ -27,7 +27,7 @@
                         <h5 class="mb-0">Filtrar Productos</h5>
                     </div>
                     <div class="card-body productos-card-body">
-                        <form method="get" action="{% url 'producto_list' %}">
+                        <form method="get" action="{% url 'cliente:producto_list' %}">
                             <div class="mb-3">
                                 {{ form.busqueda }}
                             </div>
@@ -61,7 +61,7 @@
 
                             <button type="submit" class="btn btn-primary productos-btn-aplicar-filtros w-100">Aplicar
                                 Filtros</button>
-                            <a href="{% url 'producto_list' %}"
+                            <a href="{% url 'cliente:producto_list' %}"
                                 class="btn btn-outline-secondary productos-btn-limpiar-filtros w-100 mt-2">Limpiar
                                 Filtros</a>
                         </form>

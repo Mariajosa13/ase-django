@@ -39,7 +39,7 @@ class SignupForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, label="Contraseña", required=True)
     password2 = forms.CharField(widget=forms.PasswordInput, label="Confirmar Contraseña", required=True)
 
-    # Campos opcionales para Cliente, Domiciliario, Tienda que aparecerán una vez ya ingrese
+    # Campos opcionales para Cliente, Domiciliario que aparecerán una vez ya ingrese
     segundo_apellido = forms.CharField(max_length=200, required=False)
     celular = forms.CharField(max_length=20, required=False)
     genero = forms.CharField(max_length=1, required=False)
@@ -47,9 +47,6 @@ class SignupForm(forms.Form):
         required=False, 
         widget=forms.DateInput(attrs={'type': 'date'}), # Esto ayuda a que el navegador muestre un selector de fecha
     ) 
-
-    nombre_tienda = forms.CharField(max_length=200, required=False)
-    nit = forms.CharField(max_length=50, required=False)
         
     def clean_username(self):
         username = self.cleaned_data['username']

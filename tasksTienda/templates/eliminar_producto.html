@@ -1,0 +1,27 @@
+{% extends 'baseTienda.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="mb-0">⚠️ Confirmar Eliminación</h2>
+                </div>
+                <div class="card-body">
+                    <p class="lead">¿Estás seguro de que deseas eliminar el producto:</p>
+                    <h4 class="text-danger">{{ producto.nombre }} (ID: {{ producto.id }})</h4>
+                    <p>Esta acción es **irreversible**.</p>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger me-2">Sí, Eliminar Definitivamente</button>
+                        <a href="{% url 'tienda:productos_tienda_list' %}" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,5 +1,5 @@
 from urllib import request
-import uuid
+import secrets
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -99,23 +99,28 @@ class Domiciliario(models.Model):
 
     def __str__(self):
         return f"Domiciliario: {self.profile.user.username}"
-
-class ApiKey(models.Model):
-    tienda = models.OneToOneField(Profile, on_delete=models.CASCADE, limit_choices_to={'tipo_usuario':'tienda'})
-    key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-
-    def __call__(self):
-        return f"{self.tienda.user} - {self.key}"
+    
+def generate_api_key():
+    return secrets.token_urlsafe(32) 
 
 class Tienda(gis_models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     nombre_tienda = models.CharField(max_length=200, blank=True, null=True)
     nit = models.CharField(max_length=50, blank=True, null=True)
-    ubicacion = gis_models.PointField(null=True, blank=True, srid=4326) # sistema de coordenadas estandar Lat Lng
+    ubicacion = gis_models.CharField(max_length=100, null=True, blank=True)
 
 
     def __str__(self):
         return f"Tienda: {self.profile.user.username} ({self.nombre_tienda})"
+
+class ApiKey(models.Model):
+    tienda = models.OneToOneField('Tienda', on_delete=models.CASCADE, related_name='api_key')
+    key = models.CharField(editable=False, default=generate_api_key, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        nombre = self.tienda.nombre_tienda or self.tienda.profile.user.username
+        return f"API Key para {nombre}"
 
 @receiver(post_save, sender=Profile)
 def crear_subtipo_usuario(sender, instance, created, **kwargs):
@@ -203,7 +208,7 @@ class Productos(models.Model):
         return f"{self.nombre} - {self.get_tipo_mascota_display()} - by {self.user.username}"
 
     def get_absolute_url(self):
-        return reverse('producto_detail', args=[str(self.id)])
+        return reverse('cliente:producto_detail', args=[str(self.id)])
 
 class Meta:
     verbose_name = "Producto para Mascota"

@@ -52,12 +52,12 @@
                 {% if cliente_info %}
                 <p class="info-item"><strong>Celular:</strong> {{ cliente_info.celular|default:"N/A" }}</p>
                 <p class="info-item"><strong>Género:</strong> {{ cliente_info.get_genero_display }}</p>
-                <a href="{% url 'edit_profile' %}" class="btn btn-secondary">Editar Perfil</a>
+                <a href="{% url 'cliente:edit_profile' %}" class="btn btn-secondary">Editar Perfil</a>
                 {% endif %}
             </div>
             {% else %}
             <div class="alert alert-info">
-                Por favor <a href="{% url 'signup' %}?next={{ request.path }}">inicia sesión</a> para agilizar tu
+                Por favor <a href="{% url 'cliente:signup' %}?next={{ request.path }}">inicia sesión</a> para agilizar tu
                 compra, o continúa como invitado.
             </div>
             {% endif %}
@@ -90,7 +90,7 @@
                         </li>
                     </ul>
                     <button type="submit" class="btn btn-primary btn-large">Confirmar Compra</button>
-                    <a href="{% url 'view_cart' %}" class="btn btn-secondary btn-large">Volver al Carrito</a>
+                    <a href="{% url 'cliente:view_cart' %}" class="btn btn-secondary btn-large">Volver al Carrito</a>
                 </div>
             </div>
         </div>
@@ -99,7 +99,7 @@
     <div class="empty-cart">
         Tu carrito está vacío. ¡No hay productos para proceder al pago!
         <br>
-        <a href="{% url 'productos' %}" class="btn btn-primary">Ver Productos</a>
+        <a href="{% url 'cliente:productos' %}" class="btn btn-primary">Ver Productos</a>
     </div>
     {% endif %}
 </div>

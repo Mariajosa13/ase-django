@@ -1,8 +1,79 @@
 from django import forms
 from django.contrib.auth.models import User
-from ..tasks.models import Productos, Profile, ResenaProductoMascota, CategoriaMascota
-from datetime import date
+from tasks.models import Productos, CategoriaMascota, Tienda, ApiKey
+from django.db import transaction
+import uuid
+from django.contrib.gis.db import models as gis_models
+from django.contrib.gis.forms import OSMWidget, PointField
 
+
+
+
+#registro e ingreso tienda
+
+TIPO_USUARIO = (
+    ('cliente', 'Cliente'),
+    ('domiciliario', 'Domiciliario'),
+    ('tienda', 'Tienda'),
+)
+
+class SignupFormTienda(forms.ModelForm):
+    correo = forms.EmailField(required=True, label="Correo Electrónico")
+    password1 = forms.CharField(label="Contraseña", min_length=8, widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Confirmar Contraseña", widget=forms.PasswordInput)
+
+    tipo_usuario = forms.ChoiceField(
+        choices=[('tienda', 'Tienda')], 
+        required=True, 
+        initial='tienda',
+        widget=forms.HiddenInput()
+    )
+
+    ubicacion = forms.CharField(
+    required=True,
+    label="Ubicación (Ciudad)",
+    widget=forms.TextInput(attrs={
+        "placeholder": "Ej: Medellín, Antioquia",
+    })
+)
+
+    class Meta:
+        model = Tienda
+        fields = ['nombre_tienda', 'nit', 'ubicacion']
+
+    def clean_nombre_tienda(self):
+        nombre_tienda = self.cleaned_data['nombre_tienda']
+        if User.objects.filter(username=nombre_tienda).exists():
+            raise forms.ValidationError("Este nombre de tienda ya está en uso.")
+        return nombre_tienda
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("password1") != cleaned_data.get("password2"):
+            raise forms.ValidationError("Las contraseñas no coinciden.")
+        return cleaned_data
+
+    def save(self, commit=True):
+        with transaction.atomic():
+            user = User.objects.create_user(
+                username=self.cleaned_data['nombre_tienda'],
+                password=self.cleaned_data['password1']
+            )
+
+            profile = user.profile
+            profile.tipo_usuario = 'tienda'
+            profile.correo = self.cleaned_data['correo']
+            profile.save()
+
+            tienda_instance = super().save(commit=False)
+            tienda_instance.profile = profile  
+            tienda_instance.save()
+
+            api_key_obj = ApiKey.objects.create(
+                tienda=tienda_instance 
+            )
+
+            return user, api_key_obj.key
 
 # formulario para crear o editar un producto
 class ProductoForm(forms.ModelForm): #el modelForm esta directamente conectado a la base de datos django

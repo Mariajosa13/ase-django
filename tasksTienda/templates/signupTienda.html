@@ -1,0 +1,105 @@
+{% extends 'baseTienda.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/formularios_signup.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-global">
+    <div class="container-header">
+        <h1>Regístrate Como Tienda</h1>
+    </div>
+
+    {# Bloque de mensajes #}
+    {% if messages %}
+        {# Usa la clase de Bootstrap si la tienes, si no, mantén la original #}
+        <ul class="messages list-unstyled"> 
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form action="{% url 'tienda:signupTienda' %}" method="POST" class="card card-body">
+        {% csrf_token %}
+        
+        {# 1. Campo OCULTO: tipo_usuario #}
+        {{ signupTienda_form.tipo_usuario }} 
+
+        {# 2. Campo: nombre_tienda (MODELO) #}
+        <div class="form-group mb-3">
+            <label for="{{ signupTienda_form.nombre_tienda.id_for_label }}">Nombre de la Tienda</label>
+            {% render_field signupTienda_form.nombre_tienda class="form-control" placeholder="Nombre legal o comercial" %}
+            {% for error in signupTienda_form.nombre_tienda.errors %}
+                <p class="text-danger small">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        {# nit (MODELO) #}
+        <div class="form-group mb-3">
+            <label for="{{ signupTienda_form.nit.id_for_label }}">NIT</label>
+            {% render_field signupTienda_form.nit class="form-control" placeholder="Número de Identificación Tributaria" %}
+            {% for error in signupTienda_form.nit.errors %}
+                <p class="text-danger small">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        {# ubicación #}
+        <div class="form-group mb-3">
+            <label for="{{ signupTienda_form.ubicacion.id_for_label }}">Ubicación</label>
+            {% render_field signupTienda_form.ubicacion class="form-control" %}
+            {% for error in signupTienda_form.ubicacion.errors %}
+                <p class="text-danger small">{{ error }}</p>
+            {% endfor %}
+        </div>
+                
+        {# correo #}
+        <div class="form-group mb-3">
+            <label for="{{ signupTienda_form.correo.id_for_label }}">Correo Electrónico</label>
+            {% render_field signupTienda_form.correo class="form-control" placeholder="Correo para contacto y notificaciones" %}
+            {% for error in signupTienda_form.correo.errors %}
+                <p class="text-danger small">{{ error }}</p>
+            {% endfor %}
+        </div>
+        
+        {# Contraseña #}
+        <div class="form-group mb-3">
+            <label for="{{ signupTienda_form.password1.id_for_label }}">Contraseña de Ingreso</label>
+            {% render_field signupTienda_form.password1 class="form-control" placeholder="Define tu Contraseña" %}
+            {% for error in signupTienda_form.password1.errors %}
+                <p class="text-danger small">{{ error }}</p>
+            {% endfor %}
+        </div>
+        
+        {# 6. Campo: Confirmación #}
+        <div class="form-group mb-3">
+            <label for="{{ signupTienda_form.password2.id_for_label }}">Confirmar Contraseña</label>
+            {% render_field signupTienda_form.password2 class="form-control" placeholder="Repite la Contraseña" %}
+            {% for error in signupTienda_form.password2.errors %}
+                <p class="text-danger small">{{ error }}</p>
+            {% endfor %}
+        </div>
+        
+        
+        {% if signupTienda_form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in signupTienda_form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <p class="error messages">{{ error }}</p>
+        {% endif %}
+
+        <button class="submit-button btn btn-primary mt-3" type="submit" name="register_submit">
+            Registrarse como tienda <i class="fas fa-arrow-right"></i>
+        </button>
+
+        <p class="mt-3">¿Ya tienes una cuenta? <a href="{% url 'tienda:signinTienda' %}">Inicia sesión aquí</a></p>
+    </form>
+</div>
+{% endblock content %}

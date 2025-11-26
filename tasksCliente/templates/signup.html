@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <form action="{% url 'signup' %}" method="POST" class="card card-body">
+        <form action="{% url 'cliente:signup' %}" method="POST" class="card card-body">
             {% csrf_token %}
 
             <div class="form-group">
@@ -127,7 +127,7 @@
                 Registrarse <i class="fas fa-arrow-right"></i>
             </button>
 
-            <p>¿Ya tienes una cuenta? <a href="{% url 'signin' %}">Inicia sesión aquí</a></p>
+            <p>¿Ya tienes una cuenta? <a href="{% url 'cliente:signin' %}">Inicia sesión aquí</a></p>
         </form>
     </div>
 </div>

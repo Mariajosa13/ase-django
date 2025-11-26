@@ -1,0 +1,63 @@
+{% extends 'baseTienda.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1>Lista de Productos - {{ tienda_nombre }}</h1>
+            <p class="lead">Productos subidos y gestionados por tu tienda.</p>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            
+            {% if productos %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Categoría</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for producto in productos %}
+                            <tr>
+                                <td>{{ producto.id }}</td>
+                                <td>
+                                    {% if producto.imagen %}
+                                        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" style="width: 50px; height: 50px; object-fit: cover;">
+                                    {% else %}
+                                        (Sin imagen)
+                                    {% endif %}
+                                </td>
+                                <td>{{ producto.nombre }}</td>
+                                <td>${{ producto.precio|floatformat:2 }}</td>
+                                <td>{{ producto.stock }}</td>
+                                <td>{{ producto.categoria|default_if_none:"N/A" }}</td>
+                                <td>
+                                    <a href="{% url 'tienda:editar_producto' producto.id %}" class="btn btn-sm btn-info text-white">Editar</a>
+                                    <a href="{% url 'tienda:eliminar_producto' producto.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    No tienes productos subidos aún. Usa el botón "Añadir Nuevo Producto" para empezar.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

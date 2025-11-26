@@ -108,7 +108,7 @@ DATABASES = {
         # conexión postgres
 
         'ENGINE': 'django.contrib.gis.db.backends.postgis', 
-        'NAME': 'asebd',
+        'NAME': 'asebd_clean',
         'USER': 'postgres',
         'PASSWORD': 'BA$05V3rd3',
         'HOST': 'localhost',

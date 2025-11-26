@@ -9,7 +9,7 @@
 <div class="checkout-container">
     <div class="card-body">
         <h1 class="checkout-title">Agregar Nueva Dirección</h1>
-        <form method="post" action="{% url 'agregar_direccion' %}">
+        <form method="post" action="{% url 'cliente:agregar_direccion' %}">
             {% csrf_token %}
 
             {% for field in form %}

@@ -316,3 +316,28 @@
     height: 3px;
     background: linear-gradient(to right, var(--morado-claro), var(--morado-principal));
   }
+
+/* Estilos de la barra de navegación (si existe fuera del formulario) */
+.navbar {
+    background-color: var(--white);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-end;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: var(--primary);
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.navbar a:hover {
+    color: var(--primary-hover);
+}
