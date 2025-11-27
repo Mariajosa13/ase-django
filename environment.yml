@@ -76,4 +76,4 @@ prefix: C:\Users\maria\.conda\envs\django-gis
 
 # para actualizar documento - conda env export > environment.yml
 # conda activate django-gis - para activar entorno
-# conda env create -f environment.yml - para crear entorno en otro computador 
+# conda env create -f environment.yml - para crear entorno en otro computador
