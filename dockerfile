@@ -13,4 +13,4 @@ RUN conda env create -f environment.yml
 RUN python manage.py collectstatic --no-input
 
 
-CMD /bin/bash -c "conda run -n django-gis python manage.py migrate --no-input && conda run -n django-gis gunicorn ASEproject.wsgi:application --bind 0.0.0.0:$PORT"
+CMD /bin/bash -c "/opt/conda/envs/django-gis/bin/python manage.py migrate --no-input && /opt/conda/envs/django-gis/bin/gunicorn ASEproject.wsgi:application --bind 0.0.0.0:$PORT"
