@@ -45,6 +45,12 @@ def recibir_producto(request):
     #si pasa el permiso, request.profile y request.user contienen la información de la tienda.
     
     profile = request.profile # Profile de la tienda autenticada
+
+    print("--- Contenido de request.data (incluye Archivos) ---")
+    print(request.data)
+    print("--- Contenido de request.FILES (solo Archivos) ---")
+    print(request.FILES)
+    print("-----------------------------------------------------")
     
     # Pasar el profile al serializador para la asignación de FKs
     serializer = ProductoSerializer(data=request.data, context={'request': request, 'profile': profile})

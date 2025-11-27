@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 CONDA_ENV_PATH = r"C:\Users\maria\.conda\envs\django-gis"
@@ -28,13 +29,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(=-y9!b+qjazo*ehn2cv4i-oled)*c6fsr8^%-xcr6_2wu)y^%'
+SECRET_KEY = os.environ.get('SECRET_KEY', default='your secret key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
 
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
 
@@ -92,28 +96,22 @@ WSGI_APPLICATION = 'ASEproject.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
 
-        # conexión mysql
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default='postgresql://postgres:BA$05V3rd3@localhost:5432/mysite',
+        conn_max_age=600
+    )
+    # 'default': {
+        
 
-        # 'ENGINE': 'django.db.backends.mysql', 
-        # 'NAME': 'bdase'
-        # 'USER': 'root'
-        # 'PASSWORD': 'mariajose'
-        # 'HOST': '127.0.0.1',
-        # 'PORT': '3307',
-
-        # conexión postgres
-
-        'ENGINE': 'django.contrib.gis.db.backends.postgis', 
-        'NAME': 'asebd_clean',
-        'USER': 'postgres',
-        'PASSWORD': 'BA$05V3rd3',
-        'HOST': 'localhost',
-        'PORT': '5432', 
-    }
+    #     # 'ENGINE': 'django.contrib.gis.db.backends.postgis', 
+    #     # 'NAME': 'asebd_clean',
+    #     # 'USER': 'postgres',
+    #     # 'PASSWORD': 'BA$05V3rd3',
+    #     # 'HOST': 'localhost',
+    #     # 'PORT': '5432', 
+    # }
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
