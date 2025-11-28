@@ -1,11 +1,10 @@
 name: django-gis
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - python=3.11
-  - gdal=3.9
-  - geos=3.12
+  - gdal
+  - geos
   - proj
   - geotiff
   - libspatialite
@@ -23,5 +22,3 @@ dependencies:
       - gunicorn
       - dj-database-url==2.1.0
       - whitenoise==6.6.0
-
-
