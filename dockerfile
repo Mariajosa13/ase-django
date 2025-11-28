@@ -12,4 +12,4 @@ SHELL ["/bin/bash", "--login", "-c"]
 RUN conda activate django-gis && \
     python manage.py collectstatic --no-input
 
-CMD /bin/bash -c "source activate django-gis && python manage.py migrate --no-input && gunicorn ASEproject.wsgi:application --bind 0.0.0.0:$PORT"
+CMD ["bash", "-c", "python manage.py migrate --no-input && gunicorn ASEproject.wsgi:application --bind 0.0.0.0:$PORT"]
