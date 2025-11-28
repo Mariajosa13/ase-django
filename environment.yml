@@ -21,3 +21,7 @@ dependencies:
       - pillow
       - psycopg2-binary
       - gunicorn
+      - dj-database-url==2.1.0
+      - whitenoise==6.6.0
+
+
