@@ -14,13 +14,6 @@ from pathlib import Path
 import os
 import dj_database_url
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-CONDA_ENV_PATH = r"C:\Users\maria\.conda\envs\django-gis"
-
-# Aquí apuntas directo al archivo que existe
-GDAL_LIBRARY_PATH = os.path.join(CONDA_ENV_PATH, r"Library\bin\gdal.dll")
-
-os.environ['PATH'] = CONDA_ENV_PATH + r"\Library\bin;" + os.environ['PATH']
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
