@@ -7,7 +7,7 @@ COPY . /app/
 
 RUN conda env create -f environment.yml
 
-SHELL ["/bin/bash", "--login", "-c"]
+ENV PATH="/opt/conda/envs/django-gis/bin:$PATH"
 
 RUN conda activate django-gis && \
     python manage.py collectstatic --no-input
