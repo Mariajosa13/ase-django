@@ -5,11 +5,8 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY . /app/
 
-# Crear entorno conda
-RUN conda env create -f environment.yml && \
-    echo "conda activate django-gis" >> ~/.bashrc
+RUN conda env create -f environment.yml
 
-# Todas las instrucciones siguientes ejecutan dentro del entorno
 SHELL ["/bin/bash", "--login", "-c"]
 
 RUN conda activate django-gis && \
