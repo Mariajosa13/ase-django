@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import dj_database_url
 
+GDAL_LIBRARY_PATH = r"C:\Users\maria\.conda\envs\django-gis\Library\bin\gdal.dll"
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -91,22 +92,23 @@ WSGI_APPLICATION = 'ASEproject.wsgi.application'
 
 DATABASES = {
 
-    'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default='postgresql://postgres:BA$05V3rd3@localhost:5432/asebd_clean',
-        conn_max_age=600
-    )
-    # 'default': {
+    # 'default': dj_database_url.config(
+    #     # Replace this value with your local database's connection string.
+    #     default='postgresql://postgres:BA$05V3rd3@localhost:5432/asebd_clean',
+    #     conn_max_age=600
+    # )
+    'default': {
         
 
-    #     # 'ENGINE': 'django.contrib.gis.db.backends.postgis', 
-    #     # 'NAME': 'asebd_clean',
-    #     # 'USER': 'postgres',
-    #     # 'PASSWORD': 'BA$05V3rd3',
-    #     # 'HOST': 'localhost',
-    #     # 'PORT': '5432', 
-    # }
+        'ENGINE': 'django.contrib.gis.db.backends.postgis', 
+        'NAME': 'asebd_clean',
+        'USER': 'postgres',
+        'PASSWORD': 'BA$05V3rd3',
+        'HOST': 'localhost',
+        'PORT': '5432', 
+    }
 }
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
