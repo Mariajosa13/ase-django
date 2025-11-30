@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from tasks.models import Cliente, Domiciliario, Profile, ResenaProductoMascota, Tienda, Direccion
 from datetime import date
+import re
+
 
 #para dejar reseña 
 class ResenaProductoMascotaForm(forms.ModelForm):
@@ -49,9 +51,20 @@ class SignupForm(forms.Form):
     ) 
         
     def clean_username(self):
-        username = self.cleaned_data['username']
+        username = self.cleaned_data.get('username')
+
+        # caracteres permitidos
+        if not re.match(r'^[a-zA-Z0-9@.+\-_]+$', username):
+            raise forms.ValidationError("El usuario contiene caracteres no permitidos.")
+
+        # nombres prohibidos
+        restricted = ["admin", "root", "superuser", "test"]
+        if username.lower() in restricted:
+            raise forms.ValidationError("Este usuario no está permitido.")
+
         if User.objects.filter(username=username).exists():
             raise forms.ValidationError("Este nombre de usuario ya está en uso.")
+
         return username
 
     def clean_correo(self):
@@ -59,14 +72,34 @@ class SignupForm(forms.Form):
         if Profile.objects.filter(correo=correo).exists():
             raise forms.ValidationError("Este correo electrónico ya está registrado.")
         return correo
+    
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+
+        if len(password) < 8:
+            raise forms.ValidationError("La contraseña debe tener al menos 8 caracteres.")
+
+        if not re.search(r'[A-Z]', password):
+            raise forms.ValidationError("La contraseña debe incluir al menos una letra mayúscula.")
+
+        if not re.search(r'[a-z]', password):
+            raise forms.ValidationError("La contraseña debe incluir al menos una letra minúscula.")
+
+        if not re.search(r'[0-9]', password):
+            raise forms.ValidationError("La contraseña debe incluir al menos un número.")
+
+        if not re.search(r'[@$!%*#?&]', password):
+            raise forms.ValidationError("La contraseña debe contener al menos un símbolo (@, $, !, %, *, #, ?, &).")
+
+        return password
 
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get('password')
-        password_confirm = cleaned_data.get('password_confirm')
+        password2 = cleaned_data.get('password2')
 
-        if password and password_confirm and password != password_confirm:
-            self.add_error('password_confirm', "Las contraseñas no coinciden")
+        if password and password2 and password != password2:
+            self.add_error('password2', "Las contraseñas no coinciden")
 
         return cleaned_data
 

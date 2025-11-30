@@ -5,6 +5,7 @@ from django.db import transaction
 import uuid
 from django.contrib.gis.db import models as gis_models
 from django.contrib.gis.forms import OSMWidget, PointField
+import re
 
 
 
@@ -46,6 +47,27 @@ class SignupFormTienda(forms.ModelForm):
         if User.objects.filter(username=nombre_tienda).exists():
             raise forms.ValidationError("Este nombre de tienda ya está en uso.")
         return nombre_tienda
+    
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+
+        if len(password) < 8:
+            raise forms.ValidationError("La contraseña debe tener al menos 8 caracteres.")
+
+        if not re.search(r'[A-Z]', password):
+            raise forms.ValidationError("La contraseña debe incluir al menos una letra mayúscula.")
+
+        if not re.search(r'[a-z]', password):
+            raise forms.ValidationError("La contraseña debe incluir al menos una letra minúscula.")
+
+        if not re.search(r'[0-9]', password):
+            raise forms.ValidationError("La contraseña debe incluir al menos un número.")
+
+        if not re.search(r'[@$!%*#?&]', password):
+            raise forms.ValidationError("La contraseña debe contener al menos un símbolo (@, $, !, %, *, #, ?, &).")
+
+        return password
+
 
     def clean(self):
         cleaned_data = super().clean()
